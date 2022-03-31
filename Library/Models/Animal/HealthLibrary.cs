@@ -10,6 +10,5 @@ namespace Library.Models.Animal
     {
         public int Id { get; set; }
         public Enum Status { get; set; }
-        public bool Vacination { get; set; }
     }
 }

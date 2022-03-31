@@ -11,8 +11,10 @@ namespace Library.Models.Animal
         public int Id { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
-        public Enum Genre { get; set; }
-        public ImagesLibrary Images { get; set; }
+        public string Genre { get; set; }
+        public string Age { get; set; }
+        public DateTime Birthday { get; set; }
+        public ImageLibrary Image { get; set; }
         public HealthLibrary Health { get; set; }
         public ServiceLibrary Service { get; set; }
         public int PersonId { get; set; }

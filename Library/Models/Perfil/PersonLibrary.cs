@@ -14,7 +14,7 @@ namespace Library.Models.Perfil
         public int Age { get; set; }
         public Enum Genre { get; set; }
         public DateTime Birthday { get; set; }
-        public PicturesLibrary Picture { get; set; }
+        public PictureLibrary Picture { get; set; }
         public ContactLibrary Contact { get; set; }
         public AddressLibrary Address { get; set; }
     }

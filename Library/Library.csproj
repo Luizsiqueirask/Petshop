@@ -62,20 +62,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bridge.cs" />
-    <Compile Include="Context\Animal\ClassAnimal.cs" />
-    <Compile Include="Context\Animal\InterfaceAnimal.cs" />
-    <Compile Include="Context\Animal\ThrowAnimal.cs" />
-    <Compile Include="Context\Perfil\ClassPerfil.cs" />
-    <Compile Include="Context\Perfil\InterfacePerfil.cs" />
-    <Compile Include="Context\Perfil\ThrowPerfil.cs" />
+    <Compile Include="Context\Animal\ClassPet.cs" />
+    <Compile Include="Context\Animal\InterfacePet.cs" />
+    <Compile Include="Context\Animal\ThrowPet.cs" />
+    <Compile Include="Context\Perfil\ClassPerson.cs" />
+    <Compile Include="Context\Perfil\InterfacePerson.cs" />
+    <Compile Include="Context\Perfil\ThrowPerson.cs" />
     <Compile Include="Models\Animal\HealthLibrary.cs" />
-    <Compile Include="Models\Animal\ImagesLibrary.cs" />
+    <Compile Include="Models\Animal\ImageLibrary.cs" />
     <Compile Include="Models\Animal\PetLibrary.cs" />
     <Compile Include="Models\Animal\ServiceLibrary.cs" />
     <Compile Include="Models\Perfil\AddressLibrary.cs" />
     <Compile Include="Models\Perfil\ContactLibrary.cs" />
     <Compile Include="Models\Perfil\PersonLibrary.cs" />
-    <Compile Include="Models\Perfil\PicturesLibrary.cs" />
+    <Compile Include="Models\Perfil\PictureLibrary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
