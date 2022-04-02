@@ -1,88 +1,103 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Web.Context;
+using Web.Models.Animal;
 
 namespace Web.Controllers
 {
     public class PetController : Controller
     {
-        // GET: Pet
-        public ActionResult Index()
+        private readonly PetPersistence clientPet;
+
+        public PetController()
         {
-            return View();
+            clientPet = new PetPersistence();
+        }
+
+        // GET: Pet
+        public async Task<ActionResult> Index()
+        {
+            var pet = await clientPet.List();
+            return View(pet);
         }
 
         // GET: Pet/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int? Id)
         {
-            return View();
+            var pet = await clientPet.Get(Id);
+            return View(pet);
         }
 
         // GET: Pet/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            return View();
+            var pet = await clientPet.Create();
+            return View(pet);
         }
 
         // POST: Pet/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public async Task<ActionResult> Create(Pet pet, HttpPostedFileBase httpPosted)
         {
             try
             {
                 // TODO: Add insert logic here
-
+                await clientPet.Post(pet, httpPosted);
                 return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return View(new Pet());
             }
         }
 
         // GET: Pet/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int? Id)
         {
-            return View();
+            var pet = await clientPet.Update(Id);
+            return View(pet);
         }
 
         // POST: Pet/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public async Task<ActionResult> Edit(Pet pet, int? Id, HttpPostedFileBase httpPosted)
         {
             try
             {
                 // TODO: Add update logic here
-
+                await clientPet.Put(pet, Id, httpPosted);
                 return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return View(new Pet());
             }
         }
 
         // GET: Pet/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int? Id)
         {
-            return View();
+            var pet = await clientPet.Get(Id);
+            return View(pet);
         }
 
         // POST: Pet/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public async Task<ActionResult> Delete(int Id)
         {
             try
             {
                 // TODO: Add delete logic here
-
+                await clientPet.Delete(Id);
                 return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return View(new Pet());
             }
         }
     }

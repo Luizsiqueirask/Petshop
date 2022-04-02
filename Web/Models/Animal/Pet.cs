@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
+using Web.Models.Perfil;
 
 namespace Web.Models.Animal
 {
@@ -18,5 +20,13 @@ namespace Web.Models.Animal
         public Health Health { get; set; }
         public Service Service { get; set; }
         public int PersonId { get; set; }
+    }
+    public class PersonPet
+    {
+        public Person Person { get; set; }
+        public Pet Pet { get; set; }
+        public IEnumerable<SelectListItem> PeoplePetsSelect { get; set; }
+        public SelectListItem PersonPetSelect { get; set; }
+
     }
 }

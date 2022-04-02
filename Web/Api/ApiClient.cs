@@ -14,7 +14,7 @@ namespace Web.Api
     {
         public readonly HttpClient _clientAnimal;
         public readonly HttpClient _clientPerfil;
-        private readonly List<int> ports = new List<int>() { 62678, 60341 };
+        private readonly List<int> ports = new List<int>() { 44377, 44379 };
 
         public ApiClient()
         {
@@ -55,30 +55,30 @@ namespace Web.Api
         {
             return await _clientPerfil.PutAsJsonAsync($"api/Person/{Id}", person);
         }
-        public async Task<HttpResponseMessage> DeletPerson(int? Id)
+        public async Task<HttpResponseMessage> DeletePerson(int? Id)
         {
             return await _clientPerfil.DeleteAsync($"api/Person/{Id}");
         }
         #endregion Person
 
         #region Pet
-        public async Task<HttpResponseMessage> GetFriends()
+        public async Task<HttpResponseMessage> GetPet()
         {
             return await _clientAnimal.GetAsync("api/Pet");
         }
-        public async Task<HttpResponseMessage> GetFriendsById(int? Id)
+        public async Task<HttpResponseMessage> GetPetById(int? Id)
         {
             return await _clientAnimal.GetAsync($"api/Pet/{Id}");
         }
-        public async Task<HttpResponseMessage> PostFriends(Pet pet)
+        public async Task<HttpResponseMessage> PostPet(Pet pet)
         {
             return await _clientAnimal.PostAsJsonAsync("api/Pet", pet);
         }
-        public async Task<HttpResponseMessage> PutFriends(Pet pet, int? Id)
+        public async Task<HttpResponseMessage> PutPet(Pet pet, int? Id)
         {
             return await _clientAnimal.PutAsJsonAsync($"api/Pet/{Id}", pet);
         }
-        public async Task<HttpResponseMessage> DeleteFriends(int? Id)
+        public async Task<HttpResponseMessage> DeletePet(int? Id)
         {
             return await _clientAnimal.DeleteAsync($"api/Pet/{Id}");
         }
