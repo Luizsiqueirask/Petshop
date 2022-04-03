@@ -3,9 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Context.Perfil
 {
@@ -63,7 +60,7 @@ namespace Library.Context.Perfil
                                     States = dataReader["States"].ToString(),
                                     City = dataReader["City"].ToString(),
                                     Neighborhoods = dataReader["Neighborhoods"].ToString()
-                                }                                
+                                }
                             };
 
                             allPerson.Add(personLibrary);

@@ -1,5 +1,4 @@
-﻿using Animal;
-using Animal.Controllers;
+﻿using Animal.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web.Mvc;
 

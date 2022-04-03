@@ -3,9 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Context.Animal
 {
@@ -146,7 +143,7 @@ namespace Library.Context.Animal
                     command.Parameters.AddWithValue("@Status", petLibrary.Health.Status);
                     // -- Service
                     command.Parameters.AddWithValue("@Category", petLibrary.Service.Category);
-                   
+
                     int running = command.ExecuteNonQuery();
                 }
                 catch (SqlException ex)

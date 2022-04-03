@@ -1,3 +1,4 @@
+using Animal.Areas.HelpPage.ModelDescriptions;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -5,7 +6,6 @@ using System.Reflection;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 using System.Xml.XPath;
-using Animal.Areas.HelpPage.ModelDescriptions;
 
 namespace Animal.Areas.HelpPage
 {

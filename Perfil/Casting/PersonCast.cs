@@ -1,10 +1,7 @@
 ﻿using Library.Context.Perfil;
 using Library.Models.Perfil;
 using Perfil.Models.Perfil;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Perfil.Casting
 {
@@ -174,7 +171,7 @@ namespace Perfil.Casting
                     Neighborhoods = person.Address.Neighborhoods
                 }
             };
- 
+
             classPerson.Put(personLibrary, Id);
         }
         public void Delete(int? Id)
