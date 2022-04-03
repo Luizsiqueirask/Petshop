@@ -63,8 +63,8 @@ namespace Web.Context
                         }
                     };
                     listPerson.Add(_person);
+                    return listPerson;
                 }
-                return listPerson;
             }
 
             return new List<Person>();
