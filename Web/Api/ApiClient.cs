@@ -17,23 +17,24 @@ namespace Web.Api
         public ApiClient()
         {
 
-            _clientAnimal = new HttpClient
-            {
-                BaseAddress = new Uri($"http://localhost:{ports[0]}/")
-            };
-
             _clientPerfil = new HttpClient
             {
-                BaseAddress = new Uri($"http://localhost:{ports[1]}/")
+                BaseAddress = new Uri($"http://127.0.0.1:{ports[0]}/")
             };
 
-            _clientAnimal.DefaultRequestHeaders.Accept.Clear();
+            _clientAnimal = new HttpClient
+            {
+                BaseAddress = new Uri($"http://127.0.0.1:{ports[1]}/")
+            };
+            
             _clientPerfil.DefaultRequestHeaders.Accept.Clear();
+            _clientAnimal.DefaultRequestHeaders.Accept.Clear();
 
             var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
 
-            _clientAnimal.DefaultRequestHeaders.Accept.Add(mediaType);
             _clientPerfil.DefaultRequestHeaders.Accept.Add(mediaType);
+            _clientAnimal.DefaultRequestHeaders.Accept.Add(mediaType);
+
         }
 
         #region Person

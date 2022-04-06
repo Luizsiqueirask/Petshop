@@ -12,6 +12,16 @@ USE Petship;
 				  /* CREATE TABLES */
 ----------------------------------------------------------
 
+DROP TABLE Contacts;
+DROP TABLE Pictures;
+DROP TABLE Addresses;
+DROP TABLE Person;
+
+DROP TABLE Health;
+DROP TABLE Services;
+DROP TABLE Images;
+DROP TABLE Pet
+
 ------------------------- Person -------------------------
 
 
@@ -148,10 +158,10 @@ CREATE TABLE [dbo].[Pet] (
 	[ServiceId] INT NOT NULL,
 	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (ImageId) REFERENCES [dbo].[Pictures](Id) ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (PersonId) REFERENCES [dbo].[Services](Id) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (ImageId) REFERENCES [dbo].[Images](Id) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (HealthId) REFERENCES [dbo].[Health](Id) ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (ServiceId) REFERENCES [dbo].[Services](Id) ON UPDATE CASCADE ON DELETE CASCADE
+	FOREIGN KEY (ServiceId) REFERENCES [dbo].[Services](Id) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (PersonId) REFERENCES [dbo].[Person](Id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 ELSE
 	PRINT 'Pet - Exists this table !!!'
@@ -218,27 +228,28 @@ END
 GO;
 
 /* Create */
-CREATE PROCEDURE [dbo].[PostPerson]
+CREATE PROCEDURE [dbo].[PostPerson]	
+	-- Pictures
+	@Tag AS NVARCHAR(255),
+	@Path AS NVARCHAR(255),
+	@PictureId AS INT,
+	-- Contacts
+	@Email AS NVARCHAR(250),
+	@Mobile AS NVARCHAR(250),
+	@ContactId AS INT,
+	-- Addresses
+	@Country AS NVARCHAR(250),
+	@States AS NVARCHAR(250),
+	@City AS NVARCHAR(250),
+	@Neighborhoods AS NVARCHAR(250),
+	@AddressId AS INT,
 	-- Person
 	@FirstName AS NVARCHAR(250),
 	@LastName AS NVARCHAR(250),
 	@Genre AS NVARCHAR(250),
 	@Birthday AS DATE,
-	@Age AS INT,
-	-- Contacts
-	@Email AS NVARCHAR(250),
-	@Mobile AS NVARCHAR(250),
-	@ContactId AS INT,
-	-- Pictures
-	@Tag AS NVARCHAR(255),
-	@Path AS NVARCHAR(255),
-	@PictureId AS INT,
-	-- Addresses
-	@AddressId AS INT,
-	@Country AS NVARCHAR(250),
-	@States AS NVARCHAR(250),
-	@City AS NVARCHAR(250),
-	@Neighborhoods AS NVARCHAR(250)
+	@Age AS INT
+
 AS BEGIN
 	-- Pictures
 	INSERT INTO [dbo].[Pictures]([Tag], [Path]) 
@@ -263,21 +274,21 @@ CREATE PROCEDURE [dbo].[PutPerson]
 	@Path AS NVARCHAR(255),
 	@PictureId AS INT,
 	-- Contacts
-	@Email AS NVARCHAR(255),
-	@Mobile AS NVARCHAR(255),
+	@Email AS NVARCHAR(250),
+	@Mobile AS NVARCHAR(250),
 	@ContactId AS INT,
-	-- Person
-	@FirstName AS NVARCHAR(250),
-	@LastName AS NVARCHAR(250),
-	@Age AS INT,
-	@Genre AS NVARCHAR(250),
-	@Birthday AS DATE,
 	-- Addresses
-	@AddressId AS INT,
 	@Country AS NVARCHAR(250),
 	@States AS NVARCHAR(250),
 	@City AS NVARCHAR(250),
-	@Neighborhoods AS NVARCHAR(250)
+	@Neighborhoods AS NVARCHAR(250),
+	@AddressId AS INT,
+	-- Person
+	@FirstName AS NVARCHAR(250),
+	@LastName AS NVARCHAR(250),
+	@Genre AS NVARCHAR(250),
+	@Birthday AS DATE,
+	@Age AS INT
 
 AS BEGIN
 	-- Pictures
@@ -389,6 +400,45 @@ GO;
 
 /* Create */
 CREATE PROCEDURE [dbo].[PostPet]
+	
+	-- Images
+	@Tag AS NVARCHAR(255),
+	@Path AS NVARCHAR(255),
+	@ImageId AS INT,
+	-- Health
+	@Status AS NVARCHAR(250),
+	@HealthId AS INT,
+	-- Services
+	@Category AS NVARCHAR(250),
+	@ServiceId AS INT,
+	-- Pet
+	@Name AS NVARCHAR(250),
+	@Type AS NVARCHAR(250),
+	@Genre AS NVARCHAR(250),
+	@Birthday AS DATE,
+	@Age AS INT,
+	-- Person
+	@PersonId AS INT
+
+AS BEGIN
+	-- Images
+	INSERT INTO [dbo].[Images]([Tag], [Path]) 
+	VALUES (@Tag, @Path);
+	-- Contacts
+	INSERT INTO [dbo].[Health]([Status]) 
+	VALUES (@Status);
+	-- Addresses
+	INSERT INTO [dbo].[Services]([Category]) 
+	VALUES (@Category);
+	-- Pet
+	INSERT INTO [dbo].[Pet]([Name], [Type], [Age], [Genre], [Birthday], [ImageId], [HealthId], [ServiceId], [PersonId])
+	VALUES (@Name, @Type, @Age, @Genre, Convert(date, @Birthday), @ImageId, @HealthId, @ServiceId, @PersonId);
+END
+GO;
+
+/* Update */
+CREATE PROCEDURE [dbo].[PutPet]
+	@IdPet AS INT,
 	-- Pet
 	@Name AS NVARCHAR(250),
 	@Type AS NVARCHAR(250),
@@ -400,47 +450,13 @@ CREATE PROCEDURE [dbo].[PostPet]
 	@Path AS NVARCHAR(255),
 	@ImageId AS INT,
 	-- Health
-	@States AS NVARCHAR(250),
+	@Status AS NVARCHAR(250),
 	@HealthId AS INT,
 	-- Services
 	@Category AS NVARCHAR(250),
-	@ServiceId AS INT
-
-AS BEGIN
-	-- Images
-	INSERT INTO [dbo].[Images]([Tag], [Path]) 
-	VALUES (@Tag, @Path);
-	-- Contacts
-	INSERT INTO [dbo].[Health]([Status]) 
-	VALUES (@States);
-	-- Addresses
-	INSERT INTO [dbo].[Services]([Category]) 
-	VALUES (@Category);
-	-- Person
-	INSERT INTO [dbo].[Pet]([Name], [Type], [Age], [Genre], [Birthday], [ImageId], [HealthId], [ServiceId])
-	VALUES (@Name, @Type, @Age, @Genre, Convert(date, @Birthday), @ImageId, @HealthId, @ServiceId);
-END
-GO;
-
-/* Update */
-CREATE PROCEDURE [dbo].[PutPet]
-	@IdPet AS INT,
-	-- Person
-	@Name AS NVARCHAR(250),
-	@Type AS NVARCHAR(250),
-	@Genre AS NVARCHAR(250),
-	@Birthday AS DATE,
-	@Age AS INT,	
-	-- Images
-	@Tag AS NVARCHAR(255),
-	@Path AS NVARCHAR(255),
-	@ImageId AS INT,
-	-- Health
-	@HealthId AS INT,
-	@Status AS NVARCHAR(250),
-	-- Services
 	@ServiceId AS INT,
-	@Category AS NVARCHAR(250)
+	-- Person
+	@PersonId AS INT
 
 AS BEGIN
 	-- Images
@@ -504,16 +520,18 @@ EXEC [dbo].[GetPerson] @IdPerson = 1;
 /* Create */
 
 EXEC [dbo].[PostPerson] @Tag = 'MyPicturePerson', @Path = '../Pictures/my_picture_person.png', 
-	@Email = 'luiz@siqueira.psk', @Mobile = '21975918265',  
+	@Email = 'luiz@siqueira.psk', @Mobile = '21975918265', 
+	@Country = 'Brasil', @States = 'Rio de Janeiro', @City = 'Rio de Janeiro', @Neighborhoods = 'Leme',
 	@Firstname = 'Luiz', @Lastname = 'Siqueira', @Genre = 'Male', @Age = '31', @Birthday = '1990-01-28',
 	@PictureId = 1, @ContactId = 1, @AddressId = 1; 
 
 /* Update */
 
 EXEC [dbo].[PutPerson] @IdPerson = 1, @Tag = 'MyPicturePerson', @Path = '../Pictures/my_picture_person.png', 
-	@Email = 'luiz@siqueira.psk', @Mobile = '21975918265',  
+	@Email = 'luiz@siqueira.psk', @Mobile = '21975918265', 
+	@Country = 'Brasil', @States = 'Rio de Janeiro', @City = 'Rio de Janeiro', @Neighborhoods = 'Leme',
 	@Firstname = 'Luiz', @Lastname = 'Siqueira', @Genre = 'Male', @Age = '31', @Birthday = '1990-01-28',
-	@PictureId = 1, @ContactId = 1, @AddressId = 1;
+	@PictureId = 1, @ContactId = 1, @AddressId = 1; 
 
 /* Delete */
 
@@ -532,15 +550,17 @@ EXEC [dbo].[GetPet] @IdPet = 1;
 
 /* Create */
 
-EXEC [dbo].[PostPet] @Tag = 'MyPicturePerson', @Path = '../Pictures/my_picture_person.png', @ImageId = 1,
-	@Status = 'Bad', @HealthId = 1, @Category = 'Tosa',  @ServiceId = 1
-	@Name = 'Luiz', @Type = 'Siqueira', Genre = 'F', @Age = '31', @Birthday = '1990-01-28', PersonId = 1; 
+EXEC [dbo].[PostPet] @Tag = 'MyPicturePerson', @Path = '../Pictures/my_picture_person.png',
+	@Status = 'Bad', @Category = 'Tosa', 
+	@Name = 'Negao', @Type = 'Mendes', @Genre = 'F', @Age = '10', @Birthday = '2002-11-20', 
+	@ImageId = 1,  @HealthId = 1, @ServiceId = 1, @PersonId = 1; 
 
 /* Update */
 
-EXEC [dbo].[PutPet] @IdPet = 1, @Tag = 'MyPicturePerson', @Path = '../Pictures/my_picture_person.png', @ImageId = 1, 
-	@Status = 'Bad', @HealthId = 1, @Category = 'Tosa',  @ServiceId = 1
-	@Name = 'Luiz', @Type = 'Siqueira', Genre = 'F', @Age = '31', @Birthday = '1990-01-28', PersonId = 1;  
+EXEC [dbo].[PutPet] @IdPet = 1, @Tag = 'MyPicturePerson', @Path = '../Pictures/my_picture_person.png',
+	@Status = 'Bad', @Category = 'Tosa', 
+	@Name = 'Luiz', @Type = 'Siqueira', @Genre = 'F', @Age = '31', @Birthday = '1990-01-28', 
+	@ImageId = 1,  @HealthId = 1, @ServiceId = 1, @PersonId = 1; 
 
 /* Delete */
 

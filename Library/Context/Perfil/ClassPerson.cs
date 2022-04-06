@@ -37,29 +37,29 @@ namespace Library.Context.Perfil
                             var personLibrary = new PersonLibrary()
                             {
                                 Id = (int)dataReader["Id"],
-                                FirstName = dataReader["FirstName"].ToString(),
-                                LastName = dataReader["LastName"].ToString(),
+                                FirstName = (string)dataReader["FirstName"],
+                                LastName = (string)dataReader["LastName"],
                                 Age = (int)dataReader["Age"],
                                 Birthday = (DateTime)dataReader["Birthday"],
-                                Genre = (Enum)dataReader["Genre"],
+                                Genre = (string)dataReader["Genre"],
                                 Picture = new PictureLibrary()
                                 {
                                     Id = (int)dataReader["Id"],
-                                    Tag = dataReader["Tag"].ToString(),
-                                    Path = dataReader["Path"].ToString()
+                                    Tag = (string)dataReader["Tag"],
+                                    Path = (string)dataReader["Path"]
                                 },
                                 Contact = new ContactLibrary()
                                 {
                                     Id = (int)dataReader["Id"],
-                                    Email = dataReader["Email"].ToString(),
-                                    Mobile = dataReader["Mobile"].ToString()
+                                    Email = (string)dataReader["Email"],
+                                    Mobile = (string)dataReader["Mobile"]
                                 },
                                 Address = new AddressLibrary()
                                 {
                                     Id = (int)dataReader["Id"],
-                                    States = dataReader["States"].ToString(),
-                                    City = dataReader["City"].ToString(),
-                                    Neighborhoods = dataReader["Neighborhoods"].ToString()
+                                    States = (string)dataReader["States"],
+                                    City = (string)dataReader["City"],
+                                    Neighborhoods = (string)dataReader["Neighborhoods"]
                                 }
                             };
 
@@ -100,29 +100,29 @@ namespace Library.Context.Perfil
                     personLibrary = new PersonLibrary()
                     {
                         Id = (int)dataReader["Id"],
-                        FirstName = dataReader["FirstName"].ToString(),
-                        LastName = dataReader["LastName"].ToString(),
+                        FirstName = (string)dataReader["FirstName"],
+                        LastName = (string)dataReader["LastName"],
                         Age = (int)dataReader["Age"],
                         Birthday = (DateTime)dataReader["Birthday"],
-                        Genre = (Enum)dataReader["Genre"],
+                        Genre = (string)dataReader["Genre"],
                         Picture = new PictureLibrary()
                         {
                             Id = (int)dataReader["Id"],
-                            Tag = dataReader["Tag"].ToString(),
-                            Path = dataReader["Path"].ToString()
+                            Tag = (string)dataReader["Tag"],
+                            Path = (string)dataReader["Path"]
                         },
                         Contact = new ContactLibrary()
                         {
                             Id = (int)dataReader["Id"],
-                            Email = dataReader["Email"].ToString(),
-                            Mobile = dataReader["Mobile"].ToString()
+                            Email = (string)dataReader["Email"],
+                            Mobile = (string)dataReader["Mobile"]
                         },
                         Address = new AddressLibrary()
                         {
                             Id = (int)dataReader["Id"],
-                            States = dataReader["States"].ToString(),
-                            City = dataReader["City"].ToString(),
-                            Neighborhoods = dataReader["Neighborhoods"].ToString()
+                            States = (string)dataReader["States"],
+                            City = (string)dataReader["City"],
+                            Neighborhoods = (string)dataReader["Neighborhoods"]
                         }
                     };
                 }

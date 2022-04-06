@@ -18,12 +18,16 @@ namespace Web.Models.Animal
         public Service Service { get; set; }
         public int PersonId { get; set; }
     }
+    public class PeoplePets
+    {
+        public Person People { get; set; }
+        public Pet Pets { get; set; }
+        public IEnumerable<SelectListItem> PeoplePetsSelect { get; set; }
+    }
     public class PersonPet
     {
         public Person Person { get; set; }
         public Pet Pet { get; set; }
-        public IEnumerable<SelectListItem> PeoplePetsSelect { get; set; }
         public SelectListItem PersonPetSelect { get; set; }
-
     }
 }

@@ -23,44 +23,43 @@ namespace Web.Context
             _blobClient = new BlobClient();
         }
 
-        public async Task<IEnumerable<PersonPet>> List()
+        public async Task<IEnumerable<PeoplePets>> List()
         {
             var allPets = await _clientPet.GetPet();
             var allPeople = await _clientPet.GetPerson();
-            var containerPersonPet = new List<PersonPet>();
+            var containerPersonPet = new List<PeoplePets>();
 
             if (allPets.IsSuccessStatusCode)
             {
                 var pets = await allPets.Content.ReadAsAsync<IEnumerable<Pet>>();
+                var people = await allPeople.Content.ReadAsAsync<IEnumerable<Person>>();
 
                 if (allPeople.IsSuccessStatusCode)
                 {
-                    var people = await allPeople.Content.ReadAsAsync<IEnumerable<Person>>();
-
                     foreach (var pet in pets)
                     {
                         foreach (var person in people)
                         {
-                            var personPet = new PersonPet()
+                            var peoplePets = new PeoplePets()
                             {
-                                Person = person,
-                                Pet = pet,
+                                People = person,
+                                Pets = pet,
                                 PeoplePetsSelect = new List<SelectListItem>() {
                                     new SelectListItem()
                                     {
-                                        Value = person.Id.ToString(),
-                                        Text = person.FirstName,
+                                        Value = pet.Id.ToString(),
+                                        Text = pet.Name,
                                         Selected = pet.PersonId == person.Id
                                     }
                                 }
                             };
-                            containerPersonPet.Add(personPet);
+                            containerPersonPet.Add(peoplePets);
                         }
+                        return containerPersonPet;
                     }
-                    return containerPersonPet;
                 }
             }
-            return new List<PersonPet>();
+            return new List<PeoplePets>();
         }
         public async Task<PersonPet> Get(int? Id)
         {

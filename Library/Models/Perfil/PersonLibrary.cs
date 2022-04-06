@@ -8,7 +8,7 @@ namespace Library.Models.Perfil
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int Age { get; set; }
-        public Enum Genre { get; set; }
+        public string Genre { get; set; }
         public DateTime Birthday { get; set; }
         public PictureLibrary Picture { get; set; }
         public ContactLibrary Contact { get; set; }

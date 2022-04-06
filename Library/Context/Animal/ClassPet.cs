@@ -39,17 +39,17 @@ namespace Library.Context.Animal
                                 Id = (int)dataReader["Id"],
                                 Name = (string)dataReader["Name"],
                                 Type = (string)dataReader["Type"],
-                                Genre = (string)dataReader["Genre"],
-                                Health = new HealthLibrary()
-                                {
-                                    Id = (int)dataReader["Id"],
-                                    Status = (Enum)dataReader["Status"],
-                                },
+                                Genre = (string)dataReader["Genre"],                                
                                 Image = new ImageLibrary()
                                 {
                                     Id = (int)dataReader["Id"],
                                     Tag = (string)dataReader["Tag"],
                                     Path = (string)dataReader["Path"]
+                                },
+                                Health = new HealthLibrary()
+                                {
+                                    Id = (int)dataReader["Id"],
+                                    Status = (string)dataReader["Status"],
                                 },
                                 Service = new ServiceLibrary()
                                 {
@@ -86,7 +86,7 @@ namespace Library.Context.Animal
             using (SqlCommand command = new SqlCommand("GetPet", _sqlConnection))
             {
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@IdPerson", Id);
+                command.Parameters.AddWithValue("@IdPet", Id);
                 _sqlConnection.Open();
 
                 SqlDataReader dataReader = command.ExecuteReader();
@@ -98,17 +98,17 @@ namespace Library.Context.Animal
                         Id = (int)dataReader["Id"],
                         Name = (string)dataReader["Name"],
                         Type = (string)dataReader["Type"],
-                        Genre = (string)dataReader["Genre"],
-                        Health = new HealthLibrary()
-                        {
-                            Id = (int)dataReader["Id"],
-                            Status = (Enum)dataReader["Status"],
-                        },
+                        Genre = (string)dataReader["Genre"],                       
                         Image = new ImageLibrary()
                         {
                             Id = (int)dataReader["Id"],
                             Tag = (string)dataReader["Tag"],
                             Path = (string)dataReader["Path"]
+                        },
+                        Health = new HealthLibrary()
+                        {
+                            Id = (int)dataReader["Id"],
+                            Status = (string)dataReader["Status"],
                         },
                         Service = new ServiceLibrary()
                         {
@@ -161,7 +161,7 @@ namespace Library.Context.Animal
             using (SqlCommand command = new SqlCommand("PutPet", _sqlConnection))
             {
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@IdPerson", Id);
+                command.Parameters.AddWithValue("@IdPet", Id);
                 // -- Pet
                 command.Parameters.AddWithValue("@Name", petLibrary.Name);
                 command.Parameters.AddWithValue("@Type", petLibrary.Type);
@@ -187,7 +187,7 @@ namespace Library.Context.Animal
             using (SqlCommand command = new SqlCommand("DeletePet", _sqlConnection))
             {
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@IdPerson", Id);
+                command.Parameters.AddWithValue("@IdPet", Id);
 
                 _sqlConnection.Open();
                 var running = command.ExecuteNonQuery();
