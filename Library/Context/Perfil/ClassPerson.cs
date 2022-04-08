@@ -57,6 +57,7 @@ namespace Library.Context.Perfil
                                 Address = new AddressLibrary()
                                 {
                                     Id = (int)dataReader["Id"],
+                                    Country = (string)dataReader["Country"],
                                     States = (string)dataReader["States"],
                                     City = (string)dataReader["City"],
                                     Neighborhoods = (string)dataReader["Neighborhoods"]
@@ -120,6 +121,7 @@ namespace Library.Context.Perfil
                         Address = new AddressLibrary()
                         {
                             Id = (int)dataReader["Id"],
+                            Country = (string)dataReader["Country"],
                             States = (string)dataReader["States"],
                             City = (string)dataReader["City"],
                             Neighborhoods = (string)dataReader["Neighborhoods"]

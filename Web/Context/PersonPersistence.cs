@@ -14,7 +14,7 @@ namespace Web.Context
     {
         private readonly ApiClient _clientPerson;
         private readonly BlobClient _blobClient;
-        //private readonly HttpPostedFileBase httpPosted;
+        private readonly HttpPostedFileBase httpPosted;
 
         public PersonPersistence()
         {
@@ -25,89 +25,23 @@ namespace Web.Context
         public async Task<IEnumerable<Person>> List()
         {
             var allPeople = await _clientPerson.GetPerson();
-            var listPerson = new List<Person>();
 
             if (allPeople.IsSuccessStatusCode)
             {
                 var people = await allPeople.Content.ReadAsAsync<IEnumerable<Person>>();
-
-                foreach (var person in people)
-                {
-                    var _person = new Person()
-                    {
-                        Id = person.Id,
-                        FirstName = person.FirstName,
-                        LastName = person.LastName,
-                        Age = person.Age,
-                        Birthday = person.Birthday,
-                        Genre = person.Genre,
-                        Picture = new Picture()
-                        {
-                            Id = person.Picture.Id,
-                            Tag = person.Picture.Tag,
-                            Path = person.Picture.Path
-                        },
-                        Contact = new Contact()
-                        {
-                            Id = person.Contact.Id,
-                            Email = person.Contact.Email,
-                            Mobile = person.Contact.Mobile
-                        },
-                        Address = new Address()
-                        {
-                            Id = person.Address.Id,
-                            Country = person.Address.Country,
-                            States = person.Address.States,
-                            City = person.Address.City,
-                            Neighborhoods = person.Address.Neighborhoods
-                        }
-                    };
-                    listPerson.Add(_person);
-                    return listPerson;
-                }
+                return people;
             }
 
             return new List<Person>();
         }
         public async Task<Person> Get(int? Id)
         {
-
             var people = await _clientPerson.GetPersonById(Id);
 
             if (people.IsSuccessStatusCode)
             {
                 var person = await people.Content.ReadAsAsync<Person>();
-
-                var _person = new Person()
-                {
-                    Id = person.Id,
-                    FirstName = person.FirstName,
-                    LastName = person.LastName,
-                    Age = person.Age,
-                    Birthday = person.Birthday,
-                    Genre = person.Genre,
-                    Picture = new Picture()
-                    {
-                        Id = person.Picture.Id,
-                        Tag = person.Picture.Tag,
-                        Path = person.Picture.Path
-                    },
-                    Contact = new Contact()
-                    {
-                        Id = person.Contact.Id,
-                        Email = person.Contact.Email,
-                        Mobile = person.Contact.Mobile
-                    },
-                    Address = new Address()
-                    {
-                        Id = person.Address.Id,
-                        Country = person.Address.Country,
-                        States = person.Address.States,
-                        City = person.Address.City,
-                        Neighborhoods = person.Address.Neighborhoods
-                    }
-                };
-                return _person;
+                return person;
             }
 
             return new Person();
