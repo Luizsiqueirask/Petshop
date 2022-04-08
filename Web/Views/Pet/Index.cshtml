@@ -16,8 +16,7 @@
                     <div class="card-body">
                         <br />
                         <figure class="card-img align-items-center mb-3 container-sm figure-img rounded-circle">
-                            <img src="@Url.Content(item.Pets.Image.Tag)" alt="Image" style="width: 360px; height: 270px;" class="img-thumbnail figure-img shadow-sm rounded-3 rounded-pill mb-5" />
-                            <h6 class="p text-nowrap p-2">@Html.DisplayFor(model => item.Pets.Image.Tag)</h6>
+                            <img src="@Url.Content(item.Pets.Image.Tag)" alt="@Html.DisplayFor(model => item.Pets.Image.Tag)" style="width: 360px; height: 270px;" class="img-thumbnail figure-img shadow-sm rounded-3 rounded-pill mb-5" />
                         </figure>
                         <div>
                             <h5 class="h-50 mb-3 text-center">Animal de Instimação</h5>
@@ -48,7 +47,7 @@
                                         @Html.DisplayFor(model => item.Pets.Service.Category)
                                         <br />
                                         <b>@Html.DisplayNameFor(model => model.People.FirstName):</b>
-                                        @Html.DisplayFor(model => item.People.FirstName) + " " +@Html.DisplayFor(model => item.People.LastName)
+                                        @Html.DisplayFor(model => item.People.FirstName) @Html.DisplayFor(model => item.People.LastName)
                                     </p>
                                 </div>
                             </div>

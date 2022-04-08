@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
@@ -93,8 +94,30 @@ namespace Web.Context
         }
         public async Task<Pet> Create()
         {
+            var allPerson = await _clientPet.GetPerson();
+            var selectPetsList = new List<SelectListItem>();
+            var pets = new Pet();
+
+            if (allPerson.IsSuccessStatusCode)
+            {
+                var people = await allPerson.Content.ReadAsAsync<IEnumerable<Person>>();
+
+                foreach(var person in people)
+                {
+                    var personPet = new SelectListItem()
+                    {
+                        Value = person.Id.ToString(),
+                        Text = person.FirstName + " " + person.LastName,
+                        Selected =  person.Id == pets.PersonId
+                    };
+                    selectPetsList.Add(personPet);
+                }
+                pets.PersonPetsSelect = selectPetsList;
+                return pets;
+            }
             return new Pet();
         }
+
         public async Task<Boolean> Post(Pet pet, HttpPostedFileBase httpPosted)
         {
             try

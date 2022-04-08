@@ -17,6 +17,7 @@ namespace Web.Models.Animal
         public Health Health { get; set; }
         public Service Service { get; set; }
         public int PersonId { get; set; }
+        public IEnumerable<SelectListItem> PersonPetsSelect { get; set; }
     }
     public class PeoplePets
     {
