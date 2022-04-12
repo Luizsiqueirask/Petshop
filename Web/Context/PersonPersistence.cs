@@ -14,7 +14,7 @@ namespace Web.Context
     {
         private readonly ApiClient _clientPerson;
         private readonly BlobClient _blobClient;
-        private readonly HttpPostedFileBase httpPosted;
+        //private readonly HttpPostedFileBase httpPosted;
 
         public PersonPersistence()
         {

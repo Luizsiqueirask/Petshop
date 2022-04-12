@@ -39,7 +39,9 @@ namespace Library.Context.Animal
                                 Id = (int)dataReader["Id"],
                                 Name = (string)dataReader["Name"],
                                 Type = (string)dataReader["Type"],
-                                Genre = (string)dataReader["Genre"],                                
+                                Genre = (string)dataReader["Genre"],
+                                Birthday = (DateTime)dataReader["Birthday"],
+                                Age = (int)dataReader["Age"],
                                 Image = new ImageLibrary()
                                 {
                                     Id = (int)dataReader["Id"],
@@ -51,10 +53,18 @@ namespace Library.Context.Animal
                                     Id = (int)dataReader["Id"],
                                     Status = (string)dataReader["Status"],
                                 },
-                                Service = new ServiceLibrary()
+                                Schedule = new ScheduleLibrary()
                                 {
                                     Id = (int)dataReader["Id"],
-                                    Category = (string)dataReader["Category"]
+                                    Services = (string)dataReader["Services"],
+                                    Date = (DateTime)dataReader["Date"],
+                                    Time = (DateTime)dataReader["Time"],
+                                    Places = new PlacesLibrary()
+                                    {
+                                        City = (string)dataReader["City"],
+                                        Street = (string)dataReader["Street"],
+                                        Number = (int)dataReader["Number"],
+                                    }
                                 },
                                 PersonId = (int)dataReader["PersonId"]
                             };
@@ -98,7 +108,9 @@ namespace Library.Context.Animal
                         Id = (int)dataReader["Id"],
                         Name = (string)dataReader["Name"],
                         Type = (string)dataReader["Type"],
-                        Genre = (string)dataReader["Genre"],                       
+                        Genre = (string)dataReader["Genre"],
+                        Birthday = (DateTime)dataReader["Birthday"],
+                        Age = (int)dataReader["Age"],
                         Image = new ImageLibrary()
                         {
                             Id = (int)dataReader["Id"],
@@ -110,10 +122,18 @@ namespace Library.Context.Animal
                             Id = (int)dataReader["Id"],
                             Status = (string)dataReader["Status"],
                         },
-                        Service = new ServiceLibrary()
+                        Schedule = new ScheduleLibrary()
                         {
                             Id = (int)dataReader["Id"],
-                            Category = (string)dataReader["Category"]
+                            Services = (string)dataReader["Services"],
+                            Date = (DateTime)dataReader["Date"],
+                            Time = (DateTime)dataReader["Time"],
+                            Places = new PlacesLibrary()
+                            {
+                                City = (string)dataReader["City"],
+                                Street = (string)dataReader["Street"],
+                                Number = (int)dataReader["Number"],
+                            }                            
                         },
                         PersonId = (int)dataReader["PersonId"]
                     };
@@ -142,7 +162,12 @@ namespace Library.Context.Animal
                     // -- Health
                     command.Parameters.AddWithValue("@Status", petLibrary.Health.Status);
                     // -- Service
-                    command.Parameters.AddWithValue("@Category", petLibrary.Service.Category);
+                    command.Parameters.AddWithValue("@Services", petLibrary.Schedule.Services);
+                    command.Parameters.AddWithValue("@Date", petLibrary.Schedule.Date);
+                    command.Parameters.AddWithValue("@Time", petLibrary.Schedule.Time);
+                    command.Parameters.AddWithValue("@City", petLibrary.Schedule.Places.City);
+                    command.Parameters.AddWithValue("@Street", petLibrary.Schedule.Places.Street);
+                    command.Parameters.AddWithValue("@Number", petLibrary.Schedule.Places.Number);
 
                     int running = command.ExecuteNonQuery();
                 }
@@ -161,7 +186,6 @@ namespace Library.Context.Animal
             using (SqlCommand command = new SqlCommand("PutPet", _sqlConnection))
             {
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@IdPet", Id);
                 // -- Pet
                 command.Parameters.AddWithValue("@Name", petLibrary.Name);
                 command.Parameters.AddWithValue("@Type", petLibrary.Type);
@@ -175,7 +199,12 @@ namespace Library.Context.Animal
                 // -- Health
                 command.Parameters.AddWithValue("@Status", petLibrary.Health.Status);
                 // -- Service
-                command.Parameters.AddWithValue("@Category", petLibrary.Service.Category);
+                command.Parameters.AddWithValue("@Services", petLibrary.Schedule.Services);
+                command.Parameters.AddWithValue("@Date", petLibrary.Schedule.Date);
+                command.Parameters.AddWithValue("@Time", petLibrary.Schedule.Time);
+                command.Parameters.AddWithValue("@City", petLibrary.Schedule.Places.City);
+                command.Parameters.AddWithValue("@Street", petLibrary.Schedule.Places.Street);
+                command.Parameters.AddWithValue("@Number", petLibrary.Schedule.Places.Number);
 
                 _sqlConnection.Open();
                 var running = command.ExecuteNonQuery();

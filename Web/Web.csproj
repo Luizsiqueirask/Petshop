@@ -34,6 +34,10 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <FilesToIncludeForPublish>AllFilesInProjectFolder</FilesToIncludeForPublish>
+    <LegacyPublishPropertiesPageEnabled>true</LegacyPublishPropertiesPageEnabled>
+    <PublishDatabases>false</PublishDatabases>
+    <DeployEncryptKey>Encryption password is used only if any deployment setting is marked as secure</DeployEncryptKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -303,7 +307,7 @@
     <Compile Include="Models\Animal\Health.cs" />
     <Compile Include="Models\Animal\Image.cs" />
     <Compile Include="Models\Animal\Pet.cs" />
-    <Compile Include="Models\Animal\Service.cs" />
+    <Compile Include="Models\Animal\Schedule.cs" />
     <Compile Include="Models\Perfil\Address.cs" />
     <Compile Include="Models\Perfil\Contact.cs" />
     <Compile Include="Models\Perfil\Person.cs" />

@@ -71,18 +71,20 @@
     <Compile Include="Models\Animal\HealthLibrary.cs" />
     <Compile Include="Models\Animal\ImageLibrary.cs" />
     <Compile Include="Models\Animal\PetLibrary.cs" />
-    <Compile Include="Models\Animal\ServiceLibrary.cs" />
+    <Compile Include="Models\Animal\ScheduleLibrary.cs" />
     <Compile Include="Models\Perfil\AddressLibrary.cs" />
     <Compile Include="Models\Perfil\ContactLibrary.cs" />
     <Compile Include="Models\Perfil\PersonLibrary.cs" />
     <Compile Include="Models\Perfil\PictureLibrary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Database\Petship\" />
+    <None Include="Database\Petship\.vs\Petship\v15\.ssms_suo" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Content Include="Database\mssql_petship.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,18 +3,18 @@
 @{
     ViewBag.Title = "View";
 }
+<h3 class="text-center p-5">All People</h3>
 
+<p class="p-5">
+    @Html.ActionLink("Create New", "Create", new { area = "" }, new { @class = "btn btn-md btn-gradient btn-success text-white shadow-md rounded-5" })
+</p>
 
-<div class="container-fluid">
-    <h3 class="text-center">All People</h3>
-    <p class="p-2">
-        @Html.ActionLink("Create New", "Create", new { area = "" }, new { @class = "btn btn-sm btn-success text-white" })
-    </p>
-    <hr />
+<div class="card shadow-lg rounded-5">
+
     @foreach (var item in Model)
     {
-        <div class="">
-            <div class="card card-body m-4 shadow-sm rounded-5">
+        <div class="container-fluid">
+            <div class="card-body m-4 ">
                 <div class="card-header shadow-sm bg-white">
                     <h2 class="h3 text-center m-4">@Html.DisplayFor(model => item.FirstName)</h2>
                     <hr />

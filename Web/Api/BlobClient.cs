@@ -11,7 +11,7 @@ namespace Web.Api
     {
         public CloudBlobClient _blobClient;
         public CloudBlobContainer _blobContainer;
-        private const string _blobContainerName = "Friendzone";
+        private const string _blobContainerName = "Petshop";
 
         public async Task SetupCloudBlob()
         {
