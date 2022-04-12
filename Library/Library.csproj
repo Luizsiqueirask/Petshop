@@ -80,11 +80,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="Database\Petship\.vs\Petship\v15\.ssms_suo" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Database\mssql_petship.sql" />
+    <Content Include="Database\mssql_petshop.sql" />
+    <Content Include="Database\mssql_petshop_auth.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

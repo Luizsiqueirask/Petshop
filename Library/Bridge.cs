@@ -9,12 +9,12 @@ namespace Library
         {
             try
             {
-                var PathConnection = WebConfigurationManager.ConnectionStrings["Petship"].ConnectionString;
+                var PathConnection = WebConfigurationManager.ConnectionStrings["Petshop"].ConnectionString;
                 return PathConnection;
             }
             catch
             {
-                var PathConnection = ConfigurationManager.ConnectionStrings["Petship"].ConnectionString;
+                var PathConnection = ConfigurationManager.ConnectionStrings["Petshop"].ConnectionString;
                 return PathConnection;
             }
         }

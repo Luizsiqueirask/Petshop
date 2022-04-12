@@ -20,15 +20,15 @@
             <a class="navbar-brand" href="#page-top">WEB</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             @Html.ActionLink("Petship", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="nav navbar-nav">
-                    <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item">@Html.ActionLink("Person", "Index", "Person", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item">@Html.ActionLink("Pet", "Index", "Pet", new { area = "" }, new { @class = "nav-link" })</li>
-                </ul>
-            </div>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="nav navbar-nav">
+                <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Person", "Index", "Person", new { area = "" }, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Pet", "Index", "Pet", new { area = "" }, new { @class = "nav-link" })</li>
+            </ul>
+        </div>
         </div>
     </nav>
     <!-- Header-->
@@ -45,9 +45,9 @@
                 <div class="container-fluid col-lg-8">
                     <h2 class="h2 justify-content-center text-center mb-5 mt-5">Petshop</h2>
                     <p class="lead pb-5 text-center justify-content-xxl-center">Petship is a relationship of mutual affection between pet. It is a stronger form of interpet bond than an acquaintance or an association, such as a classmate, neighbor, or colleague.</p>
-                    <div class="body-content">
+                    <div class="body-content m-3 p-2">
                         <!--a href="~/App_Start/WebApiConfig.cs">~/App_Start/WebApiConfig.cs</a-->
-                        <div class="container-lg">
+                        <div class="container">
                             @RenderBody()
                         </div>
                     </div>

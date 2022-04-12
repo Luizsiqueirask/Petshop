@@ -1,8 +1,8 @@
-using Animal.Areas.HelpPage.ModelDescriptions;
-using Animal.Areas.HelpPage.Models;
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
+using Animal.Areas.HelpPage.ModelDescriptions;
+using Animal.Areas.HelpPage.Models;
 
 namespace Animal.Areas.HelpPage.Controllers
 {

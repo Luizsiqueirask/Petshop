@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace UWebViewer
+namespace UWebAuth
 {
     public class Tests
     {
