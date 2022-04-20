@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using WebAuth.Api;
 using WebAuth.Models.Perfil;
 
@@ -50,47 +52,54 @@ namespace WebAuth.Context
         {
             return new Person();
         }
-        public async Task<Boolean> Post(Person person, HttpPostedFileBase httpPosted)
+        public async Task<ActionResult> Post(Person person)
         {
+            HttpFileCollectionBase httpFileCollection = Request.Files;
+            FileUpload fileUpload = new FileUpload();
+
             try
             {
-                if (httpPosted != null && httpPosted.ContentLength > 0)
+                if (ModelState.IsValid)
                 {
                     await _blobClient.SetupCloudBlob();
 
-                    var getBlobName = _blobClient.GetRandomBlobName(httpPosted.FileName);
-                    var blobContainer = _blobClient._blobContainer.GetBlockBlobReference(getBlobName);
-                    await blobContainer.UploadFromStreamAsync(httpPosted.InputStream);
+                    var pictureNameBlob = _blobClient.GetRandomBlobName(httpFileCollection[0].FileName);
+                    var picturePathblob = _blobClient._blobContainer.GetBlockBlobReference(pictureNameBlob);
+                    await picturePathblob.UploadFromStreamAsync(httpFileCollection[0].InputStream);
 
-                    person.Picture.Tag = blobContainer.Name.ToString();
-                    person.Picture.Path = blobContainer.Uri.AbsolutePath.ToString();
+                    person.Picture.Tag = picturePathblob.Name.ToString();
+                    person.Picture.Path = picturePathblob.Uri.AbsolutePath.ToString();
 
                     await _clientPerson.PostPerson(person);
-                    return true;
                 }
-                return false;
             }
             catch
             {
-                var directoryPath = @"~/Images/Person/";
-                if (httpPosted != null && httpPosted.ContentLength > 0)
+                if (ModelState.IsValid)
                 {
-                    var PictureName = Path.GetFileName(httpPosted.FileName);
-                    var PictureExt = Path.GetExtension(PictureName);
+                    var directoryPath = @"../Web/Uploads/Person/";
+                    // Create pictute on server
+                    var pictureName = Path.GetFileName(httpFileCollection[0].FileName);
+                    var picturePath = Server.MapPath(Path.Combine(directoryPath, pictureName));
+
+                    // Add Picture reference to model and save
+                    var pictureLocalPath = string.Concat(directoryPath, pictureName);
+                    var PictureExt = Path.GetExtension(pictureName);
+
                     if (PictureExt.Equals(".jpg") || PictureExt.Equals(".jpeg") || PictureExt.Equals(".png"))
                     {
-                        var PicturePath = Path.Combine(Server.MapPath(directoryPath), PictureName);
+                        person.Picture.Tag = pictureName;
+                        person.Picture.Path = pictureLocalPath;
+                        fileUpload.SaveAs(picturePath);
 
-                        person.Picture.Tag = PictureName;
-                        person.Picture.Path = PicturePath;
-
-                        httpPosted.SaveAs(person.Picture.Path);
+                        Debug.WriteLine(person.FirstName);
                         await _clientPerson.PostPerson(person);
+
+                        return RedirectToAction("Index");
                     }
-                    return true;
                 }
-                return false;
             }
+            return View(new Person());
         }
         public async Task<Person> Update(int? Id)
         {
