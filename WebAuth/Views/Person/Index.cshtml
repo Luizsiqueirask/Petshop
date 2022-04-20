@@ -16,12 +16,12 @@
         <div class="container-fluid">
             <div class="card-body m-4 ">
                 <div class="card-header shadow-sm bg-white">
-                    <h2 class="h3 text-center m-4">@Html.DisplayFor(model => item.FirstName)</h2>
+                    <h3 class="h3 text-center m-4">@Html.DisplayFor(model => item.FirstName)</h3>
                     <hr />
                     <div class="card-body">
                         <br />
                         <figure class="card-img align-items-center mb-3 container-sm">
-                            <img src="@Url.Content(item.Picture.Tag)" alt=">@Html.DisplayFor(model => item.Picture.Tag)" style="width: 360px; height: 270px;" class="img-thumbnail figure-img shadow-sm rounded-3 rounded-pill mb-5" />
+                            <img src="@Url.Content(item.Picture.Tag)" alt="@Html.DisplayFor(model => item.Picture.Tag)" style="width: 360px; height: 270px;" class="img-thumbnail figure-img shadow-sm rounded-3 rounded-pill mb-5" />
                         </figure>
                         <div>
                             <h5 class="h-50 mb-3 text-center">Pessoa</h5>

@@ -104,75 +104,82 @@ namespace Perfil.Casting
                 return null;
             }
         }
-        public void Post(Person person)
+        public bool Post(Person person)
         {
-            var personLibrary = new PersonLibrary()
+            if (person != null)
             {
-                Id = person.Id,
-                FirstName = person.FirstName,
-                LastName = person.LastName,
-                Birthday = person.Birthday,
-                Age = person.Age,
-                Genre = person.Genre,
-
-                Picture = new PictureLibrary()
+                var personLibrary = new PersonLibrary()
                 {
-                    Id = person.Picture.Id,
-                    Tag = person.Picture.Tag,
-                    Path = person.Picture.Path
-                },
-                Contact = new ContactLibrary()
-                {
-                    Id = person.Contact.Id,
-                    Email = person.Contact.Email,
-                    Mobile = person.Contact.Mobile
-                },
-                Address = new AddressLibrary()
-                {
-                    Id = person.Address.Id,
-                    Country = person.Address.Country,
-                    States = person.Address.States,
-                    City = person.Address.City,
-                    Neighborhoods = person.Address.Neighborhoods
-                }
-            };
-
-            classPerson.Post(personLibrary);
+                    Id = person.Id,
+                    FirstName = person.FirstName,
+                    LastName = person.LastName,
+                    Birthday = person.Birthday,
+                    Age = person.Age,
+                    Genre = person.Genre,
+                    Picture = new PictureLibrary()
+                    {
+                        Id = person.Picture.Id,
+                        Tag = person.Picture.Tag,
+                        Path = person.Picture.Path
+                    },
+                    Contact = new ContactLibrary()
+                    {
+                        Id = person.Contact.Id,
+                        Email = person.Contact.Email,
+                        Mobile = person.Contact.Mobile
+                    },
+                    Address = new AddressLibrary()
+                    {
+                        Id = person.Address.Id,
+                        Country = person.Address.Country,
+                        States = person.Address.States,
+                        City = person.Address.City,
+                        Neighborhoods = person.Address.Neighborhoods
+                    }
+                };
+                classPerson.Post(personLibrary);
+                return true;
+            }
+            return false;
         }
-        public void Put(Person person, int? Id)
+        public bool Put(Person person, int? Id)
         {
-            var personLibrary = new PersonLibrary()
+            if (person != null)
             {
-                Id = person.Id,
-                FirstName = person.FirstName,
-                LastName = person.LastName,
-                Birthday = person.Birthday,
-                Age = person.Age,
-                Genre = person.Genre,
+                var personLibrary = new PersonLibrary()
+                {
+                    Id = person.Id,
+                    FirstName = person.FirstName,
+                    LastName = person.LastName,
+                    Birthday = person.Birthday,
+                    Age = person.Age,
+                    Genre = person.Genre,
 
-                Picture = new PictureLibrary()
-                {
-                    Id = person.Picture.Id,
-                    Tag = person.Picture.Tag,
-                    Path = person.Picture.Path
-                },
-                Contact = new ContactLibrary()
-                {
-                    Id = person.Contact.Id,
-                    Email = person.Contact.Email,
-                    Mobile = person.Contact.Mobile
-                },
-                Address = new AddressLibrary()
-                {
-                    Id = person.Address.Id,
-                    Country = person.Address.Country,
-                    States = person.Address.States,
-                    City = person.Address.City,
-                    Neighborhoods = person.Address.Neighborhoods
-                }
-            };
-
-            classPerson.Put(personLibrary, Id);
+                    Picture = new PictureLibrary()
+                    {
+                        Id = person.Picture.Id,
+                        Tag = person.Picture.Tag,
+                        Path = person.Picture.Path
+                    },
+                    Contact = new ContactLibrary()
+                    {
+                        Id = person.Contact.Id,
+                        Email = person.Contact.Email,
+                        Mobile = person.Contact.Mobile
+                    },
+                    Address = new AddressLibrary()
+                    {
+                        Id = person.Address.Id,
+                        Country = person.Address.Country,
+                        States = person.Address.States,
+                        City = person.Address.City,
+                        Neighborhoods = person.Address.Neighborhoods
+                    }
+                };
+                classPerson.Put(personLibrary, Id);
+                return true;
+            }
+            return false;
         }
         public void Delete(int? Id)
         {

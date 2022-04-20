@@ -65,6 +65,9 @@
     <Compile Include="Context\Animal\ClassPet.cs" />
     <Compile Include="Context\Animal\InterfacePet.cs" />
     <Compile Include="Context\Animal\ThrowPet.cs" />
+    <Compile Include="Context\PerfilAuth\ClassAuthPerson.cs" />
+    <Compile Include="Context\PerfilAuth\InterfaceAuthPerson.cs" />
+    <Compile Include="Context\PerfilAuth\ThrowAuthPerson.cs" />
     <Compile Include="Context\Perfil\ClassPerson.cs" />
     <Compile Include="Context\Perfil\InterfacePerson.cs" />
     <Compile Include="Context\Perfil\ThrowPerson.cs" />

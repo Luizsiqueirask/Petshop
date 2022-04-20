@@ -2,16 +2,16 @@
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using WebAuth.Context;
-using WebAuth.Models.Perfil;
+using Web.Context;
+using Web.Models.Perfil;
 
-namespace WebAuth.Controllers
+namespace Web.Controllers
 {
-    public class PersonController : Controller
+    public class PersonControllerOld : Controller
     {
         private readonly PersonPersistence clientPerson;
 
-        public PersonController()
+        public PersonControllerOld()
         {
             clientPerson = new PersonPersistence();
         }
@@ -39,13 +39,22 @@ namespace WebAuth.Controllers
 
         // POST: Person/Create
         [HttpPost]
-        public async Task<ActionResult> Create(Person person)
+        public async Task<ActionResult> Create(Person person, HttpPostedFileBase httpPosted)
         {
             try
             {
                 // TODO: Add insert logic here               
-                await clientPerson.Post(person);
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    await clientPerson.Post(person, httpPosted);
+                    Debug.WriteLine($"Nome: {person.FirstName}, Sobrenome: {person.LastName}");
+                    return View($"Nome: {person.FirstName}, Sobrenome: {person.LastName}");
+                    //return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View(person);
+                }
             }
             catch
             {

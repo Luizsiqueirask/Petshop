@@ -289,9 +289,11 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Context\PersonPersistenceOld.cs" />
     <Compile Include="Context\PersonPersistence.cs" />
     <Compile Include="Context\PetPersistence.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PersonControllerOld.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\PetController.cs" />
     <Compile Include="Global.asax.cs">
@@ -359,7 +361,6 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Person\Index.cshtml" />
-    <Content Include="Views\Person\Create.cshtml" />
     <Content Include="Views\Person\Edit.cshtml" />
     <Content Include="Views\Person\Delete.cshtml" />
     <Content Include="Views\Person\Details.cshtml" />
@@ -368,6 +369,7 @@
     <Content Include="Views\Pet\Delete.cshtml" />
     <Content Include="Views\Pet\Edit.cshtml" />
     <Content Include="Views\Pet\Index.cshtml" />
+    <Content Include="Views\Person\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

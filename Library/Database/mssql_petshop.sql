@@ -12,6 +12,23 @@ USE Petshop;
 				  /* CREATE TABLES */
 ----------------------------------------------------------
 
+
+
+-------------------------- SELECT ------------------------
+
+SELECT * FROM Person;
+SELECT * FROM Pictures;
+SELECT * FROM Contacts;
+SELECT * FROM Addresses;
+
+SELECT * FROM Pet;
+SELECT * FROM Images;
+SELECT * FROM Health;
+SELECT * FROM Places;
+SELECT * FROM Schedules;
+
+------------------------------ DROP ------------------------
+
 DROP TABLE Person;
 DROP TABLE Pictures;
 DROP TABLE Contacts;
@@ -22,7 +39,6 @@ DROP TABLE Images;
 DROP TABLE Health;
 DROP TABLE Places;
 DROP TABLE Schedules;
--- DROP TABLE Services;
 
 ------------------------- Person -------------------------
 
@@ -145,7 +161,6 @@ ELSE
 	PRINT 'Places - Exists this table !!!'
 GO
 
-
 -- Creating Schedules
 
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Schedules' and type in (N'U'))
@@ -236,7 +251,7 @@ AS BEGIN
 		c2.Id,
 		c2.Email,
 		c2.Mobile	
-	FROM Person p1
+	FROM [dbo].[Person] p1
 	-- Pictures
 	LEFT JOIN [dbo].[Pictures] p2
 	ON p1.PictureId = p2.Id
@@ -584,11 +599,11 @@ EXEC [dbo].[GetPerson] @IdPerson = 1;
 
 /* Create */
 
-EXEC [dbo].[PostPerson] @Tag = 'MyPicturePerson', @Path = '../Pictures/my_picture_person.png', 
+EXEC [dbo].[PostPerson] @Tag = 'MyPerson', @Path = '~/images/person.jpg', 
 	@Email = 'luiz@siqueira.psk', @Mobile = '21975918265', 
 	@Country = 'Brasil', @States = 'Rio de Janeiro', @City = 'Rio de Janeiro', @Neighborhoods = 'Leme',
 	@Firstname = 'Luiz', @Lastname = 'Siqueira', @Genre = 'Male', @Age = '31', @Birthday = '1990-01-28',
-	@PictureId = 1, @ContactId = 1, @AddressId = 1; 
+	@PictureId = 1, @AddressId = 1,  @ContactId = 1; 
 
 /* Update */
 
@@ -596,7 +611,7 @@ EXEC [dbo].[PutPerson] @IdPerson = 1, @Tag = 'MyPicturePerson', @Path = '../Pict
 	@Email = 'luiz@siqueira.psk', @Mobile = '21975918265', 
 	@Country = 'Brasil', @States = 'Rio de Janeiro', @City = 'Rio de Janeiro', @Neighborhoods = 'Leme',
 	@Firstname = 'Luiz', @Lastname = 'Siqueira', @Genre = 'Male', @Age = '31', @Birthday = '1990-01-28',
-	@PictureId = 1, @ContactId = 1, @AddressId = 1; 
+	@PictureId = 1, @AddressId = 1,  @ContactId = 1; 
 
 /* Delete */
 
@@ -615,7 +630,7 @@ EXEC [dbo].[GetPet] @IdPet = 1;
 
 /* Create */
 
-EXEC [dbo].[PostPet] @Tag = 'SelfPet', @Path = '../Pictures/my_picture_pet.png',
+EXEC [dbo].[PostPet] @Tag = 'SelfPet', @Path = '~~/images/pet.jpg',
 	@Status = 'Bad', @Services = 'Banho', @Date = '2022-06-12', @Time = '10:00:00.0123456', 
 	@City =	'Rio de Janeiro', @Street = 'Rua da Oliveiras', @Number = '1105',
 	@Name = 'Negao', @Type = 'Mendes', @Genre = 'M', @Age = '10', @Birthday = '2002-11-20', 

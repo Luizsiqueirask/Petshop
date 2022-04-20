@@ -1,6 +1,10 @@
 ﻿using Perfil.Casting;
 using Perfil.Models.Perfil;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace Perfil.Controllers
@@ -27,9 +31,32 @@ namespace Perfil.Controllers
         }
 
         // POST: api/Person
-        public void Post(Person person)
+        public string Post(Person person)
         {
-            personCast.Post(person);
+            try
+            {
+                if (person != null)
+                {
+                    var httpResponseOk = new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        Content = new StringContent("Sucesso"),
+                        RequestMessage = new HttpRequestMessage(),
+                    };
+                    personCast.Post(person);
+                    return httpResponseOk.ToString();
+                }               
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+
+            var httpResponseBad = new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                Content = new StringContent("Error"),
+                RequestMessage = new HttpRequestMessage(),
+            };
+            return httpResponseBad.ToString();
         }
 
         // PUT: api/Person/5

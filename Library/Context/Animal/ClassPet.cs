@@ -158,17 +158,23 @@ namespace Library.Context.Animal
                     command.Parameters.AddWithValue("@Genre", petLibrary.Genre);
                     // -- Image
                     command.Parameters.AddWithValue("@Tag", petLibrary.Image.Tag);
-                    command.Parameters.AddWithValue("@Path", petLibrary.Image.Path);
+                    command.Parameters.AddWithValue("@Path", petLibrary.Image.Id);
+                    command.Parameters.AddWithValue("@ImageId", petLibrary.Image.Path);
                     // -- Health
                     command.Parameters.AddWithValue("@Status", petLibrary.Health.Status);
-                    // -- Service
+                    command.Parameters.AddWithValue("@HealthId", petLibrary.Health.Id);
+                    // -- Schedule
                     command.Parameters.AddWithValue("@Services", petLibrary.Schedule.Services);
                     command.Parameters.AddWithValue("@Date", petLibrary.Schedule.Date);
                     command.Parameters.AddWithValue("@Time", petLibrary.Schedule.Time);
+                    command.Parameters.AddWithValue("@ScheduleIdd", petLibrary.Schedule.Id);
+                    // -- Places
                     command.Parameters.AddWithValue("@City", petLibrary.Schedule.Places.City);
                     command.Parameters.AddWithValue("@Street", petLibrary.Schedule.Places.Street);
                     command.Parameters.AddWithValue("@Number", petLibrary.Schedule.Places.Number);
+                    command.Parameters.AddWithValue("@PlaceId", petLibrary.Schedule.Places.Id);
 
+                    _sqlConnection.Open();
                     int running = command.ExecuteNonQuery();
                 }
                 catch (SqlException ex)
@@ -195,16 +201,21 @@ namespace Library.Context.Animal
                 command.Parameters.AddWithValue("@Genre", petLibrary.Genre);
                 // -- Image
                 command.Parameters.AddWithValue("@Tag", petLibrary.Image.Tag);
-                command.Parameters.AddWithValue("@Path", petLibrary.Image.Path);
+                command.Parameters.AddWithValue("@Path", petLibrary.Image.Id);
+                command.Parameters.AddWithValue("@ImageId", petLibrary.Image.Path);
                 // -- Health
                 command.Parameters.AddWithValue("@Status", petLibrary.Health.Status);
-                // -- Service
+                command.Parameters.AddWithValue("@HealthId", petLibrary.Health.Id);
+                // -- Schedule
                 command.Parameters.AddWithValue("@Services", petLibrary.Schedule.Services);
                 command.Parameters.AddWithValue("@Date", petLibrary.Schedule.Date);
                 command.Parameters.AddWithValue("@Time", petLibrary.Schedule.Time);
+                command.Parameters.AddWithValue("@ScheduleIdd", petLibrary.Schedule.Id);
+                // -- Places
                 command.Parameters.AddWithValue("@City", petLibrary.Schedule.Places.City);
                 command.Parameters.AddWithValue("@Street", petLibrary.Schedule.Places.Street);
                 command.Parameters.AddWithValue("@Number", petLibrary.Schedule.Places.Number);
+                command.Parameters.AddWithValue("@PlaceId", petLibrary.Schedule.Places.Id);
 
                 _sqlConnection.Open();
                 var running = command.ExecuteNonQuery();

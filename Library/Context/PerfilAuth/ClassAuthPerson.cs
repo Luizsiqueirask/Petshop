@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Library.Context.Perfil
+namespace Library.Context.PerfilAuth
 {
-    public class ClassPerson : ThrowPerson
+    public class ClassAuthPerson : ThrowAuthPerson
     {
         public readonly Bridge _conn;
         public readonly SqlConnection _sqlConnection;
 
-        public ClassPerson()
+        public ClassAuthPerson()
         {
             _conn = new Bridge();
             _sqlConnection = new SqlConnection(_conn.Connect());
@@ -153,17 +153,15 @@ namespace Library.Context.Perfil
                     // -- Person
                     command.Parameters.AddWithValue("@FirstName", personLibrary.FirstName);
                     command.Parameters.AddWithValue("@LastName", personLibrary.LastName);
-                    command.Parameters.AddWithValue("@Genre", personLibrary.Genre);
                     command.Parameters.AddWithValue("@Age", personLibrary.Age);
-                    command.Parameters.AddWithValue("@Birthday", personLibrary.Birthday.ToString("d"));
+                    command.Parameters.AddWithValue("@Birthday", personLibrary.Birthday);
+                    command.Parameters.AddWithValue("@Genre", personLibrary.Genre);
                     command.Parameters.AddWithValue("@PictureId", personLibrary.Picture.Id);
                     command.Parameters.AddWithValue("@ContactId", personLibrary.Contact.Id);
                     command.Parameters.AddWithValue("@AddressId", personLibrary.Address.Id);
 
                     _sqlConnection.Open();
                     int running = command.ExecuteNonQuery();
-                    _sqlConnection.Close();
-
                 }
                 catch (SqlException ex)
                 {
@@ -195,12 +193,12 @@ namespace Library.Context.Perfil
                 // -- Person
                 command.Parameters.AddWithValue("@FirstName", personLibrary.FirstName);
                 command.Parameters.AddWithValue("@LastName", personLibrary.LastName);
-                command.Parameters.AddWithValue("@Genre", personLibrary.Genre);
                 command.Parameters.AddWithValue("@Age", personLibrary.Age);
-                command.Parameters.AddWithValue("@Birthday", personLibrary.Birthday.ToString("d"));
+                command.Parameters.AddWithValue("@Birthday", personLibrary.Birthday);
+                command.Parameters.AddWithValue("@Genre", personLibrary.Genre);
                 command.Parameters.AddWithValue("@PictureId", personLibrary.Picture.Id);
-                command.Parameters.AddWithValue("@AddressId", personLibrary.Address.Id);
                 command.Parameters.AddWithValue("@ContactId", personLibrary.Contact.Id);
+                command.Parameters.AddWithValue("@AddressId", personLibrary.Address.Id);
 
                 _sqlConnection.Open();
                 var running = command.ExecuteNonQuery();
