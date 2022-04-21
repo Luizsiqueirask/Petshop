@@ -101,16 +101,16 @@ CREATE TABLE [dbo].[Person] (
 	[Age] INT NOT NULL,
 	[Genre] NVARCHAR(250) NOT NULL,
 	[Birthday] DATE NOT NULL,
+	[UserId] INT NOT NULL,
 	[PictureId] INT NOT NULL,
 	[AddressId] INT NOT NULL,
 	[ContactId] INT NOT NULL,
-	[UserId] INT NOT NULL,
 	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (UserId) REFERENCES [dbo].[Users](Id) ON UPDATE CASCADE ON DELETE CASCADE
 	FOREIGN KEY (PictureId) REFERENCES [dbo].[Pictures](Id) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (ContactId) REFERENCES [dbo].[Contacts](Id) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (AddressId) REFERENCES [dbo].[Addresses](Id) ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (UserId) REFERENCES [dbo].[Users](Id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 ELSE
 	PRINT 'Person - Exists this table !!!'
@@ -245,6 +245,7 @@ AS BEGIN
 		p1.Id,
 		p1.FirstName,
 		p1.LastName,
+		p1.Genre,
 		p1.Age,
 		p1.Birthday,
 		-- Users
@@ -313,12 +314,16 @@ AS BEGIN
 	-- Addresses
 	INSERT INTO [dbo].[Addresses]([Country], [States], [City], [Neighborhoods]) 
 	VALUES (@Country, @States, @City, @Neighborhoods);
-	-- Contacts
+	-- User
 	INSERT INTO [dbo].[Users]([Username], [Password]) 
 	VALUES (@Username, @Password);
 	-- Person
-	INSERT INTO [dbo].[Person]([FirstName], [LastName], [Age], [Genre], [Birthday], [PictureId], [AddressId], [ContactId])
-	VALUES (@FirstName, @LastName, @Age, @Genre, Convert(DATE, @Birthday), @PictureId, @AddressId, @ContactId);
+	INSERT INTO [dbo].[Person]([FirstName], [LastName], [Age], [Genre], [Birthday], [UserId], [PictureId], [AddressId], [ContactId])
+	VALUES (@FirstName, @LastName, @Age, @Genre, Convert(DATE, @Birthday), 
+	(SELECT MAX(u1.Id) FROM [dbo].[Users] u1),
+	(SELECT MAX(p1.Id) FROM [dbo].[Pictures] p1),
+	(SELECT MAX(c1.Id) FROM [dbo].[Contacts] c1),
+	(SELECT MAX(a1.Id) FROM [dbo].[Addresses] a1));
 END
 GO;
 
@@ -523,7 +528,11 @@ AS BEGIN
 	VALUES (@Services, Convert(DATE, @Date), @Time, @PlaceId);
 	-- Pet
 	INSERT INTO [dbo].[Pet]([Name], [Type], [Age], [Genre], [Birthday], [ImageId], [HealthId], [ScheduleId], [PersonId])
-	VALUES (@Name, @Type, @Age, @Genre, Convert(DATE, @Birthday), @ImageId, @HealthId, @ScheduleId, @PersonId);
+	VALUES (@Name, @Type, @Age, @Genre, Convert(DATE, @Birthday), 
+	(SELECT MAX(i1.Id) FROM [dbo].[Images] i1),
+	(SELECT MAX(h1.Id) FROM [dbo].[Health] h1),
+	(SELECT MAX(s1.Id) FROM [dbo].[Schedules] s1),
+	(SELECT MAX(p1.Id) FROM [dbo].[Person] p1))
 END
 GO;
 
@@ -592,7 +601,8 @@ AS BEGIN
 		Birthday = Convert(DATE, @Birthday),
 		ImageId = @ImageId,
 		HealthId = @HealthId,
-		ScheduleId = @ScheduleId
+		ScheduleId = @ScheduleId,
+		PersonId = @PersonId
 	WHERE Id = @IdPet;
 END
 GO;

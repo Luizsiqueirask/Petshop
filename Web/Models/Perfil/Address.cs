@@ -6,7 +6,6 @@ namespace Web.Models.Perfil
 {
     public class Address
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required(ErrorMessage = "Informe pais")]
         [DisplayName("Pais")]

@@ -239,6 +239,7 @@ AS BEGIN
 		p1.Id,
 		p1.FirstName,
 		p1.LastName,
+		p1.Genre,
 		p1.Age,
 		p1.Birthday,
 		-- Address
@@ -300,7 +301,10 @@ AS BEGIN
 	VALUES (@Country, @States, @City, @Neighborhoods);
 	-- Person
 	INSERT INTO [dbo].[Person]([FirstName], [LastName], [Age], [Genre], [Birthday], [PictureId], [AddressId], [ContactId])
-	VALUES (@FirstName, @LastName, @Age, @Genre, Convert(DATE, @Birthday), @PictureId, @AddressId, @ContactId);
+	VALUES (@FirstName, @LastName, @Age, @Genre, Convert(DATE, @Birthday), 
+	(SELECT MAX(p1.Id) FROM [dbo].[Pictures] p1),
+	(SELECT MAX(c1.Id) FROM [dbo].[Contacts] c1),
+	(SELECT MAX(a1.Id) FROM [dbo].[Addresses] a1));
 END
 GO;
 
@@ -348,7 +352,7 @@ AS BEGIN
 		[City] = @City,
 		[Neighborhoods] = @Neighborhoods
 	WHERE Id = @AddressId;
-	
+
 	-- Person
 	UPDATE [dbo].[Person] SET 
 		FirstName = @FirstName,
@@ -450,49 +454,44 @@ END
 GO;
 
 /* Create */
-CREATE PROCEDURE [dbo].[PostPet]
-	-- Images
+CREATE PROCEDURE [dbo].[PostPerson]	
+	-- Pictures
 	@Tag AS NVARCHAR(255),
 	@Path AS NVARCHAR(255),
-	@ImageId AS INT,
-	-- Health
-	@Status AS NVARCHAR(250),
-	@HealthId AS INT,
-	-- Services
-	@Services AS NVARCHAR(250),
-	@Date AS DATE,
-	@Time AS TIME,
-	@ScheduleId AS INT,
-	-- Places
+	@PictureId AS INT,
+	-- Contacts
+	@Email AS NVARCHAR(250),
+	@Mobile AS NVARCHAR(250),
+	@ContactId AS INT,
+	-- Addresses
+	@Country AS NVARCHAR(250),
+	@States AS NVARCHAR(250),
 	@City AS NVARCHAR(250),
-	@Street AS NVARCHAR(250),
-	@Number AS INT,
-	@PlaceId AS INT,
-	-- Pet
-	@Name AS NVARCHAR(250),
-	@Type AS NVARCHAR(250),
+	@Neighborhoods AS NVARCHAR(250),
+	@AddressId AS INT,
+	-- Person
+	@FirstName AS NVARCHAR(250),
+	@LastName AS NVARCHAR(250),
 	@Genre AS NVARCHAR(250),
 	@Birthday AS DATE,
-	@Age AS INT,
-	-- Person
-	@PersonId AS INT
+	@Age AS INT
 
 AS BEGIN
-	-- Images
-	INSERT INTO [dbo].[Images]([Tag], [Path]) 
+	-- Pictures
+	INSERT INTO [dbo].[Pictures]([Tag], [Path]) 
 	VALUES (@Tag, @Path);
 	-- Contacts
-	INSERT INTO [dbo].[Health]([Status]) 
-	VALUES (@Status);	
-	-- Places
-	INSERT INTO [dbo].[Places]([City], [Street], [Number]) 
-	VALUES (@City, @Street, @Number);
-	-- Schedules
-	INSERT INTO [dbo].[Schedules]([Services], [Date], [Time], [PlaceId]) 
-	VALUES (@Services, Convert(DATE, @Date), @Time, @PlaceId);
-	-- Pet
-	INSERT INTO [dbo].[Pet]([Name], [Type], [Age], [Genre], [Birthday], [ImageId], [HealthId], [ScheduleId], [PersonId])
-	VALUES (@Name, @Type, @Age, @Genre, Convert(DATE, @Birthday), @ImageId, @HealthId, @ScheduleId, @PersonId);
+	INSERT INTO [dbo].[Contacts]([Email], [Mobile]) 
+	VALUES (@Email, @Mobile);
+	-- Addresses
+	INSERT INTO [dbo].[Addresses]([Country], [States], [City], [Neighborhoods]) 
+	VALUES (@Country, @States, @City, @Neighborhoods);
+	-- Person
+	INSERT INTO [dbo].[Person]([FirstName], [LastName], [Age], [Genre], [Birthday], [PictureId], [AddressId], [ContactId])
+	VALUES (@FirstName, @LastName, @Age, @Genre, Convert(DATE, @Birthday), 
+	(SELECT MAX(p1.Id) FROM [dbo].[Pictures] p1),
+	(SELECT MAX(c1.Id) FROM [dbo].[Contacts] c1),
+	(SELECT MAX(a1.Id) FROM [dbo].[Addresses] a1));
 END
 GO;
 
@@ -561,7 +560,8 @@ AS BEGIN
 		Birthday = Convert(DATE, @Birthday),
 		ImageId = @ImageId,
 		HealthId = @HealthId,
-		ScheduleId = @ScheduleId
+		ScheduleId = @ScheduleId,
+		PersonId = @PersonId
 	WHERE Id = @IdPet;
 END
 GO;
@@ -599,19 +599,21 @@ EXEC [dbo].[GetPerson] @IdPerson = 1;
 
 /* Create */
 
-EXEC [dbo].[PostPerson] @Tag = 'MyPerson', @Path = '~/images/person.jpg', 
+EXEC [dbo].[PostPerson] @Tag = 'MyPicturePerson', @Path = '../Pictures/my_picture_person.png', 
 	@Email = 'luiz@siqueira.psk', @Mobile = '21975918265', 
 	@Country = 'Brasil', @States = 'Rio de Janeiro', @City = 'Rio de Janeiro', @Neighborhoods = 'Leme',
+	@Username = 'luizsiqueira', @Password = '123456',
 	@Firstname = 'Luiz', @Lastname = 'Siqueira', @Genre = 'Male', @Age = '31', @Birthday = '1990-01-28',
-	@PictureId = 1, @AddressId = 1,  @ContactId = 1; 
+	@PictureId = 1, @UserId = 1, @ContactId = 1, @AddressId = 1; 
 
 /* Update */
 
 EXEC [dbo].[PutPerson] @IdPerson = 1, @Tag = 'MyPicturePerson', @Path = '../Pictures/my_picture_person.png', 
 	@Email = 'luiz@siqueira.psk', @Mobile = '21975918265', 
 	@Country = 'Brasil', @States = 'Rio de Janeiro', @City = 'Rio de Janeiro', @Neighborhoods = 'Leme',
+	@Username = 'luizsiqueira', @Password = '123456',
 	@Firstname = 'Luiz', @Lastname = 'Siqueira', @Genre = 'Male', @Age = '31', @Birthday = '1990-01-28',
-	@PictureId = 1, @AddressId = 1,  @ContactId = 1; 
+	@PictureId = 1, @UserId = 1, @ContactId = 1, @AddressId = 1;
 
 /* Delete */
 
@@ -630,7 +632,7 @@ EXEC [dbo].[GetPet] @IdPet = 1;
 
 /* Create */
 
-EXEC [dbo].[PostPet] @Tag = 'SelfPet', @Path = '~~/images/pet.jpg',
+EXEC [dbo].[PostPet] @Tag = 'SelfPet', @Path = '../Pictures/my_picture_pet.png',
 	@Status = 'Bad', @Services = 'Banho', @Date = '2022-06-12', @Time = '10:00:00.0123456', 
 	@City =	'Rio de Janeiro', @Street = 'Rua da Oliveiras', @Number = '1105',
 	@Name = 'Negao', @Type = 'Mendes', @Genre = 'M', @Age = '10', @Birthday = '2002-11-20', 

@@ -9,11 +9,11 @@ namespace Web.Controllers
 {
     public class PersonControllerOld : Controller
     {
-        private readonly PersonPersistence clientPerson;
+        private readonly PersonPersistenceOld clientPerson;
 
         public PersonControllerOld()
         {
-            clientPerson = new PersonPersistence();
+            clientPerson = new PersonPersistenceOld();
         }
 
         // GET: Person
@@ -39,22 +39,16 @@ namespace Web.Controllers
 
         // POST: Person/Create
         [HttpPost]
-        public async Task<ActionResult> Create(Person person, HttpPostedFileBase httpPosted)
+        public async Task<ActionResult> Create(Person person)
         {
+            HttpFileCollectionBase httpFileCollection = Request.Files;
+            HttpPostedFileBase postedFileBase = httpFileCollection[0];
+
             try
             {
                 // TODO: Add insert logic here               
-                if (ModelState.IsValid)
-                {
-                    await clientPerson.Post(person, httpPosted);
-                    Debug.WriteLine($"Nome: {person.FirstName}, Sobrenome: {person.LastName}");
-                    return View($"Nome: {person.FirstName}, Sobrenome: {person.LastName}");
-                    //return RedirectToAction("Index");
-                }
-                else
-                {
-                    return View(person);
-                }
+                await clientPerson.Post(person, postedFileBase);
+                return RedirectToAction("Index");
             }
             catch
             {

@@ -5,7 +5,6 @@ namespace Web.Models.Perfil
 {
     public class Picture
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [DataType(DataType.Text)]
 

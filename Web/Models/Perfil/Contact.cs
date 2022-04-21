@@ -6,7 +6,6 @@ namespace Web.Models.Perfil
 {
     public class Contact
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required(ErrorMessage = "Informe e-mail")]
         [DisplayName("E-mail")]

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
 using Web.Api;
 using Web.Context;
 using Web.Models.Perfil;
@@ -16,13 +13,13 @@ namespace Web.Controllers
 {
     public class PersonController : Controller
     {
-        private readonly PersonPersistence clientPerson;
+        //private readonly PersonPersistence clientPerson;
         private readonly ApiClient _clientPerson;
         private readonly BlobClient _blobClient;
 
         public PersonController()
         {
-            clientPerson = new PersonPersistence();
+            //clientPerson = new PersonPersistence();
             _clientPerson = new ApiClient();
             _blobClient = new BlobClient();
         }
@@ -76,8 +73,8 @@ namespace Web.Controllers
             // https://cpratt.co/file-uploads-in-asp-net-mvc-with-view-models/
 
             HttpFileCollectionBase httpFileCollection = Request.Files;
-            FileUpload fileUpload = new FileUpload();
-
+            HttpPostedFileBase postedFileBase = httpFileCollection[0];
+           
             try
             {
                 if (ModelState.IsValid)
@@ -98,23 +95,23 @@ namespace Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var directoryPath = @"../Web/Uploads/Person/";
+                    var directoryPath = @"../Uploads/Person/";
 
                     // Create pictute on server
                     var pictureName = Path.GetFileName(httpFileCollection[0].FileName);
-                    var picturePath = Server.MapPath(Path.Combine(directoryPath, pictureName));
+                    var rootPath = Server.MapPath(directoryPath);
+                    var picturePath = Path.Combine(rootPath, pictureName);
 
-                    //Add picture reference to model and save
-                    var pictureLocalPath = string.Concat(directoryPath, pictureName);
+                    // Add picture reference to model and save
+                    //var pictureLocalPath = string.Concat(directoryPath, pictureName);
                     var PictureExt = Path.GetExtension(pictureName);
 
                     if (PictureExt.Equals(".jpg") || PictureExt.Equals(".jpeg") || PictureExt.Equals(".png"))
                     {
                         person.Picture.Tag = pictureName;
-                        person.Picture.Path = pictureLocalPath;
-                        fileUpload.SaveAs(picturePath);
+                        person.Picture.Path = picturePath;
 
-                        Debug.WriteLine(person.Picture.Path);
+                        postedFileBase.SaveAs(picturePath);
                         await _clientPerson.PostPerson(person);
 
                         return RedirectToAction("Index");
