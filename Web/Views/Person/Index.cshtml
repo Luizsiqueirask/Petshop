@@ -21,7 +21,7 @@
                     <div class="card-body">
                         <br />
                         <figure class="card-img align-items-center mb-3 container-sm">
-                            <img src="@Url.Content(item.Picture.Tag)" alt="@Html.DisplayFor(model => item.Picture.Tag)" style="width: 360px; height: 270px;" class="img-thumbnail figure-img shadow-sm rounded-3 rounded-pill mb-5" />
+                            <img src="@Url.Content(item.Picture.Path)" alt="@Html.DisplayFor(model => item.Picture.Tag)" style="width: 360px; height: 270px;" class="img-thumbnail figure-img shadow-sm rounded-3 rounded-pill mb-5" />
                         </figure>
                         <div>
                             <h5 class="h-50 mb-3 text-center">Pessoa</h5>
@@ -39,6 +39,7 @@
                                         <br />
                                         <b>@Html.DisplayNameFor(model => model.Age):</b>
                                         @Html.DisplayFor(model => item.Age)
+                                        <br />
                                         <b>@Html.DisplayNameFor(model => model.Genre):</b>
                                         @Html.DisplayFor(model => item.Genre)
                                     </p>
@@ -51,8 +52,18 @@
                                         <b>@Html.DisplayNameFor(model => model.Contact.Mobile):</b>
                                         @Html.DisplayFor(model => item.Contact.Mobile)
                                         <br />
+                                        <br />
                                         <b>@Html.DisplayNameFor(model => model.Address.Country):</b>
                                         @Html.DisplayFor(model => item.Address.Country)
+                                        <br />
+                                        <b>@Html.DisplayNameFor(model => model.Address.States):</b>
+                                        @Html.DisplayFor(model => item.Address.States)
+                                        <br />
+                                        <b>@Html.DisplayNameFor(model => model.Address.City):</b>
+                                        @Html.DisplayFor(model => item.Address.City)
+                                        <br />
+                                        <b>@Html.DisplayNameFor(model => model.Address.Neighborhoods):</b>
+                                        @Html.DisplayFor(model => item.Address.Neighborhoods)
                                     </p>
                                 </div>
                             </div>

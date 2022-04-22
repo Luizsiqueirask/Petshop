@@ -12,18 +12,36 @@ USE Petshop;
 				  /* CREATE TABLES */
 ----------------------------------------------------------
 
-DROP TABLE Users;
+
+-------------------------- SELECT ------------------------
+
+-- Person
+SELECT * FROM Person;
+SELECT * FROM Pictures;
+SELECT * FROM Contacts;
+SELECT * FROM Addresses;
+
+-- Pet
+SELECT * FROM Pet;
+SELECT * FROM Images;
+SELECT * FROM Health;
+SELECT * FROM Places;
+SELECT * FROM Schedules;
+
+------------------------------ DROP ------------------------
+
+-- Person
 DROP TABLE Person;
 DROP TABLE Pictures;
 DROP TABLE Contacts;
 DROP TABLE Addresses;
 
+-- Pet
 DROP TABLE Pet;
 DROP TABLE Images;
 DROP TABLE Health;
 DROP TABLE Places;
 DROP TABLE Schedules;
--- DROP TABLE Services;
 
 ------------------------- Person -------------------------
 
@@ -107,7 +125,7 @@ CREATE TABLE [dbo].[Person] (
 	[ContactId] INT NOT NULL,
 	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (UserId) REFERENCES [dbo].[Users](Id) ON UPDATE CASCADE ON DELETE CASCADE
+	FOREIGN KEY (UserId) REFERENCES [dbo].[Users](Id) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (PictureId) REFERENCES [dbo].[Pictures](Id) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (ContactId) REFERENCES [dbo].[Contacts](Id) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (AddressId) REFERENCES [dbo].[Addresses](Id) ON UPDATE CASCADE ON DELETE CASCADE,

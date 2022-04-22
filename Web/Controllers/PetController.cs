@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Web.Api;
-using Web.Context;
 using Web.Models.Animal;
 using Web.Models.Perfil;
 
@@ -125,6 +124,7 @@ namespace Web.Controllers
 
         // POST: Pet/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Pet pet)
         {
             HttpFileCollectionBase httpFileCollection = Request.Files;
@@ -191,7 +191,8 @@ namespace Web.Controllers
 
         // POST: Pet/Edit/5
         [HttpPost]
-        public async Task<ActionResult> Edit(Pet pet, int? Id, HttpPostedFileBase httpPosted)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(Pet pet, int? Id)
         {
             HttpFileCollectionBase httpFileCollection = Request.Files;
             HttpPostedFileBase postedFileBase = httpFileCollection[0];

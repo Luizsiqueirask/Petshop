@@ -16,11 +16,13 @@ USE Petshop;
 
 -------------------------- SELECT ------------------------
 
+-- Person
 SELECT * FROM Person;
 SELECT * FROM Pictures;
 SELECT * FROM Contacts;
 SELECT * FROM Addresses;
 
+-- Pet
 SELECT * FROM Pet;
 SELECT * FROM Images;
 SELECT * FROM Health;
@@ -29,11 +31,13 @@ SELECT * FROM Schedules;
 
 ------------------------------ DROP ------------------------
 
+-- Person
 DROP TABLE Person;
 DROP TABLE Pictures;
 DROP TABLE Contacts;
 DROP TABLE Addresses;
 
+-- Pet
 DROP TABLE Pet;
 DROP TABLE Images;
 DROP TABLE Health;
@@ -454,44 +458,53 @@ END
 GO;
 
 /* Create */
-CREATE PROCEDURE [dbo].[PostPerson]	
-	-- Pictures
+CREATE PROCEDURE [dbo].[PostPet]
+	-- Images
 	@Tag AS NVARCHAR(255),
 	@Path AS NVARCHAR(255),
-	@PictureId AS INT,
-	-- Contacts
-	@Email AS NVARCHAR(250),
-	@Mobile AS NVARCHAR(250),
-	@ContactId AS INT,
-	-- Addresses
-	@Country AS NVARCHAR(250),
-	@States AS NVARCHAR(250),
+	@ImageId AS INT,
+	-- Health
+	@Status AS NVARCHAR(250),
+	@HealthId AS INT,
+	-- Services
+	@Services AS NVARCHAR(250),
+	@Date AS DATE,
+	@Time AS TIME,
+	@ScheduleId AS INT,
+	-- Places
 	@City AS NVARCHAR(250),
-	@Neighborhoods AS NVARCHAR(250),
-	@AddressId AS INT,
-	-- Person
-	@FirstName AS NVARCHAR(250),
-	@LastName AS NVARCHAR(250),
+	@Street AS NVARCHAR(250),
+	@Number AS INT,
+	@PlaceId AS INT,
+	-- Pet
+	@Name AS NVARCHAR(250),
+	@Type AS NVARCHAR(250),
 	@Genre AS NVARCHAR(250),
 	@Birthday AS DATE,
-	@Age AS INT
+	@Age AS INT,
+	-- Person
+	@PersonId AS INT
 
 AS BEGIN
-	-- Pictures
-	INSERT INTO [dbo].[Pictures]([Tag], [Path]) 
+	-- Images
+	INSERT INTO [dbo].[Images]([Tag], [Path]) 
 	VALUES (@Tag, @Path);
 	-- Contacts
-	INSERT INTO [dbo].[Contacts]([Email], [Mobile]) 
-	VALUES (@Email, @Mobile);
-	-- Addresses
-	INSERT INTO [dbo].[Addresses]([Country], [States], [City], [Neighborhoods]) 
-	VALUES (@Country, @States, @City, @Neighborhoods);
-	-- Person
-	INSERT INTO [dbo].[Person]([FirstName], [LastName], [Age], [Genre], [Birthday], [PictureId], [AddressId], [ContactId])
-	VALUES (@FirstName, @LastName, @Age, @Genre, Convert(DATE, @Birthday), 
-	(SELECT MAX(p1.Id) FROM [dbo].[Pictures] p1),
-	(SELECT MAX(c1.Id) FROM [dbo].[Contacts] c1),
-	(SELECT MAX(a1.Id) FROM [dbo].[Addresses] a1));
+	INSERT INTO [dbo].[Health]([Status]) 
+	VALUES (@Status);	
+	-- Places
+	INSERT INTO [dbo].[Places]([City], [Street], [Number]) 
+	VALUES (@City, @Street, @Number);
+	-- Schedules
+	INSERT INTO [dbo].[Schedules]([Services], [Date], [Time], [PlaceId]) 
+	VALUES (@Services, Convert(DATE, @Date), @Time, @PlaceId);
+	-- Pet
+	INSERT INTO [dbo].[Pet]([Name], [Type], [Age], [Genre], [Birthday], [ImageId], [HealthId], [ScheduleId], [PersonId])
+	VALUES (@Name, @Type, @Age, @Genre, Convert(DATE, @Birthday), 
+	(SELECT MAX(i1.Id) FROM [dbo].[Images] i1),
+	(SELECT MAX(h1.Id) FROM [dbo].[Health] h1),
+	(SELECT MAX(s1.Id) FROM [dbo].[Schedules] s1),
+	(SELECT MAX(p1.Id) FROM [dbo].[Person] p1))
 END
 GO;
 
@@ -602,18 +615,16 @@ EXEC [dbo].[GetPerson] @IdPerson = 1;
 EXEC [dbo].[PostPerson] @Tag = 'MyPicturePerson', @Path = '../Pictures/my_picture_person.png', 
 	@Email = 'luiz@siqueira.psk', @Mobile = '21975918265', 
 	@Country = 'Brasil', @States = 'Rio de Janeiro', @City = 'Rio de Janeiro', @Neighborhoods = 'Leme',
-	@Username = 'luizsiqueira', @Password = '123456',
 	@Firstname = 'Luiz', @Lastname = 'Siqueira', @Genre = 'Male', @Age = '31', @Birthday = '1990-01-28',
-	@PictureId = 1, @UserId = 1, @ContactId = 1, @AddressId = 1; 
+	@PictureId = 1, @ContactId = 1, @AddressId = 1;
 
 /* Update */
 
 EXEC [dbo].[PutPerson] @IdPerson = 1, @Tag = 'MyPicturePerson', @Path = '../Pictures/my_picture_person.png', 
 	@Email = 'luiz@siqueira.psk', @Mobile = '21975918265', 
 	@Country = 'Brasil', @States = 'Rio de Janeiro', @City = 'Rio de Janeiro', @Neighborhoods = 'Leme',
-	@Username = 'luizsiqueira', @Password = '123456',
 	@Firstname = 'Luiz', @Lastname = 'Siqueira', @Genre = 'Male', @Age = '31', @Birthday = '1990-01-28',
-	@PictureId = 1, @UserId = 1, @ContactId = 1, @AddressId = 1;
+	@PictureId = 1, @ContactId = 1, @AddressId = 1;
 
 /* Delete */
 

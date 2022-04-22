@@ -6,34 +6,26 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Web.Api;
-using Web.Context;
 using Web.Models.Perfil;
+using System.Threading;
 
 namespace Web.Controllers
 {
     public class PersonController : Controller
     {
-        //private readonly PersonPersistence clientPerson;
         private readonly ApiClient _clientPerson;
         private readonly BlobClient _blobClient;
 
         public PersonController()
         {
-            //clientPerson = new PersonPersistence();
             _clientPerson = new ApiClient();
             _blobClient = new BlobClient();
         }
 
         // GET: Person
         public async Task<ActionResult> Index()
-        {
-            /*
-             var path = Server.MapPath("~/images/"); 
-             string[] imagesFiles = Directory.GetFiles(Path)
-             ViewBag.images = imagesFiles;
-            */
+        {   
             var allPeople = await _clientPerson.GetPerson();
-
             if (allPeople.IsSuccessStatusCode)
             {
                 var people = await allPeople.Content.ReadAsAsync<IEnumerable<Person>>();
@@ -53,12 +45,11 @@ namespace Web.Controllers
                 var person = await people.Content.ReadAsAsync<Person>();
                 return View(person);
             }
-
             return View(new Person());
         }
 
         // GET: Person/Create
-        public async Task<ActionResult> Create()
+        public ActionResult Create()
         {
             return View(new Person());
         }
@@ -88,7 +79,9 @@ namespace Web.Controllers
                     person.Picture.Tag = picturePathblob.Name.ToString();
                     person.Picture.Path = picturePathblob.Uri.AbsolutePath.ToString();
 
+                    // Thread.Sleep(1000);
                     await _clientPerson.PostPerson(person);
+                    return RedirectToAction("Index");
                 }
             }
             catch
@@ -103,15 +96,15 @@ namespace Web.Controllers
                     var picturePath = Path.Combine(rootPath, pictureName);
 
                     // Add picture reference to model and save
-                    //var pictureLocalPath = string.Concat(directoryPath, pictureName);
                     var PictureExt = Path.GetExtension(pictureName);
 
                     if (PictureExt.Equals(".jpg") || PictureExt.Equals(".jpeg") || PictureExt.Equals(".png"))
                     {
                         person.Picture.Tag = pictureName;
                         person.Picture.Path = picturePath;
-
                         postedFileBase.SaveAs(picturePath);
+
+                        // Thread.Sleep(1000);
                         await _clientPerson.PostPerson(person);
 
                         return RedirectToAction("Index");
@@ -136,44 +129,58 @@ namespace Web.Controllers
 
         // POST: Person/Edit/5
         [HttpPost]
-        public async Task<ActionResult> Edit(Person person, int? Id, HttpPostedFileBase httpPosted)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(Person person, int? Id)
         {
+            HttpFileCollectionBase httpFileCollection = Request.Files;
+            HttpPostedFileBase postedFileBase = httpFileCollection[0];
+
             try
             {
-                if (httpPosted != null && httpPosted.ContentLength > 0)
+                if (ModelState.IsValid)
                 {
                     await _blobClient.SetupCloudBlob();
 
-                    var getBlobName = _blobClient.GetRandomBlobName(httpPosted.FileName);
-                    var blobContainer = _blobClient._blobContainer.GetBlockBlobReference(getBlobName);
-                    await blobContainer.UploadFromStreamAsync(httpPosted.InputStream);
+                    var pictureNameBlob = _blobClient.GetRandomBlobName(httpFileCollection[0].FileName);
+                    var picturePathblob = _blobClient._blobContainer.GetBlockBlobReference(pictureNameBlob);
+                    await picturePathblob.UploadFromStreamAsync(httpFileCollection[0].InputStream);
 
-                    person.Picture.Tag = blobContainer.Name.ToString();
-                    person.Picture.Path = blobContainer.Uri.AbsolutePath.ToString();
+                    person.Picture.Tag = picturePathblob.Name.ToString();
+                    person.Picture.Path = picturePathblob.Uri.AbsolutePath.ToString();
 
+                    // Thread.Sleep(1000);
                     await _clientPerson.PostPerson(person);
+                    return RedirectToAction("Index");
                 }
             }
             catch
             {
-                var directoryPath = @"~/Images/Flags/Countries/";
-                if (httpPosted != null && httpPosted.ContentLength > 0)
+                if (ModelState.IsValid)
                 {
-                    var PictureName = Path.GetFileName(httpPosted.FileName);
-                    var PictureExt = Path.GetExtension(PictureName);
+                    var directoryPath = @"../Uploads/Person/";
+
+                    // Create pictute on server
+                    var pictureName = Path.GetFileName(httpFileCollection[0].FileName);
+                    var rootPath = Server.MapPath(directoryPath);
+                    var picturePath = Path.Combine(rootPath, pictureName);
+
+                    // Add picture reference to model and save
+                    var PictureExt = Path.GetExtension(pictureName);
+
                     if (PictureExt.Equals(".jpg") || PictureExt.Equals(".jpeg") || PictureExt.Equals(".png"))
                     {
-                        var PicturePath = Path.Combine(Server.MapPath(directoryPath), PictureName);
+                        person.Picture.Tag = pictureName;
+                        person.Picture.Path = picturePath;
+                        postedFileBase.SaveAs(picturePath);
 
-                        person.Picture.Tag = PictureName;
-                        person.Picture.Path = PicturePath;
+                        // Thread.Sleep(1000);
+                        await _clientPerson.PutPerson(person, Id);
 
-                        httpPosted.SaveAs(person.Picture.Path);
-                        await _clientPerson.PostPerson(person);
+                        return RedirectToAction("Index");
                     }
                 }
             }
-            return View();
+            return View(new Person());
         }
 
         // GET: Person/Delete/5

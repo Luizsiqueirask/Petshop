@@ -2,7 +2,6 @@
 using Perfil.Models.Perfil;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
