@@ -5,16 +5,18 @@ namespace Library
 {
     public class Bridge
     {
+        protected string PathConnection = null;
+
         public string Connect()
         {
             try
             {
-                var PathConnection = WebConfigurationManager.ConnectionStrings["Petshop"].ConnectionString;
+                PathConnection = WebConfigurationManager.ConnectionStrings["Petshop"].ConnectionString;
                 return PathConnection;
             }
             catch
             {
-                var PathConnection = ConfigurationManager.ConnectionStrings["Petshop"].ConnectionString;
+                PathConnection = ConfigurationManager.ConnectionStrings["Petshop"].ConnectionString;
                 return PathConnection;
             }
         }

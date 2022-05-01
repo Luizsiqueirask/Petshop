@@ -65,24 +65,19 @@ namespace Library.Context.Perfil
                             };
 
                             allPerson.Add(personLibrary);
+                            _sqlConnection.Close();
                         }
-                        else
-                        {
-                            return null;
-                        }
+                        return allPerson;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Exception: " + ex.Message);
             }
             finally
             {
                 _sqlConnection.Close();
             }
 
-            return allPerson;
+            return new List<PersonLibrary>();
+
         }
         public new PersonLibrary Get(int? Id)
         {
@@ -142,23 +137,23 @@ namespace Library.Context.Perfil
                     // -- Picture
                     command.Parameters.AddWithValue("@Tag", personLibrary.Picture.Tag);
                     command.Parameters.AddWithValue("@Path", personLibrary.Picture.Path);
+                    command.Parameters.AddWithValue("@PictureId", Convert.ToInt32(personLibrary.Picture.Id));
                     // -- Contacts
                     command.Parameters.AddWithValue("@Email", personLibrary.Contact.Email);
                     command.Parameters.AddWithValue("@Mobile", personLibrary.Contact.Mobile);
+                    command.Parameters.AddWithValue("@ContactId", Convert.ToInt32(personLibrary.Contact.Id));
                     // -- Address
                     command.Parameters.AddWithValue("@Country", personLibrary.Address.Country);
                     command.Parameters.AddWithValue("@States", personLibrary.Address.States);
                     command.Parameters.AddWithValue("@City", personLibrary.Address.City);
                     command.Parameters.AddWithValue("@Neighborhoods", personLibrary.Address.Neighborhoods);
+                    command.Parameters.AddWithValue("@AddressId", Convert.ToInt32(personLibrary.Address.Id));
                     // -- Person
                     command.Parameters.AddWithValue("@FirstName", personLibrary.FirstName);
                     command.Parameters.AddWithValue("@LastName", personLibrary.LastName);
                     command.Parameters.AddWithValue("@Genre", personLibrary.Genre);
                     command.Parameters.AddWithValue("@Age", personLibrary.Age);
                     command.Parameters.AddWithValue("@Birthday", personLibrary.Birthday.ToString("d"));
-                    command.Parameters.AddWithValue("@PictureId", personLibrary.Picture.Id);
-                    command.Parameters.AddWithValue("@ContactId", personLibrary.Contact.Id);
-                    command.Parameters.AddWithValue("@AddressId", personLibrary.Address.Id);
 
                     _sqlConnection.Open();
                     int running = command.ExecuteNonQuery();
@@ -184,23 +179,23 @@ namespace Library.Context.Perfil
                 // -- Picture
                 command.Parameters.AddWithValue("@Tag", personLibrary.Picture.Tag);
                 command.Parameters.AddWithValue("@Path", personLibrary.Picture.Path);
+                command.Parameters.AddWithValue("@PictureId", Convert.ToInt32(personLibrary.Picture.Id));
                 // -- Contacts
                 command.Parameters.AddWithValue("@Email", personLibrary.Contact.Email);
                 command.Parameters.AddWithValue("@Mobile", personLibrary.Contact.Mobile);
+                command.Parameters.AddWithValue("@ContactId", Convert.ToInt32(personLibrary.Contact.Id));
                 // -- Address
                 command.Parameters.AddWithValue("@Country", personLibrary.Address.Country);
                 command.Parameters.AddWithValue("@States", personLibrary.Address.States);
                 command.Parameters.AddWithValue("@City", personLibrary.Address.City);
                 command.Parameters.AddWithValue("@Neighborhoods", personLibrary.Address.Neighborhoods);
+                command.Parameters.AddWithValue("@AddressId", Convert.ToInt32(personLibrary.Address.Id));
                 // -- Person
                 command.Parameters.AddWithValue("@FirstName", personLibrary.FirstName);
                 command.Parameters.AddWithValue("@LastName", personLibrary.LastName);
                 command.Parameters.AddWithValue("@Genre", personLibrary.Genre);
                 command.Parameters.AddWithValue("@Age", personLibrary.Age);
                 command.Parameters.AddWithValue("@Birthday", personLibrary.Birthday.ToString("d"));
-                command.Parameters.AddWithValue("@PictureId", personLibrary.Picture.Id);
-                command.Parameters.AddWithValue("@AddressId", personLibrary.Address.Id);
-                command.Parameters.AddWithValue("@ContactId", personLibrary.Contact.Id);
 
                 _sqlConnection.Open();
                 var running = command.ExecuteNonQuery();

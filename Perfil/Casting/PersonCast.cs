@@ -15,7 +15,7 @@ namespace Perfil.Casting
 
         public IEnumerable<Person> List()
         {
-            var listPersonApi = new List<Person>();
+            var listPerson = new List<Person>();
             var allPerson = classPerson.List();
 
             if (allPerson != null)
@@ -52,15 +52,11 @@ namespace Perfil.Casting
                         }
                     };
 
-                    listPersonApi.Add(person);
+                    listPerson.Add(person);
                 }
-
-                return listPersonApi;
+                return listPerson;
             }
-            else
-            {
-                return null;
-            }
+            return new List<Person>();
         }
         public Person Get(int? Id)
         {
@@ -99,10 +95,7 @@ namespace Perfil.Casting
                 };
                 return person;
             }
-            else
-            {
-                return null;
-            }
+            return new Person();
         }
         public bool Post(Person person)
         {

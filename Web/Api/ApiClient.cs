@@ -12,7 +12,7 @@ namespace Web.Api
     {
         public readonly HttpClient _clientAnimal;
         public readonly HttpClient _clientPerfil;
-        private readonly List<int> ports = new List<int>() { 51654, 51555, 44377, 44379 };
+        private readonly List<int> ports = new List<int>() { 51654, 51555 };
 
         public ApiClient()
         {

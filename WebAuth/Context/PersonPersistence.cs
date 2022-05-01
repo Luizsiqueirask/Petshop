@@ -71,6 +71,7 @@ namespace WebAuth.Context
                     person.Picture.Path = picturePathblob.Uri.AbsolutePath.ToString();
 
                     await _clientPerson.PostPerson(person);
+                    return RedirectToAction("Index");
                 }
             }
             catch
@@ -92,7 +93,6 @@ namespace WebAuth.Context
                         person.Picture.Path = pictureLocalPath;
                         fileUpload.SaveAs(picturePath);
 
-                        Debug.WriteLine(person.FirstName);
                         await _clientPerson.PostPerson(person);
 
                         return RedirectToAction("Index");

@@ -26,7 +26,6 @@ SELECT * FROM Addresses;
 SELECT * FROM Pet;
 SELECT * FROM Images;
 SELECT * FROM Health;
-SELECT * FROM Places;
 SELECT * FROM Schedules;
 
 ------------------------------ DROP ------------------------
@@ -41,7 +40,6 @@ DROP TABLE Addresses;
 DROP TABLE Pet;
 DROP TABLE Images;
 DROP TABLE Health;
-DROP TABLE Places;
 DROP TABLE Schedules;
 
 ------------------------- Person -------------------------
@@ -56,7 +54,7 @@ CREATE TABLE [dbo].[Pictures](
 	[Tag] NVARCHAR(255) NULL,
 	[Path] NVARCHAR(255) NULL,
 	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 ELSE
 	PRINT 'Pictures - Exists this table !!!'
@@ -71,7 +69,7 @@ CREATE TABLE [dbo].[Contacts](
 	[Email] NVARCHAR(250) NOT NULL,
 	[Mobile] NVARCHAR(250) NOT NULL,
 	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 ELSE
 	PRINT 'Contacts - Exists this table !!!'
@@ -88,7 +86,7 @@ CREATE TABLE [dbo].[Addresses](
 	[City] NVARCHAR(255) NOT NULL,
 	[Neighborhoods] NVARCHAR(255) NOT NULL,
 	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 ELSE
 	PRINT 'Addresses - Exists this table !!!'
@@ -149,22 +147,6 @@ ELSE
 	PRINT 'Health - Exists this table !!!'
 GO
 
--- Creating Places
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Places' and type in (N'U'))
-
-CREATE TABLE [dbo].[Places](
-	[Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[City] NVARCHAR(255) NOT NULL,
-	[Street] NVARCHAR(255) NOT NULL,
-	[Number] NVARCHAR(255) NOT NULL,
-	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-ELSE
-	PRINT 'Places - Exists this table !!!'
-GO
-
 -- Creating Schedules
 
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Schedules' and type in (N'U'))
@@ -172,12 +154,10 @@ IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Schedules' and type in (N'
 CREATE TABLE [dbo].[Schedules](
 	[Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	[Services] NVARCHAR(255) NOT NULL,
-	[Date] DATE NOT NULL,
-	[Time] TIME NOT NULL,
-	[PlaceId] INT NOT NULL,
+	[Date] DATETIME NOT NULL,
+	[Time] DATETIME NOT NULL,
 	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (PlaceId) REFERENCES [dbo].[Places](Id) ON UPDATE CASCADE ON DELETE CASCADE,
+    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 ELSE
 	PRINT 'Schedules - Exists this table !!!'
@@ -194,16 +174,16 @@ CREATE TABLE [dbo].[Pet] (
 	[Genre] NVARCHAR(250) NOT NULL,
 	[Age] INT NOT NULL,
 	[Birthday] DATE NOT NULL,
-	[ImageId] INT NOT NULL,
 	[PersonId] INT NOT NULL,
+	[ImageId] INT NOT NULL,
 	[HealthId] INT NOT NULL,
 	[ScheduleId] INT NOT NULL,
 	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (PersonId) REFERENCES [dbo].[Person](Id) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (ImageId) REFERENCES [dbo].[Images](Id) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (HealthId) REFERENCES [dbo].[Health](Id) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (ScheduleId) REFERENCES [dbo].[Schedules](Id) ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (PersonId) REFERENCES [dbo].[Person](Id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 ELSE
 	PRINT 'Pet - Exists this table !!!'
@@ -232,7 +212,7 @@ AS BEGIN
 	LEFT JOIN [dbo].[Addresses] a1
 	ON p1.AddressId = a1.Id
 END
-GO;
+GO
 
 /* Detail */
 CREATE PROCEDURE [dbo].[GetPerson]
@@ -268,7 +248,7 @@ AS BEGIN
 	ON p1.AddressId = a1.Id
 	WHERE p1.Id = @IdPerson
 END
-GO;
+GO
 
 /* Create */
 CREATE PROCEDURE [dbo].[PostPerson]	
@@ -310,7 +290,7 @@ AS BEGIN
 	(SELECT MAX(c1.Id) FROM [dbo].[Contacts] c1),
 	(SELECT MAX(a1.Id) FROM [dbo].[Addresses] a1));
 END
-GO;
+GO
 
 /* Update */
 CREATE PROCEDURE [dbo].[PutPerson]
@@ -369,7 +349,7 @@ AS BEGIN
 		ContactId = @ContactId
 	WHERE Id = @IdPerson;
 END
-GO;
+GO
 
 /* Delete */
 CREATE PROCEDURE [dbo].[DeletePerson]	
@@ -387,7 +367,7 @@ AS BEGIN
 	ON p1.AddressId = a1.Id
 	WHERE p1.Id = @IdPerson
 END
-GO;
+GO
 
 
 /* ********************* Pet ********************* */
@@ -407,40 +387,36 @@ AS BEGIN
 	-- Schedules
 	LEFT JOIN [dbo].[Schedules] s1
 	ON p1.ScheduleId = s1.Id
-	-- Place
-	LEFT JOIN [dbo].[Places] p2
-	ON s1.PlaceId = p2.Id
 END
-GO;
+GO
 
 /* Detail */
 CREATE PROCEDURE [dbo].[GetPet]
 	@IdPet AS INT
 AS BEGIN
-	SELECT 	
-		-- Pictures
-		i1.[Id],
-		i1.[Tag],
-		i1.[Path],
-		-- Health
-		h1.[Status],		
-		-- Places
-		p2.[City],
-		p2.[Street],
-		p2.[Number],
-		-- Schedules
-		s1.[Services],
-		s1.[Date],
-		s1.[Time],
-		s1.[PlaceId],
+	SELECT 
 		-- Pet
 		p1.[Id],
 		p1.[Name],
 		p1.[Type],
 		p1.[Age],
 		p1.[Birthday],
-		p1.[Genre]
-	FROM Pet p1
+		p1.[Genre],
+		p1.[PersonId],
+		-- Images
+		i1.[Id],
+		i1.[Tag],
+		i1.[Path],
+		-- Health
+		h1.[Id],
+		h1.[Status],		
+		-- Schedules
+		s1.[Id],
+		s1.[Services],
+		s1.[Date],
+		s1.[Time]
+	-- Person
+	FROM [dbo].[Pet] p1
 	-- Image
 	LEFT JOIN [dbo].[Images] i1
 	ON p1.ImageId = i1.Id
@@ -450,12 +426,9 @@ AS BEGIN
 	-- Schedules
 	LEFT JOIN [dbo].[Schedules] s1
 	ON p1.ScheduleId = s1.Id
-	-- Place
-	LEFT JOIN [dbo].[Places] p2
-	ON s1.PlaceId = p2.Id
 	WHERE p1.Id = @IdPet
 END
-GO;
+GO
 
 /* Create */
 CREATE PROCEDURE [dbo].[PostPet]
@@ -471,11 +444,6 @@ CREATE PROCEDURE [dbo].[PostPet]
 	@Date AS DATE,
 	@Time AS TIME,
 	@ScheduleId AS INT,
-	-- Places
-	@City AS NVARCHAR(250),
-	@Street AS NVARCHAR(250),
-	@Number AS INT,
-	@PlaceId AS INT,
 	-- Pet
 	@Name AS NVARCHAR(250),
 	@Type AS NVARCHAR(250),
@@ -491,22 +459,19 @@ AS BEGIN
 	VALUES (@Tag, @Path);
 	-- Contacts
 	INSERT INTO [dbo].[Health]([Status]) 
-	VALUES (@Status);	
-	-- Places
-	INSERT INTO [dbo].[Places]([City], [Street], [Number]) 
-	VALUES (@City, @Street, @Number);
+	VALUES (@Status);		
 	-- Schedules
-	INSERT INTO [dbo].[Schedules]([Services], [Date], [Time], [PlaceId]) 
-	VALUES (@Services, Convert(DATE, @Date), @Time, @PlaceId);
+	INSERT INTO [dbo].[Schedules]([Services], [Date], [Time]) 
+	VALUES (@Services, Convert(DATE, @Date), @Time);
 	-- Pet
 	INSERT INTO [dbo].[Pet]([Name], [Type], [Age], [Genre], [Birthday], [ImageId], [HealthId], [ScheduleId], [PersonId])
 	VALUES (@Name, @Type, @Age, @Genre, Convert(DATE, @Birthday), 
 	(SELECT MAX(i1.Id) FROM [dbo].[Images] i1),
 	(SELECT MAX(h1.Id) FROM [dbo].[Health] h1),
 	(SELECT MAX(s1.Id) FROM [dbo].[Schedules] s1),
-	(SELECT MAX(p1.Id) FROM [dbo].[Person] p1))
+	(SELECT MAX(p1.Id) FROM [dbo].[Person] p1 WHERE Id = @PersonId));
 END
-GO;
+GO
 
 /* Update */
 CREATE PROCEDURE [dbo].[PutPet]
@@ -523,11 +488,6 @@ CREATE PROCEDURE [dbo].[PutPet]
 	@Date AS DATE,
 	@Time TIME,
 	@ScheduleId AS INT,
-	-- Places
-	@City AS NVARCHAR(250),
-	@Street AS NVARCHAR(250),
-	@Number AS INT,
-	@PlaceId AS INT,
 	-- Pet
 	@Name AS NVARCHAR(250),
 	@Type AS NVARCHAR(250),
@@ -549,19 +509,11 @@ AS BEGIN
 		[Status] = @Status
 	WHERE Id = @HealthId;
 
-	-- Places
-	UPDATE  [dbo].[Places] SET 
-		[City] = @City,
-		[Street] = @Street,
-		[Number] = @Number
-	WHERE Id = @PlaceId;
-
 	-- Schedules
 	UPDATE  [dbo].[Schedules] SET 
 		[Services] = @Services,
 		[Date] = @Date,
-		[Time] = @Time,
-		[PlaceId] = @PlaceId
+		[Time] = @Time
 	WHERE Id = @ScheduleId;	
 	
 	-- Pet
@@ -577,7 +529,7 @@ AS BEGIN
 		PersonId = @PersonId
 	WHERE Id = @IdPet;
 END
-GO;
+GO
 
 /* Delete */
 CREATE PROCEDURE [dbo].[DeletePet]	
@@ -592,13 +544,10 @@ AS BEGIN
 	ON p1.HealthId = h1.Id	
 	-- Schedules
 	LEFT JOIN [dbo].[Schedules] s1
-	ON p1.ScheduleId = s1.Id
-	-- Place
-	LEFT JOIN [dbo].[Places] p2
-	ON s1.PlaceId = p2.Id
+	ON p1.ScheduleId = s1.Id	
 	WHERE p1.Id = @IdPet
 END
-GO;
+GO
 
 /* ********************* Person ********************* */
 
@@ -643,19 +592,17 @@ EXEC [dbo].[GetPet] @IdPet = 1;
 
 /* Create */
 
-EXEC [dbo].[PostPet] @Tag = 'SelfPet', @Path = '../Pictures/my_picture_pet.png',
+EXEC [dbo].[PostPet] @Tag = 'my_picture_pet', @Path = '../Pictures/my_picture_pet.png',
 	@Status = 'Bad', @Services = 'Banho', @Date = '2022-06-12', @Time = '10:00:00.0123456', 
-	@City =	'Rio de Janeiro', @Street = 'Rua da Oliveiras', @Number = '1105',
 	@Name = 'Negao', @Type = 'Mendes', @Genre = 'M', @Age = '10', @Birthday = '2002-11-20', 
-	@ImageId = 1,  @HealthId = 1, @PersonId = 1, @ScheduleId = 1, @PlaceId = 1; 
+	@ImageId = 1,  @HealthId = 1, @PersonId = 1, @ScheduleId = 1; 
 
 /* Update */
 
 EXEC [dbo].[PutPet] @IdPet = 1, @Tag = 'SelfPet', @Path = '../Pictures/my_picture_pet.png',
 	@Status = 'Bad', @Services = 'Banho', @Date = '2022-06-12', @Time = '10:00:00.0123456', 
-	@City =	'Rio de Janeiro', @Street = 'Rua da Oliveiras', @Number = '1105',
 	@Name = 'Negao', @Type = 'Mendes', @Genre = 'M', @Age = '10', @Birthday = '2002-11-20', 
-	@ImageId = 1,  @HealthId = 1, @PersonId = 1, @ScheduleId = 1, @PlaceId = 1; 
+	@ImageId = 1,  @HealthId = 1, @PersonId = 1, @ScheduleId = 1; 
 
 /* Delete */
 

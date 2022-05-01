@@ -1,5 +1,7 @@
-﻿using Library.Context.Animal;
+﻿using Animal.Models.Animal;
+using Library.Context.Animal;
 using Library.Models.Animal;
+
 using System.Collections.Generic;
 
 namespace Animal.Casting
@@ -44,28 +46,17 @@ namespace Animal.Casting
                         Schedule = new Schedule()
                         {
                             Id = pets.Schedule.Id,
-                            Services = pets.Schedule.Services,
+                            Services =pets.Schedule.Services,
                             Date = pets.Schedule.Date,
-                            Time = pets.Schedule.Time,
-                            Places = new Places()
-                            {
-                                Id = pets.Schedule.Places.Id,
-                                City = pets.Schedule.Places.City,
-                                Street = pets.Schedule.Places.Street,
-                                Number = pets.Schedule.Places.Number,
-                            }
+                            Time = pets.Schedule.Time
                         }
                     };
 
                     listPet.Add(pet);
                 }
-
                 return listPet;
             }
-            else
-            {
-                return null;
-            }
+            return new List<Pet>();
         }
         public Pet Get(int? Id)
         {
@@ -98,21 +89,12 @@ namespace Animal.Casting
                         Id = pets.Schedule.Id,
                         Services = pets.Schedule.Services,
                         Date = pets.Schedule.Date,
-                        Time = pets.Schedule.Time,
-                        Places = new Places()
-                        {
-                            City = pets.Schedule.Places.City,
-                            Street = pets.Schedule.Places.Street,
-                            Number = pets.Schedule.Places.Number,
-                        }
+                        Time = pets.Schedule.Time                        
                     }
                 };
                 return pet;
             }
-            else
-            {
-                return null;
-            }
+            return new Pet();
         }
         public void Post(Pet pet)
         {
@@ -141,13 +123,7 @@ namespace Animal.Casting
                     Id = pet.Schedule.Id,
                     Services = pet.Schedule.Services,
                     Date = pet.Schedule.Date,
-                    Time = pet.Schedule.Time,
-                    Places = new PlacesLibrary()
-                    {
-                        City = pet.Schedule.Places.City,
-                        Street = pet.Schedule.Places.Street,
-                        Number = pet.Schedule.Places.Number,
-                    }
+                    Time = pet.Schedule.Time                    
                 }
             };
 
@@ -180,14 +156,7 @@ namespace Animal.Casting
                     Id = pet.Schedule.Id,
                     Services = pet.Schedule.Services,
                     Date = pet.Schedule.Date,
-                    Time = pet.Schedule.Time,
-                    Places = new PlacesLibrary()
-                    {
-                        Id = pet.Schedule.Places.Id,
-                        City = pet.Schedule.Places.City,
-                        Street = pet.Schedule.Places.Street,
-                        Number = pet.Schedule.Places.Number
-                    }
+                    Time = pet.Schedule.Time                    
                 }
             };
 

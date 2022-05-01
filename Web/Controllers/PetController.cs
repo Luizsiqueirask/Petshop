@@ -13,13 +13,11 @@ namespace Web.Controllers
 {
     public class PetController : Controller
     {
-        //private readonly PetPersistence clientPet;
         private readonly ApiClient _clientPet;
         private readonly BlobClient _blobClient;
 
         public PetController()
         {
-            //clientPet = new PetPersistence();
             _clientPet = new ApiClient();
             _blobClient = new BlobClient();
         }
@@ -57,13 +55,12 @@ namespace Web.Controllers
                             };
                             containerPersonPet.Add(peoplePets);
                         }
-                        return View(containerPersonPet);
                     }
+                    return View(containerPersonPet);
                 }
             }
-            return View(new List<PeoplePets>());
+            return View(new List<Person>());
         }
-
         // GET: Pet/Details/5
         public async Task<ActionResult> Details(int? Id)
         {
@@ -82,7 +79,7 @@ namespace Web.Controllers
                     {
                         Person = person,
                         Pet = pet,
-                        PersonPetSelect = new SelectListItem()
+                        PersonPetsSelect = new SelectListItem()
                         {
                             Value = person.Id.ToString(),
                             Text = person.FirstName,
@@ -99,24 +96,24 @@ namespace Web.Controllers
         public async Task<ActionResult> Create()
         {
             var allPerson = await _clientPet.GetPerson();
-            var selectPetsList = new List<SelectListItem>();
-            var pets = new Pet();
-
+            
             if (allPerson.IsSuccessStatusCode)
             {
                 var people = await allPerson.Content.ReadAsAsync<IEnumerable<Person>>();
+                var selectPetsList = new List<SelectListItem>();
+                var pets = new Pet();
 
                 foreach (var person in people)
                 {
-                    var personPet = new SelectListItem()
+                    var selectPet = new SelectListItem()
                     {
                         Value = person.Id.ToString(),
-                        Text = person.FirstName + " " + person.LastName,
-                        Selected = person.Id == pets.PersonId
+                        Text = $"Nome: {person.FirstName} {person.LastName} | Idade: {person.Age}",
+                        Selected = pets.PersonId == person.Id
                     };
-                    selectPetsList.Add(personPet);
+                    selectPetsList.Add(selectPet);
+                    pets.PersonPetSelect = selectPetsList;
                 }
-                pets.PersonPetsSelect = selectPetsList;
                 return View(pets);
             }
             return View(new Pet());
@@ -142,8 +139,9 @@ namespace Web.Controllers
 
                     pet.Image.Tag = imagePathblob.Name.ToString();
                     pet.Image.Path = imagePathblob.Uri.AbsolutePath.ToString();
-
                     await _clientPet.PostPet(pet);
+
+                    return RedirectToAction("Index");
                 }
             }
             catch
@@ -158,14 +156,12 @@ namespace Web.Controllers
                     var picturePath = Path.Combine(rootPath, imageName);
 
                     // Add picture reference to model and save
-                    //var pictureLocalPath = string.Concat(directoryPath, imageName);
                     var PictureExt = Path.GetExtension(imageName);
 
                     if (PictureExt.Equals(".jpg") || PictureExt.Equals(".jpeg") || PictureExt.Equals(".png"))
                     {
                         pet.Image.Tag = imageName;
                         pet.Image.Path = picturePath;
-
                         postedFileBase.SaveAs(picturePath);
                         await _clientPet.PostPet(pet);
 

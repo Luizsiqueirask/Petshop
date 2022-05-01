@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Web.Api;
 using Web.Models.Perfil;
-using System.Threading;
 
 namespace Web.Controllers
 {
@@ -28,7 +28,9 @@ namespace Web.Controllers
             var allPeople = await _clientPerson.GetPerson();
             if (allPeople.IsSuccessStatusCode)
             {
+                //var pages = new List<int>() { 1, 10};
                 var people = await allPeople.Content.ReadAsAsync<IEnumerable<Person>>();
+                //return View(people.OrderBy(person => person.Id).ToPagedList(pages[0], pages[1]));
                 return View(people);
             }
 
@@ -78,9 +80,8 @@ namespace Web.Controllers
 
                     person.Picture.Tag = picturePathblob.Name.ToString();
                     person.Picture.Path = picturePathblob.Uri.AbsolutePath.ToString();
-
-                    // Thread.Sleep(1000);
                     await _clientPerson.PostPerson(person);
+
                     return RedirectToAction("Index");
                 }
             }
@@ -103,8 +104,6 @@ namespace Web.Controllers
                         person.Picture.Tag = pictureName;
                         person.Picture.Path = picturePath;
                         postedFileBase.SaveAs(picturePath);
-
-                        // Thread.Sleep(1000);
                         await _clientPerson.PostPerson(person);
 
                         return RedirectToAction("Index");

@@ -16,10 +16,9 @@ namespace Library.Context.Animal
             _conn = new Bridge();
             _sqlConnection = new SqlConnection(_conn.Connect());
         }
-
         public new IEnumerable<PetLibrary> List()
         {
-            var allPerson = new List<PetLibrary>();
+            var allPet = new List<PetLibrary>();
 
             try
             {
@@ -39,9 +38,10 @@ namespace Library.Context.Animal
                                 Id = (int)dataReader["Id"],
                                 Name = (string)dataReader["Name"],
                                 Type = (string)dataReader["Type"],
-                                Genre = (string)dataReader["Genre"],
-                                Birthday = (DateTime)dataReader["Birthday"],
                                 Age = (int)dataReader["Age"],
+                                Birthday = (DateTime)dataReader["Birthday"],
+                                Genre = (string)dataReader["Genre"],
+                                PersonId = (int)dataReader["PersonId"],
                                 Image = new ImageLibrary()
                                 {
                                     Id = (int)dataReader["Id"],
@@ -58,36 +58,23 @@ namespace Library.Context.Animal
                                     Id = (int)dataReader["Id"],
                                     Services = (string)dataReader["Services"],
                                     Date = (DateTime)dataReader["Date"],
-                                    Time = (DateTime)dataReader["Time"],
-                                    Places = new PlacesLibrary()
-                                    {
-                                        City = (string)dataReader["City"],
-                                        Street = (string)dataReader["Street"],
-                                        Number = (int)dataReader["Number"],
-                                    }
-                                },
-                                PersonId = (int)dataReader["PersonId"]
+                                    Time = (DateTime)dataReader["Time"]
+                                }
                             };
 
-                            allPerson.Add(petLibrary);
+                            allPet.Add(petLibrary);
+                            _sqlConnection.Close();
                         }
-                        else
-                        {
-                            return null;
-                        }
+                        return allPet;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Exception: " + ex.Message);
             }
             finally
             {
                 _sqlConnection.Close();
             }
 
-            return allPerson;
+            return new List<PetLibrary>();
         }
         public new PetLibrary Get(int? Id)
         {
@@ -108,9 +95,10 @@ namespace Library.Context.Animal
                         Id = (int)dataReader["Id"],
                         Name = (string)dataReader["Name"],
                         Type = (string)dataReader["Type"],
-                        Genre = (string)dataReader["Genre"],
-                        Birthday = (DateTime)dataReader["Birthday"],
                         Age = (int)dataReader["Age"],
+                        Birthday = (DateTime)dataReader["Birthday"],
+                        Genre = (string)dataReader["Genre"],
+                        PersonId = (int)dataReader["PersonId"],
                         Image = new ImageLibrary()
                         {
                             Id = (int)dataReader["Id"],
@@ -127,15 +115,8 @@ namespace Library.Context.Animal
                             Id = (int)dataReader["Id"],
                             Services = (string)dataReader["Services"],
                             Date = (DateTime)dataReader["Date"],
-                            Time = (DateTime)dataReader["Time"],
-                            Places = new PlacesLibrary()
-                            {
-                                City = (string)dataReader["City"],
-                                Street = (string)dataReader["Street"],
-                                Number = (int)dataReader["Number"],
-                            }                            
-                        },
-                        PersonId = (int)dataReader["PersonId"]
+                            Time = (DateTime)dataReader["Time"]                         
+                        }
                     };
                 }
             }
@@ -148,31 +129,28 @@ namespace Library.Context.Animal
             {
                 try
                 {
-                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandType = CommandType.StoredProcedure;                    
+                    // -- Image
+                    command.Parameters.AddWithValue("@Tag", petLibrary.Image.Tag);
+                    command.Parameters.AddWithValue("@Path", petLibrary.Image.Path);
+                    command.Parameters.AddWithValue("@ImageId", Convert.ToInt32(petLibrary.Image.Path));
+                    // -- Health
+                    command.Parameters.AddWithValue("@Status", petLibrary.Health.Status);
+                    command.Parameters.AddWithValue("@HealthId", Convert.ToInt32(petLibrary.Health.Id));
+                    // -- Schedule
+                    command.Parameters.AddWithValue("@Services", petLibrary.Schedule.Services);
+                    command.Parameters.AddWithValue("@Date", petLibrary.Schedule.Date.ToString("d"));
+                    command.Parameters.AddWithValue("@Time", petLibrary.Schedule.Time.ToString("t"));
+                    command.Parameters.AddWithValue("@ScheduleId", Convert.ToInt32(petLibrary.Schedule.Id));
+                    // -- Person
+                    command.Parameters.AddWithValue("@PersonId", Convert.ToInt32(petLibrary.PersonId));
                     // -- Pet
                     command.Parameters.AddWithValue("@Name", petLibrary.Name);
                     command.Parameters.AddWithValue("@Type", petLibrary.Type);
                     command.Parameters.AddWithValue("@Genre", petLibrary.Genre);
-                    command.Parameters.AddWithValue("@Age", petLibrary.Age);
-                    command.Parameters.AddWithValue("@Birthday", petLibrary.Birthday);
+                    command.Parameters.AddWithValue("@Age", Convert.ToInt32(petLibrary.Age));
+                    command.Parameters.AddWithValue("@Birthday", petLibrary.Birthday.ToString("d"));
                     command.Parameters.AddWithValue("@Genre", petLibrary.Genre);
-                    // -- Image
-                    command.Parameters.AddWithValue("@Tag", petLibrary.Image.Tag);
-                    command.Parameters.AddWithValue("@Path", petLibrary.Image.Id);
-                    command.Parameters.AddWithValue("@ImageId", petLibrary.Image.Path);
-                    // -- Health
-                    command.Parameters.AddWithValue("@Status", petLibrary.Health.Status);
-                    command.Parameters.AddWithValue("@HealthId", petLibrary.Health.Id);
-                    // -- Schedule
-                    command.Parameters.AddWithValue("@Services", petLibrary.Schedule.Services);
-                    command.Parameters.AddWithValue("@Date", petLibrary.Schedule.Date);
-                    command.Parameters.AddWithValue("@Time", petLibrary.Schedule.Time);
-                    command.Parameters.AddWithValue("@ScheduleIdd", petLibrary.Schedule.Id);
-                    // -- Places
-                    command.Parameters.AddWithValue("@City", petLibrary.Schedule.Places.City);
-                    command.Parameters.AddWithValue("@Street", petLibrary.Schedule.Places.Street);
-                    command.Parameters.AddWithValue("@Number", petLibrary.Schedule.Places.Number);
-                    command.Parameters.AddWithValue("@PlaceId", petLibrary.Schedule.Places.Id);
 
                     _sqlConnection.Open();
                     int running = command.ExecuteNonQuery();
@@ -192,30 +170,27 @@ namespace Library.Context.Animal
             using (SqlCommand command = new SqlCommand("PutPet", _sqlConnection))
             {
                 command.CommandType = CommandType.StoredProcedure;
+                // -- Image
+                command.Parameters.AddWithValue("@Tag", petLibrary.Image.Tag);
+                command.Parameters.AddWithValue("@Path", petLibrary.Image.Path);
+                command.Parameters.AddWithValue("@ImageId", Convert.ToInt32(petLibrary.Image.Path));
+                // -- Health
+                command.Parameters.AddWithValue("@Status", petLibrary.Health.Status);
+                command.Parameters.AddWithValue("@HealthId", Convert.ToInt32(petLibrary.Health.Id));
+                // -- Schedule
+                command.Parameters.AddWithValue("@Services", petLibrary.Schedule.Services);
+                command.Parameters.AddWithValue("@Date", petLibrary.Schedule.Date.ToString("d"));
+                command.Parameters.AddWithValue("@Time", petLibrary.Schedule.Time.ToString("t"));
+                command.Parameters.AddWithValue("@ScheduleId", Convert.ToInt32(petLibrary.Schedule.Id));
                 // -- Pet
                 command.Parameters.AddWithValue("@Name", petLibrary.Name);
                 command.Parameters.AddWithValue("@Type", petLibrary.Type);
                 command.Parameters.AddWithValue("@Genre", petLibrary.Genre);
-                command.Parameters.AddWithValue("@Age", petLibrary.Age);
-                command.Parameters.AddWithValue("@Birthday", petLibrary.Birthday);
+                command.Parameters.AddWithValue("@Age", Convert.ToInt32(petLibrary.Age));
+                command.Parameters.AddWithValue("@Birthday", petLibrary.Birthday.ToString("d"));
                 command.Parameters.AddWithValue("@Genre", petLibrary.Genre);
-                // -- Image
-                command.Parameters.AddWithValue("@Tag", petLibrary.Image.Tag);
-                command.Parameters.AddWithValue("@Path", petLibrary.Image.Id);
-                command.Parameters.AddWithValue("@ImageId", petLibrary.Image.Path);
-                // -- Health
-                command.Parameters.AddWithValue("@Status", petLibrary.Health.Status);
-                command.Parameters.AddWithValue("@HealthId", petLibrary.Health.Id);
-                // -- Schedule
-                command.Parameters.AddWithValue("@Services", petLibrary.Schedule.Services);
-                command.Parameters.AddWithValue("@Date", petLibrary.Schedule.Date);
-                command.Parameters.AddWithValue("@Time", petLibrary.Schedule.Time);
-                command.Parameters.AddWithValue("@ScheduleIdd", petLibrary.Schedule.Id);
-                // -- Places
-                command.Parameters.AddWithValue("@City", petLibrary.Schedule.Places.City);
-                command.Parameters.AddWithValue("@Street", petLibrary.Schedule.Places.Street);
-                command.Parameters.AddWithValue("@Number", petLibrary.Schedule.Places.Number);
-                command.Parameters.AddWithValue("@PlaceId", petLibrary.Schedule.Places.Id);
+                // -- Person
+                command.Parameters.AddWithValue("@PersonId", Convert.ToInt32(petLibrary.PersonId));
 
                 _sqlConnection.Open();
                 var running = command.ExecuteNonQuery();

@@ -2,14 +2,7 @@
 
 namespace WebAuth.Models.Animal
 {
-    public class Places
-    {
-        public string City { get; set; }
-        public string Street { get; set; }
-        public int Number { get; set; }
-    }
-
-    public class Schedule
+   public class Schedule
     {
         public int Id { get; set; }
         public string Services { get; set; }

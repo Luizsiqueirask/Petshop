@@ -12,19 +12,19 @@ namespace Web.Models.Animal
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "Informe nome")]
-        [DisplayName("Nome do seu animal")]
+        [DisplayName("Nome do Pet")]
         public string Name { get; set; }
-        [Required(ErrorMessage = "Informe tipo de animal de estimação.")]
-        [DisplayName("tipo animal de estimação")]
+        [Required(ErrorMessage = "Informe tipo de animal de estimação. [Gato, Cão, e etc...]")]
+        [DisplayName("tipo animal de Pet")]
         public string Type { get; set; }
-        [Required(ErrorMessage = "Informe a idade seu animal")]
+        [Required(ErrorMessage = "Informe a idade Pet")]
         [DisplayName("Idade do seu animal")]
         public int Age { get; set; }
         [Required(ErrorMessage = "Inserido Genero")]
         [DisplayName("Genero do seu animal")]
         public string Genre { get; set; }
-        [Required(ErrorMessage = "Informe aniversário")]
-        [DisplayName("Data de aniversário do seu animal")]
+        [Required(ErrorMessage = "Informe aniversário do seu Pet")]
+        [DisplayName("Data de aniversário do Pet")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = @"{0:dd/MM/yyyy}", ApplyFormatInEditMode = true, HtmlEncode = true)]
         public DateTime Birthday { get; set; }
@@ -35,18 +35,18 @@ namespace Web.Models.Animal
         [Required(ErrorMessage = "Informe o nome do dono do animal")]
         [DisplayName("Dono do animal")]
         public int PersonId { get; set; }
-        public IEnumerable<SelectListItem> PersonPetsSelect { get; set; }
+        public IEnumerable<SelectListItem> PersonPetSelect { get; set; }
+    }    
+    public class PersonPet
+    {
+        public Person Person { get; set; }
+        public Pet Pet { get; set; }
+        public SelectListItem PersonPetsSelect { get; set; }
     }
     public class PeoplePets
     {
         public Person People { get; set; }
         public Pet Pets { get; set; }
         public IEnumerable<SelectListItem> PeoplePetsSelect { get; set; }
-    }
-    public class PersonPet
-    {
-        public Person Person { get; set; }
-        public Pet Pet { get; set; }
-        public SelectListItem PersonPetSelect { get; set; }
     }
 }

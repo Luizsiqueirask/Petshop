@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Library.Models.Animal
+namespace Animal.Models.Animal
 {
     public class Pet
     {

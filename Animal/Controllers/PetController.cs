@@ -1,6 +1,9 @@
 ﻿using Animal.Casting;
-using Library.Models.Animal;
+using Animal.Models.Animal;
+using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace Animal.Controllers
@@ -27,9 +30,32 @@ namespace Animal.Controllers
         }
 
         // POST: api/Pet
-        public void Post(Pet pet)
+        public string Post(Pet pet)
         {
-            petCast.Post(pet);
+            try
+            {
+                if (pet != null)
+                {
+                    var httpResponseOk = new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        Content = new StringContent("Sucesso"),
+                        RequestMessage = new HttpRequestMessage(),
+                    };
+                    petCast.Post(pet);
+                    return httpResponseOk.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+
+            var httpResponseBad = new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                Content = new StringContent("Error"),
+                RequestMessage = new HttpRequestMessage(),
+            };
+            return httpResponseBad.ToString();
         }
 
         // PUT: api/Pet/5
