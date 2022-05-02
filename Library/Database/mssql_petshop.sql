@@ -226,8 +226,9 @@ AS BEGIN
 		p1.Genre,
 		p1.Age,
 		p1.Birthday,
-		-- Address
-		p1.AddressId,
+		p1.PictureId,
+		p1.ContactId,
+		p1.AddressId,		
 		-- Pictures
 		p2.Id,
 		p2.[Tag],
@@ -235,7 +236,12 @@ AS BEGIN
 		-- Contacts
 		c2.Id,
 		c2.Email,
-		c2.Mobile	
+		c2.Mobile,
+		-- Address
+		a1.Country,
+		a1.States,
+		a1.City,
+		a1.Neighborhoods
 	FROM [dbo].[Person] p1
 	-- Pictures
 	LEFT JOIN [dbo].[Pictures] p2

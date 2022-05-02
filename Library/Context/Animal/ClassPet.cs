@@ -16,6 +16,7 @@ namespace Library.Context.Animal
             _conn = new Bridge();
             _sqlConnection = new SqlConnection(_conn.Connect());
         }
+
         public new IEnumerable<PetLibrary> List()
         {
             var allPet = new List<PetLibrary>();
@@ -33,7 +34,7 @@ namespace Library.Context.Animal
                     {
                         if (dataReader.HasRows)
                         {
-                            var petLibrary = new PetLibrary()
+                            allPet.Add(new PetLibrary()
                             {
                                 Id = (int)dataReader["Id"],
                                 Name = (string)dataReader["Name"],
@@ -60,21 +61,17 @@ namespace Library.Context.Animal
                                     Date = (DateTime)dataReader["Date"],
                                     Time = (DateTime)dataReader["Time"]
                                 }
-                            };
-
-                            allPet.Add(petLibrary);
-                            _sqlConnection.Close();
+                            });
                         }
-                        return allPet;
                     }
+                    _sqlConnection.Close();
                 }
             }
             finally
             {
                 _sqlConnection.Close();
             }
-
-            return new List<PetLibrary>();
+            return allPet;
         }
         public new PetLibrary Get(int? Id)
         {
@@ -119,9 +116,9 @@ namespace Library.Context.Animal
                         }
                     };
                 }
-            }
-            _sqlConnection.Close();
-            return petLibrary;
+                _sqlConnection.Close();
+                return petLibrary;
+            }           
         }
         public new void Post(PetLibrary petLibrary)
         {
@@ -129,11 +126,13 @@ namespace Library.Context.Animal
             {
                 try
                 {
-                    command.CommandType = CommandType.StoredProcedure;                    
+                    command.CommandType = CommandType.StoredProcedure;
+                    _sqlConnection.Open();
+
                     // -- Image
                     command.Parameters.AddWithValue("@Tag", petLibrary.Image.Tag);
                     command.Parameters.AddWithValue("@Path", petLibrary.Image.Path);
-                    command.Parameters.AddWithValue("@ImageId", Convert.ToInt32(petLibrary.Image.Path));
+                    command.Parameters.AddWithValue("@ImageId", Convert.ToInt32(petLibrary.Image.Id));
                     // -- Health
                     command.Parameters.AddWithValue("@Status", petLibrary.Health.Status);
                     command.Parameters.AddWithValue("@HealthId", Convert.ToInt32(petLibrary.Health.Id));
@@ -150,10 +149,9 @@ namespace Library.Context.Animal
                     command.Parameters.AddWithValue("@Genre", petLibrary.Genre);
                     command.Parameters.AddWithValue("@Age", Convert.ToInt32(petLibrary.Age));
                     command.Parameters.AddWithValue("@Birthday", petLibrary.Birthday.ToString("d"));
-                    command.Parameters.AddWithValue("@Genre", petLibrary.Genre);
 
-                    _sqlConnection.Open();
                     int running = command.ExecuteNonQuery();
+                    _sqlConnection.Close();
                 }
                 catch (SqlException ex)
                 {
@@ -170,10 +168,13 @@ namespace Library.Context.Animal
             using (SqlCommand command = new SqlCommand("PutPet", _sqlConnection))
             {
                 command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@IdPet", Id);
+                _sqlConnection.Open();
+
                 // -- Image
                 command.Parameters.AddWithValue("@Tag", petLibrary.Image.Tag);
                 command.Parameters.AddWithValue("@Path", petLibrary.Image.Path);
-                command.Parameters.AddWithValue("@ImageId", Convert.ToInt32(petLibrary.Image.Path));
+                command.Parameters.AddWithValue("@ImageId", Convert.ToInt32(petLibrary.Image.Id));
                 // -- Health
                 command.Parameters.AddWithValue("@Status", petLibrary.Health.Status);
                 command.Parameters.AddWithValue("@HealthId", Convert.ToInt32(petLibrary.Health.Id));
@@ -188,26 +189,31 @@ namespace Library.Context.Animal
                 command.Parameters.AddWithValue("@Genre", petLibrary.Genre);
                 command.Parameters.AddWithValue("@Age", Convert.ToInt32(petLibrary.Age));
                 command.Parameters.AddWithValue("@Birthday", petLibrary.Birthday.ToString("d"));
-                command.Parameters.AddWithValue("@Genre", petLibrary.Genre);
                 // -- Person
                 command.Parameters.AddWithValue("@PersonId", Convert.ToInt32(petLibrary.PersonId));
 
-                _sqlConnection.Open();
                 var running = command.ExecuteNonQuery();
+                _sqlConnection.Close();
             }
-            _sqlConnection.Close();
         }
         public new void Delete(int? Id)
         {
             using (SqlCommand command = new SqlCommand("DeletePet", _sqlConnection))
             {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@IdPet", Id);
+                try
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@IdPet", Id);
 
-                _sqlConnection.Open();
-                var running = command.ExecuteNonQuery();
+                    _sqlConnection.Open();
+                    var running = command.ExecuteNonQuery();
+                    _sqlConnection.Close();
+                }
+                finally
+                {
+                    _sqlConnection.Close();
+                }
             }
-            _sqlConnection.Close();
         }
     }
 }

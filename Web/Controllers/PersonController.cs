@@ -15,6 +15,7 @@ namespace Web.Controllers
     {
         private readonly ApiClient _clientPerson;
         private readonly BlobClient _blobClient;
+        internal readonly string directoryPath = @"../Storage/Person/";
 
         public PersonController()
         {
@@ -28,9 +29,7 @@ namespace Web.Controllers
             var allPeople = await _clientPerson.GetPerson();
             if (allPeople.IsSuccessStatusCode)
             {
-                //var pages = new List<int>() { 1, 10};
                 var people = await allPeople.Content.ReadAsAsync<IEnumerable<Person>>();
-                //return View(people.OrderBy(person => person.Id).ToPagedList(pages[0], pages[1]));
                 return View(people);
             }
 
@@ -89,8 +88,6 @@ namespace Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var directoryPath = @"../Uploads/Person/";
-
                     // Create pictute on server
                     var pictureName = Path.GetFileName(httpFileCollection[0].FileName);
                     var rootPath = Server.MapPath(directoryPath);
@@ -156,8 +153,6 @@ namespace Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var directoryPath = @"../Uploads/Person/";
-
                     // Create pictute on server
                     var pictureName = Path.GetFileName(httpFileCollection[0].FileName);
                     var rootPath = Server.MapPath(directoryPath);

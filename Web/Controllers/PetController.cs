@@ -15,6 +15,7 @@ namespace Web.Controllers
     {
         private readonly ApiClient _clientPet;
         private readonly BlobClient _blobClient;
+        internal readonly string directoryPath = @"../Storage/Pet/";
 
         public PetController()
         {
@@ -36,24 +37,27 @@ namespace Web.Controllers
 
                 if (allPeople.IsSuccessStatusCode)
                 {
+
                     foreach (var pet in pets)
                     {
                         foreach (var person in people)
                         {
-                            var peoplePets = new PeoplePets()
+                            if (pet.PersonId.Equals(person.Id))
                             {
-                                People = person,
-                                Pets = pet,
-                                PeoplePetsSelect = new List<SelectListItem>() {
-                                    new SelectListItem()
-                                    {
-                                        Value = pet.Id.ToString(),
-                                        Text = pet.Name,
-                                        Selected = pet.PersonId == person.Id
+                                containerPersonPet.Add(new PeoplePets()
+                                {
+                                    Pets = pet,
+                                    People = person,
+                                    PeopleSelect = new List<SelectListItem>() {
+                                        new SelectListItem()
+                                        {
+                                            Value = pet.Id.ToString(),
+                                            Text = pet.Name,
+                                            Selected = pet.PersonId == person.Id
+                                        }
                                     }
-                                }
-                            };
-                            containerPersonPet.Add(peoplePets);
+                                });
+                            }                            
                         }
                     }
                     return View(containerPersonPet);
@@ -65,27 +69,31 @@ namespace Web.Controllers
         public async Task<ActionResult> Details(int? Id)
         {
             var allPets = await _clientPet.GetPetById(Id);
+            var personPet = new PersonPet();
 
             if (allPets.IsSuccessStatusCode)
             {
                 var pet = await allPets.Content.ReadAsAsync<Pet>();
-                var allPeople = await _clientPet.GetPerson();
+                var allPeople = await _clientPet.GetPersonById(pet.PersonId);
 
                 if (allPeople.IsSuccessStatusCode)
                 {
                     var person = await allPeople.Content.ReadAsAsync<Person>();
 
-                    var personPet = new PersonPet()
+                    if (pet.PersonId.Equals(person.Id))
                     {
-                        Person = person,
-                        Pet = pet,
-                        PersonPetsSelect = new SelectListItem()
+                        personPet = new PersonPet()
                         {
-                            Value = person.Id.ToString(),
-                            Text = person.FirstName,
-                            Selected = pet.PersonId == person.Id
-                        }
-                    };
+                            Pet = pet,
+                            Person = person,
+                            PersonPetsSelect = new SelectListItem()
+                            {
+                                Value = pet.Id.ToString(),
+                                Text = pet.Name,
+                                Selected = pet.PersonId == person.Id
+                            }
+                        };
+                    }
                     return View(personPet);
                 }
             }
@@ -101,20 +109,21 @@ namespace Web.Controllers
             {
                 var people = await allPerson.Content.ReadAsAsync<IEnumerable<Person>>();
                 var selectPetsList = new List<SelectListItem>();
-                var pets = new Pet();
+                var pet = new Pet();
 
                 foreach (var person in people)
                 {
                     var selectPet = new SelectListItem()
                     {
                         Value = person.Id.ToString(),
-                        Text = $"Nome: {person.FirstName} {person.LastName} | Idade: {person.Age}",
-                        Selected = pets.PersonId == person.Id
+                        Text = $"Nome: {person.FirstName} {person.LastName}",
+                        Selected = person.Id == pet.PersonId
                     };
                     selectPetsList.Add(selectPet);
-                    pets.PersonPetSelect = selectPetsList;
+                    pet.PeopleSelect = selectPetsList;
+                    //pet.PersonId = (int)Convert.ToUInt32(selectPet.Value.ToString());
                 }
-                return View(pets);
+                return View(pet);
             }
             return View(new Pet());
         }
@@ -148,8 +157,6 @@ namespace Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var directoryPath = @"../Uploads/Pet/";
-
                     // Create pictute on server
                     var imageName = Path.GetFileName(httpFileCollection[0].FileName);
                     var rootPath = Server.MapPath(directoryPath);
@@ -169,22 +176,44 @@ namespace Web.Controllers
                     }
                 }
             }
-            return View(new Person());
+            return View(new Pet());
         }
 
         // GET: Pet/Edit/5
         public async Task<ActionResult> Edit(int? Id)
         {
-            var pets = await _clientPet.GetPetById(Id);
+            var allPets = await _clientPet.GetPetById(Id);
+            var personPet = new PersonPet();
 
-            if (pets.IsSuccessStatusCode)
+            if (allPets.IsSuccessStatusCode)
             {
-                var pet = await pets.Content.ReadAsAsync<Pet>();
-                return View(pet);
-            }
-            return View(new Pet());
-        }
+                var pet = await allPets.Content.ReadAsAsync<Pet>();
+                var allPeople = await _clientPet.GetPersonById(pet.PersonId);
 
+                if (allPeople.IsSuccessStatusCode)
+                {
+                    var person = await allPeople.Content.ReadAsAsync<Person>();
+
+                    if (pet.PersonId.Equals(person.Id))
+                    {
+                        personPet = new PersonPet()
+                        {
+                            Pet = pet,
+                            Person = person,
+                            PersonPetsSelect = new SelectListItem()
+                            {
+                                Value = pet.Id.ToString(),
+                                Text = pet.Name,
+                                Selected = pet.PersonId == person.Id
+                            }
+                        };
+                    }
+                    return View(personPet);
+                }
+            }
+            return View(new PersonPet());
+        }
+    
         // POST: Pet/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -213,15 +242,12 @@ namespace Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var directoryPath = @"../Uploads/Pet/";
-
                     // Create pictute on server
                     var imageName = Path.GetFileName(httpFileCollection[0].FileName);
                     var rootPath = Server.MapPath(directoryPath);
                     var picturePath = Path.Combine(rootPath, imageName);
 
                     // Add picture reference to model and save
-                    //var pictureLocalPath = string.Concat(directoryPath, imageName);
                     var PictureExt = Path.GetExtension(imageName);
 
                     if (PictureExt.Equals(".jpg") || PictureExt.Equals(".jpeg") || PictureExt.Equals(".png"))

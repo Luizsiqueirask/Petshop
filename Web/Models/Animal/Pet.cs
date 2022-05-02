@@ -12,19 +12,19 @@ namespace Web.Models.Animal
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "Informe nome")]
-        [DisplayName("Nome do Pet")]
+        [DisplayName("Nome")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Informe tipo de animal de estimação. [Gato, Cão, e etc...]")]
-        [DisplayName("tipo animal de Pet")]
+        [DisplayName("Tipo")]
         public string Type { get; set; }
         [Required(ErrorMessage = "Informe a idade Pet")]
-        [DisplayName("Idade do seu animal")]
+        [DisplayName("Idade")]
         public int Age { get; set; }
-        [Required(ErrorMessage = "Inserido Genero")]
-        [DisplayName("Genero do seu animal")]
+        [Required(ErrorMessage = "Inserido Gênero")]
+        [DisplayName("Gênero")]
         public string Genre { get; set; }
         [Required(ErrorMessage = "Informe aniversário do seu Pet")]
-        [DisplayName("Data de aniversário do Pet")]
+        [DisplayName("Data de aniversário")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = @"{0:dd/MM/yyyy}", ApplyFormatInEditMode = true, HtmlEncode = true)]
         public DateTime Birthday { get; set; }
@@ -35,7 +35,8 @@ namespace Web.Models.Animal
         [Required(ErrorMessage = "Informe o nome do dono do animal")]
         [DisplayName("Dono do animal")]
         public int PersonId { get; set; }
-        public IEnumerable<SelectListItem> PersonPetSelect { get; set; }
+        public SelectListItem PersonSelect { get; set; }
+        public IEnumerable<SelectListItem> PeopleSelect { get; set; }
     }    
     public class PersonPet
     {
@@ -47,6 +48,7 @@ namespace Web.Models.Animal
     {
         public Person People { get; set; }
         public Pet Pets { get; set; }
-        public IEnumerable<SelectListItem> PeoplePetsSelect { get; set; }
+        public SelectListItem PersonSelect { get; set; }
+        public IEnumerable<SelectListItem> PeopleSelect { get; set; }
     }
 }

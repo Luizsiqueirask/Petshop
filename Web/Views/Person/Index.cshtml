@@ -1,23 +1,17 @@
 ﻿@model IEnumerable<Web.Models.Perfil.Person>
-@using X.PagedList.Mvc.Core;
 
-@{
-    ViewBag.Title = "View";
-}
-<h3 class="text-center p-5">All People</h3>
-
-<p class="p-5">
-    @Html.ActionLink("Create New", "Create", new { area = "" }, new { @class = "btn btn-md btn-gradient btn-success text-white shadow-md rounded-5" })
-</p>
-
-<div class="card shadow-lg rounded-5">
-
+<div class="container-fluid">
+    <h3 class="text-center p-5">All People</h3>
+    <p class="p-2">
+        @Html.ActionLink("Create New", "Create", new { area = "" }, new { @class = "btn btn-md btn-gradient btn-success text-white shadow-md rounded-5" })
+    </p>
+    <hr />
     @foreach (var item in Model)
     {
-        <div class="container-fluid">
-            <div class="card-body m-4 ">
+        <div class="">
+            <div class="card bg-gradient bg-opacity-50 m-4 shadow-lg rounded-5">
                 <div class="card-header shadow-sm bg-white">
-                    <h3 class="h3 text-center m-4">@Html.DisplayFor(model => item.FirstName)</h3>
+                    <h2 class="h3 text-center m-4">@Html.DisplayFor(model => item.FirstName) @Html.DisplayFor(model => item.LastName)</h2>
                     <hr />
                     <div class="card-body">
                         <br />
@@ -25,10 +19,11 @@
                             <img src="@Url.Content(item.Picture.Path)" alt="@Html.DisplayFor(model => item.Picture.Tag)" style="width: 360px; height: 270px;" class="img-thumbnail figure-img shadow-sm rounded-3 rounded-pill mb-5" />
                         </figure>
                         <div>
-                            <h5 class="h-50 mb-3 text-center">Pessoa</h5>
+                            <h5 class="h-50 mb-3 text-center">Perfil</h5>
                             <div class="card-body row m-3">
                                 <div class="col-md-6">
-                                    <p>
+                                    <div class="card-body">
+                                        <p class="text-center text-capitalize mt-5"><strong>Info Pessoal</strong></p>
                                         <b>@Html.DisplayNameFor(model => model.FirstName)</b>
                                         @Html.DisplayFor(model => item.FirstName)
                                         <br />
@@ -43,17 +38,18 @@
                                         <br />
                                         <b>@Html.DisplayNameFor(model => model.Genre):</b>
                                         @Html.DisplayFor(model => item.Genre)
-                                    </p>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>
+                                    <div class="card-body">
+                                        <p class="text-center text-capitalize mt-5"><strong>Contatos</strong></p>
                                         <b>@Html.DisplayNameFor(model => model.Contact.Email):</b>
                                         @Html.DisplayFor(model => item.Contact.Email)
                                         <br />
                                         <b>@Html.DisplayNameFor(model => model.Contact.Mobile):</b>
                                         @Html.DisplayFor(model => item.Contact.Mobile)
                                         <br />
-                                        <br />
+                                        <p class="text-center text-capitalize mt-5"><strong>Endereço</strong></p>
                                         <b>@Html.DisplayNameFor(model => model.Address.Country):</b>
                                         @Html.DisplayFor(model => item.Address.Country)
                                         <br />
@@ -65,7 +61,7 @@
                                         <br />
                                         <b>@Html.DisplayNameFor(model => model.Address.Neighborhoods):</b>
                                         @Html.DisplayFor(model => item.Address.Neighborhoods)
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

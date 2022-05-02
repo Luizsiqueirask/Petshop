@@ -7,8 +7,8 @@ namespace Web.Models.Animal
     public class Health
     {
         public int Id { get; set; }
-        [Required(ErrorMessage = "Inserido estado de saude do seu animal")]
-        [DisplayName("Estado de saude do seu animal")]
+        [Required(ErrorMessage = "Inserido estado de saúde do seu animal")]
+        [DisplayName("Estado de saúde")]
         public string Status { get; set; }
     }
 }

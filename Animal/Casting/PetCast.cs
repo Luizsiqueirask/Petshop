@@ -23,7 +23,7 @@ namespace Animal.Casting
             {
                 foreach (var pets in allPets)
                 {
-                    var pet = new Pet()
+                    listPet.Add(new Pet()
                     {
                         Id = pets.Id,
                         Name = pets.Name,
@@ -46,13 +46,11 @@ namespace Animal.Casting
                         Schedule = new Schedule()
                         {
                             Id = pets.Schedule.Id,
-                            Services =pets.Schedule.Services,
+                            Services = pets.Schedule.Services,
                             Date = pets.Schedule.Date,
                             Time = pets.Schedule.Time
                         }
-                    };
-
-                    listPet.Add(pet);
+                    });
                 }
                 return listPet;
             }

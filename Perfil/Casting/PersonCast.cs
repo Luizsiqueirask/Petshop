@@ -22,7 +22,7 @@ namespace Perfil.Casting
             {
                 foreach (var people in allPerson)
                 {
-                    var person = new Person()
+                    listPerson.Add(new Person()
                     {
                         Id = people.Id,
                         FirstName = people.FirstName,
@@ -50,9 +50,7 @@ namespace Perfil.Casting
                             City = people.Address.City,
                             Neighborhoods = people.Address.Neighborhoods
                         }
-                    };
-
-                    listPerson.Add(person);
+                    });
                 }
                 return listPerson;
             }

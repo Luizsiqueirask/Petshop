@@ -3,13 +3,13 @@
 <div class="container-fluid">
     <h3 class="text-center">All Pets</h3>
     <p class="p-2">
-        @Html.ActionLink("Create New", "Create", new { area = "" }, new { @class = "btn btn-sm btn-success text-white" })
+        @Html.ActionLink("Create New", "Create", new { area = "" }, new { @class = "btn btn-md btn-gradient btn-success text-white shadow-md rounded-5" })
     </p>
     <hr />
     @foreach (var item in Model)
     {
         <div class="">
-            <div class="card bg-info bg-opacity-100 m-4 shadow-lg rounded-5">
+            <div class="card bg-gradient bg-opacity-50 m-4 shadow-lg rounded-5">
                 <div class="card-header shadow-sm bg-white">
                     <h2 class="h3 text-center m-4">@Html.DisplayFor(model => item.Pets.Name)</h2>
                     <hr />
@@ -19,35 +19,37 @@
                             <img src="@Url.Content(item.Pets.Image.Tag)" alt="@Html.DisplayFor(model => item.Pets.Image.Tag)" style="width: 360px; height: 270px;" class="img-thumbnail figure-img shadow-sm rounded-3 rounded-pill mb-5" />
                         </figure>
                         <div>
-                            <h5 class="h-50 mb-3 text-center">Animal de Instimação</h5>
+                            <h5 class="h-50 mb-3 text-center">Animal de Estimação</h5>
                             <div class="card-body row m-3">
                                 <div class="col-md-6">
-                                    <p>
+                                    <div>
+                                        <p class="text-center text-capitalize mt-5"><strong>Info Pet</strong></p>
                                         <b>@Html.DisplayNameFor(model => model.Pets.Name)</b>
                                         @Html.DisplayFor(model => item.Pets.Name)
                                         <br />
-                                        <b>@Html.DisplayNameFor(model => model.Pets.Birthday):</b>
-                                        @Html.DisplayFor(model => item.Pets.Birthday)
+                                        <b>@Html.DisplayNameFor(model => model.Pets.Type):</b>
+                                        @Html.DisplayFor(model => item.Pets.Type)
                                         <br />
                                         <b>@Html.DisplayNameFor(model => model.Pets.Genre):</b>
                                         @Html.DisplayFor(model => item.Pets.Genre)
                                         <br />
                                         <b>@Html.DisplayNameFor(model => model.Pets.Age):</b>
                                         @Html.DisplayFor(model => item.Pets.Age)
-                                        <b>@Html.DisplayNameFor(model => model.Pets.Genre):</b>
-                                        @Html.DisplayFor(model => item.Pets.Genre)
-                                    </p>
+                                        <br />
+                                        <b>@Html.DisplayNameFor(model => model.Pets.Birthday):</b>
+                                        @Html.DisplayFor(model => item.Pets.Birthday)
+                                        <br />
+                                        <b>@Html.DisplayNameFor(model => model.Pets.PersonId):</b>
+                                        @Html.DisplayFor(model => item.People.FirstName)  @Html.DisplayFor(model => item.People.LastName)
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>
+                                    <div class="card-body">
+                                        <p class="text-center text-capitalize mt-5"><strong>Saúde</strong></p>
                                         <b>@Html.DisplayNameFor(model => model.Pets.Health.Status):</b>
                                         @Html.DisplayFor(model => item.Pets.Health.Status)
-                                        <br />
-                                        <b>@Html.DisplayNameFor(model => model.People.FirstName):</b>
-                                        @Html.DisplayFor(model => item.People.FirstName) @Html.DisplayFor(model => item.People.LastName)
-                                        <hr />
-                                        <p class="text-left"><strong>Agendamento</strong></p>
-                                        <br />
+                                        
+                                        <p class="text-center text-capitalize mt-5"><strong>Agendamento</strong></p>
                                         <b>@Html.DisplayNameFor(model => model.Pets.Schedule.Services):</b>
                                         @Html.DisplayFor(model => item.Pets.Schedule.Services)
                                         <br />
@@ -56,7 +58,7 @@
                                         <br />
                                         <b>@Html.DisplayNameFor(model => model.Pets.Schedule.Time):</b>
                                         @Html.DisplayFor(model => item.Pets.Schedule.Time)
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

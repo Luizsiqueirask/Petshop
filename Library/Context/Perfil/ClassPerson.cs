@@ -34,7 +34,7 @@ namespace Library.Context.Perfil
                     {
                         if (dataReader.HasRows)
                         {
-                            var personLibrary = new PersonLibrary()
+                            allPerson.Add(new PersonLibrary()
                             {
                                 Id = (int)dataReader["Id"],
                                 FirstName = (string)dataReader["FirstName"],
@@ -62,22 +62,17 @@ namespace Library.Context.Perfil
                                     City = (string)dataReader["City"],
                                     Neighborhoods = (string)dataReader["Neighborhoods"]
                                 }
-                            };
-
-                            allPerson.Add(personLibrary);
-                            _sqlConnection.Close();
+                            });
                         }
-                        return allPerson;
                     }
+                    _sqlConnection.Close();
                 }
             }
             finally
             {
                 _sqlConnection.Close();
             }
-
-            return new List<PersonLibrary>();
-
+            return allPerson;
         }
         public new PersonLibrary Get(int? Id)
         {
@@ -123,9 +118,9 @@ namespace Library.Context.Perfil
                         }
                     };
                 }
-            }
-            _sqlConnection.Close();
-            return personLibrary;
+                _sqlConnection.Close();
+                return personLibrary;
+            }           
         }
         public new void Post(PersonLibrary personLibrary)
         {
@@ -133,7 +128,9 @@ namespace Library.Context.Perfil
             {
                 try
                 {
-                    command.CommandType = CommandType.StoredProcedure;                    
+                    command.CommandType = CommandType.StoredProcedure;
+                    _sqlConnection.Open();
+
                     // -- Picture
                     command.Parameters.AddWithValue("@Tag", personLibrary.Picture.Tag);
                     command.Parameters.AddWithValue("@Path", personLibrary.Picture.Path);
@@ -155,10 +152,8 @@ namespace Library.Context.Perfil
                     command.Parameters.AddWithValue("@Age", personLibrary.Age);
                     command.Parameters.AddWithValue("@Birthday", personLibrary.Birthday.ToString("d"));
 
-                    _sqlConnection.Open();
                     int running = command.ExecuteNonQuery();
                     _sqlConnection.Close();
-
                 }
                 catch (SqlException ex)
                 {
@@ -176,6 +171,8 @@ namespace Library.Context.Perfil
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@IdPerson", Id);
+                _sqlConnection.Open();
+
                 // -- Picture
                 command.Parameters.AddWithValue("@Tag", personLibrary.Picture.Tag);
                 command.Parameters.AddWithValue("@Path", personLibrary.Picture.Path);
@@ -197,22 +194,28 @@ namespace Library.Context.Perfil
                 command.Parameters.AddWithValue("@Age", personLibrary.Age);
                 command.Parameters.AddWithValue("@Birthday", personLibrary.Birthday.ToString("d"));
 
-                _sqlConnection.Open();
                 var running = command.ExecuteNonQuery();
+                _sqlConnection.Close();
             }
-            _sqlConnection.Close();
         }
         public new void Delete(int? Id)
         {
             using (SqlCommand command = new SqlCommand("DeletePerson", _sqlConnection))
             {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@IdPerson", Id);
+                try
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@IdPet", Id);
 
-                _sqlConnection.Open();
-                var running = command.ExecuteNonQuery();
+                    _sqlConnection.Open();
+                    var running = command.ExecuteNonQuery();
+                    _sqlConnection.Close();
+                }
+                finally
+                {
+                    _sqlConnection.Close();
+                }
             }
-            _sqlConnection.Close();
         }
     }
 }
