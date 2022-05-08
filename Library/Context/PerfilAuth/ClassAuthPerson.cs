@@ -1,4 +1,4 @@
-﻿using Library.Models.Perfil;
+﻿using Library.Models.PerfilAuth;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,9 +17,9 @@ namespace Library.Context.PerfilAuth
             _sqlConnection = new SqlConnection(_conn.Connect());
         }
 
-        public new IEnumerable<PersonLibrary> List()
+        public new IEnumerable<PersonAuthLibrary> List()
         {
-            var allPerson = new List<PersonLibrary>();
+            var allPerson = new List<PersonAuthLibrary>();
 
             try
             {
@@ -34,7 +34,7 @@ namespace Library.Context.PerfilAuth
                     {
                         if (dataReader.HasRows)
                         {
-                            var personLibrary = new PersonLibrary()
+                            var personLibrary = new PersonAuthLibrary()
                             {
                                 Id = (int)dataReader["Id"],
                                 FirstName = (string)dataReader["FirstName"],
@@ -42,19 +42,25 @@ namespace Library.Context.PerfilAuth
                                 Age = (int)dataReader["Age"],
                                 Birthday = (DateTime)dataReader["Birthday"],
                                 Genre = (string)dataReader["Genre"],
-                                Picture = new PictureLibrary()
+                                Picture = new PictureAuthLibrary()
                                 {
                                     Id = (int)dataReader["Id"],
                                     Tag = (string)dataReader["Tag"],
                                     Path = (string)dataReader["Path"]
                                 },
-                                Contact = new ContactLibrary()
+                                User = new UserAuthLibrary()
+                                {
+                                    Id = (int)dataReader["Id"],
+                                    Username = (string)dataReader["Username"],
+                                    Password = (string)dataReader["Password"]
+                                },
+                                Contact = new ContactAuthLibrary()
                                 {
                                     Id = (int)dataReader["Id"],
                                     Email = (string)dataReader["Email"],
                                     Mobile = (string)dataReader["Mobile"]
                                 },
-                                Address = new AddressLibrary()
+                                Address = new AddressAuthLibrary()
                                 {
                                     Id = (int)dataReader["Id"],
                                     Country = (string)dataReader["Country"],
@@ -84,9 +90,9 @@ namespace Library.Context.PerfilAuth
 
             return allPerson;
         }
-        public new PersonLibrary Get(int? Id)
+        public new PersonAuthLibrary Get(int? Id)
         {
-            var personLibrary = new PersonLibrary();
+            var personLibrary = new PersonAuthLibrary();
 
             using (SqlCommand command = new SqlCommand("GetPerson", _sqlConnection))
             {
@@ -98,7 +104,7 @@ namespace Library.Context.PerfilAuth
 
                 while (dataReader.Read())
                 {
-                    personLibrary = new PersonLibrary()
+                    personLibrary = new PersonAuthLibrary()
                     {
                         Id = (int)dataReader["Id"],
                         FirstName = (string)dataReader["FirstName"],
@@ -106,19 +112,25 @@ namespace Library.Context.PerfilAuth
                         Age = (int)dataReader["Age"],
                         Birthday = (DateTime)dataReader["Birthday"],
                         Genre = (string)dataReader["Genre"],
-                        Picture = new PictureLibrary()
+                        Picture = new PictureAuthLibrary()
                         {
                             Id = (int)dataReader["Id"],
                             Tag = (string)dataReader["Tag"],
                             Path = (string)dataReader["Path"]
                         },
-                        Contact = new ContactLibrary()
+                        User = new UserAuthLibrary()
+                        {
+                            Id = (int)dataReader["Id"],
+                            Username = (string)dataReader["Username"],
+                            Password = (string)dataReader["Password"]
+                        },
+                        Contact = new ContactAuthLibrary()
                         {
                             Id = (int)dataReader["Id"],
                             Email = (string)dataReader["Email"],
                             Mobile = (string)dataReader["Mobile"]
                         },
-                        Address = new AddressLibrary()
+                        Address = new AddressAuthLibrary()
                         {
                             Id = (int)dataReader["Id"],
                             Country = (string)dataReader["Country"],
@@ -132,13 +144,13 @@ namespace Library.Context.PerfilAuth
             _sqlConnection.Close();
             return personLibrary;
         }
-        public new void Post(PersonLibrary personLibrary)
+        public new void Post(PersonAuthLibrary personLibrary)
         {
             using (SqlCommand command = new SqlCommand("PostPerson", _sqlConnection))
             {
                 try
                 {
-                    command.CommandType = CommandType.StoredProcedure;                    
+                    command.CommandType = CommandType.StoredProcedure;
                     // -- Picture
                     command.Parameters.AddWithValue("@Tag", personLibrary.Picture.Tag);
                     command.Parameters.AddWithValue("@Path", personLibrary.Picture.Path);
@@ -150,6 +162,9 @@ namespace Library.Context.PerfilAuth
                     command.Parameters.AddWithValue("@States", personLibrary.Address.States);
                     command.Parameters.AddWithValue("@City", personLibrary.Address.City);
                     command.Parameters.AddWithValue("@Neighborhoods", personLibrary.Address.Neighborhoods);
+                    // -- User
+                    command.Parameters.AddWithValue("@Username", personLibrary.User.Username);
+                    command.Parameters.AddWithValue("@Password", personLibrary.User.Password);
                     // -- Person
                     command.Parameters.AddWithValue("@FirstName", personLibrary.FirstName);
                     command.Parameters.AddWithValue("@LastName", personLibrary.LastName);
@@ -157,6 +172,7 @@ namespace Library.Context.PerfilAuth
                     command.Parameters.AddWithValue("@Birthday", personLibrary.Birthday);
                     command.Parameters.AddWithValue("@Genre", personLibrary.Genre);
                     command.Parameters.AddWithValue("@PictureId", personLibrary.Picture.Id);
+                    command.Parameters.AddWithValue("@UserId", personLibrary.User.Id);
                     command.Parameters.AddWithValue("@ContactId", personLibrary.Contact.Id);
                     command.Parameters.AddWithValue("@AddressId", personLibrary.Address.Id);
 
@@ -173,7 +189,7 @@ namespace Library.Context.PerfilAuth
                 }
             }
         }
-        public new void Put(PersonLibrary personLibrary, int? Id)
+        public new void Put(PersonAuthLibrary personLibrary, int? Id) 
         {
             using (SqlCommand command = new SqlCommand("PutPerson", _sqlConnection))
             {
@@ -190,6 +206,9 @@ namespace Library.Context.PerfilAuth
                 command.Parameters.AddWithValue("@States", personLibrary.Address.States);
                 command.Parameters.AddWithValue("@City", personLibrary.Address.City);
                 command.Parameters.AddWithValue("@Neighborhoods", personLibrary.Address.Neighborhoods);
+                // -- User
+                command.Parameters.AddWithValue("@Username", personLibrary.User.Username);
+                command.Parameters.AddWithValue("@Password", personLibrary.User.Password);
                 // -- Person
                 command.Parameters.AddWithValue("@FirstName", personLibrary.FirstName);
                 command.Parameters.AddWithValue("@LastName", personLibrary.LastName);
@@ -197,6 +216,7 @@ namespace Library.Context.PerfilAuth
                 command.Parameters.AddWithValue("@Birthday", personLibrary.Birthday);
                 command.Parameters.AddWithValue("@Genre", personLibrary.Genre);
                 command.Parameters.AddWithValue("@PictureId", personLibrary.Picture.Id);
+                command.Parameters.AddWithValue("@UserId", personLibrary.User.Id);
                 command.Parameters.AddWithValue("@ContactId", personLibrary.Contact.Id);
                 command.Parameters.AddWithValue("@AddressId", personLibrary.Address.Id);
 

@@ -87,7 +87,7 @@ namespace Animal.Casting
                         Id = pets.Schedule.Id,
                         Services = pets.Schedule.Services,
                         Date = pets.Schedule.Date,
-                        Time = pets.Schedule.Time                        
+                        Time = pets.Schedule.Time
                     }
                 };
                 return pet;
@@ -121,7 +121,7 @@ namespace Animal.Casting
                     Id = pet.Schedule.Id,
                     Services = pet.Schedule.Services,
                     Date = pet.Schedule.Date,
-                    Time = pet.Schedule.Time                    
+                    Time = pet.Schedule.Time
                 }
             };
 
@@ -154,7 +154,7 @@ namespace Animal.Casting
                     Id = pet.Schedule.Id,
                     Services = pet.Schedule.Services,
                     Date = pet.Schedule.Date,
-                    Time = pet.Schedule.Time                    
+                    Time = pet.Schedule.Time
                 }
             };
 

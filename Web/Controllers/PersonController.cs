@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
@@ -13,9 +12,9 @@ namespace Web.Controllers
 {
     public class PersonController : Controller
     {
-        private readonly ApiClient _clientPerson;
-        private readonly BlobClient _blobClient;
-        internal readonly string directoryPath = @"../Storage/Person/";
+        protected readonly ApiClient _clientPerson;
+        protected readonly BlobClient _blobClient;
+        protected readonly string directoryPath = @"../Storage/Person/";
 
         public PersonController()
         {
@@ -25,7 +24,7 @@ namespace Web.Controllers
 
         // GET: Person
         public async Task<ActionResult> Index()
-        {   
+        {
             var allPeople = await _clientPerson.GetPerson();
             if (allPeople.IsSuccessStatusCode)
             {
@@ -66,7 +65,7 @@ namespace Web.Controllers
 
             HttpFileCollectionBase httpFileCollection = Request.Files;
             HttpPostedFileBase postedFileBase = httpFileCollection[0];
-           
+
             try
             {
                 if (ModelState.IsValid)

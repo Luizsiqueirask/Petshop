@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Library.Models.Animal
+﻿namespace Library.Models.Animal
 {
     public class HealthLibrary
     {

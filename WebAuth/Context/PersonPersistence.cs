@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -48,7 +47,7 @@ namespace WebAuth.Context
 
             return new Person();
         }
-        public async Task<Person> Create()
+        public Person Create()
         {
             return new Person();
         }

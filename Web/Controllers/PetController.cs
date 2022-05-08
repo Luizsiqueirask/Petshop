@@ -57,7 +57,7 @@ namespace Web.Controllers
                                         }
                                     }
                                 });
-                            }                            
+                            }
                         }
                     }
                     return View(containerPersonPet);
@@ -104,7 +104,7 @@ namespace Web.Controllers
         public async Task<ActionResult> Create()
         {
             var allPerson = await _clientPet.GetPerson();
-            
+
             if (allPerson.IsSuccessStatusCode)
             {
                 var people = await allPerson.Content.ReadAsAsync<IEnumerable<Person>>();
@@ -183,7 +183,6 @@ namespace Web.Controllers
         public async Task<ActionResult> Edit(int? Id)
         {
             var allPets = await _clientPet.GetPetById(Id);
-            var personPet = new PersonPet();
 
             if (allPets.IsSuccessStatusCode)
             {
@@ -194,26 +193,24 @@ namespace Web.Controllers
                 {
                     var person = await allPeople.Content.ReadAsAsync<Person>();
 
-                    if (pet.PersonId.Equals(person.Id))
+                    var personPet = new PersonPet()
                     {
-                        personPet = new PersonPet()
+                        Pet = pet,
+                        Person = person,
+                        PersonPetsSelect = new SelectListItem()
                         {
-                            Pet = pet,
-                            Person = person,
-                            PersonPetsSelect = new SelectListItem()
-                            {
-                                Value = pet.Id.ToString(),
-                                Text = pet.Name,
-                                Selected = pet.PersonId == person.Id
-                            }
-                        };
-                    }
+                            Value = pet.Id.ToString(),
+                            Text = pet.Name,
+                            Selected = pet.PersonId == person.Id
+                        }
+                    };
+
                     return View(personPet);
                 }
             }
             return View(new PersonPet());
         }
-    
+
         // POST: Pet/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]

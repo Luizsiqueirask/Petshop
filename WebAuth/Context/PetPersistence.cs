@@ -101,13 +101,13 @@ namespace WebAuth.Context
             {
                 var people = await allPerson.Content.ReadAsAsync<IEnumerable<Person>>();
 
-                foreach(var person in people)
+                foreach (var person in people)
                 {
                     var personPet = new SelectListItem()
                     {
                         Value = person.Id.ToString(),
                         Text = person.FirstName + " " + person.LastName,
-                        Selected =  person.Id == pets.PersonId
+                        Selected = person.Id == pets.PersonId
                     };
                     selectPetsList.Add(personPet);
                 }

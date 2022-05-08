@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Animal.Models.Animal
+﻿namespace Animal.Models.Animal
 {
     public class Health
     {

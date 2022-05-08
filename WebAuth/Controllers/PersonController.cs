@@ -1,86 +1,200 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using WebAuth.Context;
+using WebAuth.Api;
 using WebAuth.Models.Perfil;
 
 namespace WebAuth.Controllers
 {
     public class PersonController : Controller
     {
-        private readonly PersonPersistence clientPerson;
+        protected readonly ApiClient _clientPerson;
+        protected readonly BlobClient _blobClient;
+        protected readonly string directoryPath = @"../Storage/Person/";
 
         public PersonController()
         {
-            clientPerson = new PersonPersistence();
+            _clientPerson = new ApiClient();
+            _blobClient = new BlobClient();
         }
 
         // GET: Person
         public async Task<ActionResult> Index()
         {
-            var person = await clientPerson.List();
-            return View(person);
+            var allPeople = await _clientPerson.GetPerson();
+            if (allPeople.IsSuccessStatusCode)
+            {
+                var people = await allPeople.Content.ReadAsAsync<IEnumerable<Person>>();
+                return View(people);
+            }
+
+            return View(new List<Person>());
         }
 
         // GET: Person/Details/5
         public async Task<ActionResult> Details(int? Id)
         {
-            var person = await clientPerson.Get(Id);
-            return View(person);
+            var people = await _clientPerson.GetPersonById(Id);
+
+            if (people.IsSuccessStatusCode)
+            {
+                var person = await people.Content.ReadAsAsync<Person>();
+                return View(person);
+            }
+            return View(new Person());
         }
 
         // GET: Person/Create
-        public async Task<ActionResult> Create()
+        public ActionResult Create()
         {
-            var person = await clientPerson.Create();
-            return View(person);
+            return View(new Person());
         }
 
         // POST: Person/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Person person)
         {
+            // https://www.c-sharpcorner.com/article/upload-and-display-image-in-asp-net-core-3-1/
+            // https://docs.microsoft.com/pt-br/dotnet/api/system.web.ui.webcontrols.fileupload.postedfile?view=netframework-4.8
+            // https://cpratt.co/file-uploads-in-asp-net-mvc-with-view-models/
+
+            HttpFileCollectionBase httpFileCollection = Request.Files;
+            HttpPostedFileBase postedFileBase = httpFileCollection[0];
+
             try
             {
-                // TODO: Add insert logic here               
-                await clientPerson.Post(person);
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    await _blobClient.SetupCloudBlob();
+
+                    var pictureNameBlob = _blobClient.GetRandomBlobName(httpFileCollection[0].FileName);
+                    var picturePathblob = _blobClient._blobContainer.GetBlockBlobReference(pictureNameBlob);
+                    await picturePathblob.UploadFromStreamAsync(httpFileCollection[0].InputStream);
+
+                    person.Picture.Tag = picturePathblob.Name.ToString();
+                    person.Picture.Path = picturePathblob.Uri.AbsolutePath.ToString();
+                    await _clientPerson.PostPerson(person);
+
+                    return RedirectToAction("Index");
+                }
             }
             catch
             {
-                return View(new Person());
+                if (ModelState.IsValid)
+                {
+                    // Create pictute on server
+                    var pictureName = Path.GetFileName(httpFileCollection[0].FileName);
+                    var rootPath = Server.MapPath(directoryPath);
+                    var picturePath = Path.Combine(rootPath, pictureName);
+
+                    // Add picture reference to model and save
+                    var PictureExt = Path.GetExtension(pictureName);
+
+                    if (PictureExt.Equals(".jpg") || PictureExt.Equals(".jpeg") || PictureExt.Equals(".png"))
+                    {
+                        person.Picture.Tag = pictureName;
+                        person.Picture.Path = picturePath;
+                        postedFileBase.SaveAs(picturePath);
+                        await _clientPerson.PostPerson(person);
+
+                        return RedirectToAction("Index");
+                    }
+                }
             }
+            return View(new Person());
         }
 
         // GET: Person/Edit/5
         public async Task<ActionResult> Edit(int? Id)
         {
-            var person = await clientPerson.Update(Id);
-            return View(person);
+            var people = await _clientPerson.GetPersonById(Id);
+
+            if (people.IsSuccessStatusCode)
+            {
+                var person = await people.Content.ReadAsAsync<Person>();
+                return View(person);
+            }
+            return View(new Person());
         }
 
         // POST: Person/Edit/5
         [HttpPost]
-        public async Task<ActionResult> Edit(Person person, int? Id, HttpPostedFileBase httpPosted)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(Person person, int? Id)
         {
+            HttpFileCollectionBase httpFileCollection = Request.Files;
+            HttpPostedFileBase postedFileBase = httpFileCollection[0];
+
             try
             {
-                // TODO: Add update logic here
-                await clientPerson.Put(person, Id, httpPosted);
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    await _blobClient.SetupCloudBlob();
+
+                    var pictureNameBlob = _blobClient.GetRandomBlobName(httpFileCollection[0].FileName);
+                    var picturePathblob = _blobClient._blobContainer.GetBlockBlobReference(pictureNameBlob);
+                    await picturePathblob.UploadFromStreamAsync(httpFileCollection[0].InputStream);
+
+                    person.Picture.Tag = picturePathblob.Name.ToString();
+                    person.Picture.Path = picturePathblob.Uri.AbsolutePath.ToString();
+
+                    // Thread.Sleep(1000);
+                    await _clientPerson.PostPerson(person);
+                    return RedirectToAction("Index");
+                }
             }
             catch
             {
-                return View(new Person());
+                if (ModelState.IsValid)
+                {
+                    // Create pictute on server
+                    var pictureName = Path.GetFileName(httpFileCollection[0].FileName);
+                    var rootPath = Server.MapPath(directoryPath);
+                    var picturePath = Path.Combine(rootPath, pictureName);
+
+                    // Add picture reference to model and save
+                    var PictureExt = Path.GetExtension(pictureName);
+
+                    if (PictureExt.Equals(".jpg") || PictureExt.Equals(".jpeg") || PictureExt.Equals(".png"))
+                    {
+                        person.Picture.Tag = pictureName;
+                        person.Picture.Path = picturePath;
+                        postedFileBase.SaveAs(picturePath);
+
+                        // Thread.Sleep(1000);
+                        await _clientPerson.PutPerson(person, Id);
+
+                        return RedirectToAction("Index");
+                    }
+                }
             }
+            return View(new Person());
         }
 
         // GET: Person/Delete/5
         public async Task<ActionResult> Delete(int? Id)
         {
-            var person = await clientPerson.Get(Id);
-            return View(person);
+            try
+            {
+                var people = await _clientPerson.GetPersonById(Id);
+
+                if (people.IsSuccessStatusCode)
+                {
+                    var person = await people.Content.ReadAsAsync<Person>();
+                    return View(person);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"MSG: {ex.Message}");
+            }
+
+            return View(new Person());
         }
 
         // POST: Person/Delete/5
@@ -89,14 +203,19 @@ namespace WebAuth.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
-                await clientPerson.Delete(Id);
-                return RedirectToAction("Index");
+                var person = await _clientPerson.DeletePerson(Id);
+
+                if (person.IsSuccessStatusCode)
+                {
+                    await person.Content.ReadAsAsync<Person>();
+                    return View(person);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return View(new Person());
+                Console.WriteLine($"MSG: {ex.Message}");
             }
+            return View(new Person());
         }
     }
 }

@@ -112,13 +112,13 @@ namespace Library.Context.Animal
                             Id = (int)dataReader["Id"],
                             Services = (string)dataReader["Services"],
                             Date = (DateTime)dataReader["Date"],
-                            Time = (DateTime)dataReader["Time"]                         
+                            Time = (DateTime)dataReader["Time"]
                         }
                     };
                 }
                 _sqlConnection.Close();
                 return petLibrary;
-            }           
+            }
         }
         public new void Post(PetLibrary petLibrary)
         {

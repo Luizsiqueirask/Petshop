@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Web.Models.Animal
-{    
+{
     public class Schedule
     {
         public int Id { get; set; }

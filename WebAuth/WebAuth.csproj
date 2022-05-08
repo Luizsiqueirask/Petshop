@@ -448,7 +448,6 @@
     <Compile Include="Models\Animal\Health.cs" />
     <Compile Include="Models\Animal\Image.cs" />
     <Compile Include="Models\Animal\Pet.cs" />
-    <Compile Include="Models\Animal\Places.cs" />
     <Compile Include="Models\Animal\Schedule.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -456,6 +455,7 @@
     <Compile Include="Models\Perfil\Contact.cs" />
     <Compile Include="Models\Perfil\Person.cs" />
     <Compile Include="Models\Perfil\Picture.cs" />
+    <Compile Include="Models\Perfil\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -507,6 +507,16 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="Person\Create.cshtml" />
+    <Content Include="Person\Delete.cshtml" />
+    <Content Include="Person\Details.cshtml" />
+    <Content Include="Person\Edit.cshtml" />
+    <Content Include="Person\Index.cshtml" />
+    <Content Include="Pet\Create.cshtml" />
+    <Content Include="Pet\Delete.cshtml" />
+    <Content Include="Pet\Details.cshtml" />
+    <Content Include="Pet\Edit.cshtml" />
+    <Content Include="Pet\Index.cshtml" />
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.0.js" />
     <Content Include="Scripts\jquery-3.6.0.min.js" />
@@ -562,6 +572,7 @@
     <Content Include="Views\Pet\Details.cshtml" />
     <Content Include="Views\Pet\Edit.cshtml" />
     <Content Include="Views\Pet\Index.cshtml" />
+    <Content Include="WebAuths.Tests.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Web.Models.Perfil
 {
@@ -19,7 +18,7 @@ namespace Web.Models.Perfil
         public int Age { get; set; }
         [Required(ErrorMessage = "Inserido Genero")]
         [DisplayName("Genero")]
-        public string Genre { get; set; }     
+        public string Genre { get; set; }
         [Required(ErrorMessage = "Informe aniversário")]
         [DisplayName("Data de aniversário")]
         [DataType(DataType.Date)]

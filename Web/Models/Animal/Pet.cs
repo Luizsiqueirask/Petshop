@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Collections.Generic;
 using System.Web.Mvc;
 using Web.Models.Perfil;
 
@@ -37,7 +36,7 @@ namespace Web.Models.Animal
         public int PersonId { get; set; }
         public SelectListItem PersonSelect { get; set; }
         public IEnumerable<SelectListItem> PeopleSelect { get; set; }
-    }    
+    }
     public class PersonPet
     {
         public Person Person { get; set; }
