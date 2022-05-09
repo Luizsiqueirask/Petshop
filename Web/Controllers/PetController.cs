@@ -161,6 +161,7 @@ namespace Web.Controllers
                     var imageName = Path.GetFileName(httpFileCollection[0].FileName);
                     var rootPath = Server.MapPath(directoryPath);
                     var picturePath = Path.Combine(rootPath, imageName);
+                    var pathReal = directoryPath + imageName;
 
                     // Add picture reference to model and save
                     var PictureExt = Path.GetExtension(imageName);
@@ -168,7 +169,7 @@ namespace Web.Controllers
                     if (PictureExt.Equals(".jpg") || PictureExt.Equals(".jpeg") || PictureExt.Equals(".png"))
                     {
                         pet.Image.Tag = imageName;
-                        pet.Image.Path = picturePath;
+                        pet.Image.Path = pathReal;
                         postedFileBase.SaveAs(picturePath);
                         await _clientPet.PostPet(pet);
 
@@ -197,11 +198,14 @@ namespace Web.Controllers
                     {
                         Pet = pet,
                         Person = person,
-                        PersonPetsSelect = new SelectListItem()
+                        PeopleSelect = new List<SelectListItem>()
                         {
-                            Value = pet.Id.ToString(),
-                            Text = pet.Name,
-                            Selected = pet.PersonId == person.Id
+                            new SelectListItem()
+                            {
+                                Value = person.Id.ToString(),
+                                Text = $"{person.FirstName} {person.LastName}",
+                                Selected = pet.PersonId == person.Id
+                            }
                         }
                     };
 
@@ -243,6 +247,7 @@ namespace Web.Controllers
                     var imageName = Path.GetFileName(httpFileCollection[0].FileName);
                     var rootPath = Server.MapPath(directoryPath);
                     var picturePath = Path.Combine(rootPath, imageName);
+                    var pathReal = directoryPath + imageName;
 
                     // Add picture reference to model and save
                     var PictureExt = Path.GetExtension(imageName);
@@ -250,8 +255,7 @@ namespace Web.Controllers
                     if (PictureExt.Equals(".jpg") || PictureExt.Equals(".jpeg") || PictureExt.Equals(".png"))
                     {
                         pet.Image.Tag = imageName;
-                        pet.Image.Path = picturePath;
-
+                        pet.Image.Path = pathReal;
                         postedFileBase.SaveAs(picturePath);
                         await _clientPet.PutPet(pet, Id);
 

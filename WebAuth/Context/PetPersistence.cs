@@ -44,7 +44,7 @@ namespace WebAuth.Context
                             {
                                 People = person,
                                 Pets = pet,
-                                PeoplePetsSelect = new List<SelectListItem>() {
+                                PeopleSelect = new List<SelectListItem>() {
                                     new SelectListItem()
                                     {
                                         Value = pet.Id.ToString(),
@@ -79,7 +79,7 @@ namespace WebAuth.Context
                     {
                         Person = person,
                         Pet = pet,
-                        PersonPetSelect = new SelectListItem()
+                        PersonPetsSelect = new SelectListItem()
                         {
                             Value = person.Id.ToString(),
                             Text = person.FirstName,
@@ -111,7 +111,7 @@ namespace WebAuth.Context
                     };
                     selectPetsList.Add(personPet);
                 }
-                pets.PersonPetsSelect = selectPetsList;
+                pets.PeopleSelect = selectPetsList;
                 return pets;
             }
             return new Pet();

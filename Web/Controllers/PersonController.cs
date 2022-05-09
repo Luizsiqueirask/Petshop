@@ -91,14 +91,16 @@ namespace Web.Controllers
                     var pictureName = Path.GetFileName(httpFileCollection[0].FileName);
                     var rootPath = Server.MapPath(directoryPath);
                     var picturePath = Path.Combine(rootPath, pictureName);
+                    var pathReal = directoryPath + pictureName;
 
                     // Add picture reference to model and save
                     var PictureExt = Path.GetExtension(pictureName);
 
+
                     if (PictureExt.Equals(".jpg") || PictureExt.Equals(".jpeg") || PictureExt.Equals(".png"))
                     {
                         person.Picture.Tag = pictureName;
-                        person.Picture.Path = picturePath;
+                        person.Picture.Path = pathReal;
                         postedFileBase.SaveAs(picturePath);
                         await _clientPerson.PostPerson(person);
 
@@ -156,6 +158,7 @@ namespace Web.Controllers
                     var pictureName = Path.GetFileName(httpFileCollection[0].FileName);
                     var rootPath = Server.MapPath(directoryPath);
                     var picturePath = Path.Combine(rootPath, pictureName);
+                    var pathReal = directoryPath + pictureName;
 
                     // Add picture reference to model and save
                     var PictureExt = Path.GetExtension(pictureName);
@@ -163,7 +166,7 @@ namespace Web.Controllers
                     if (PictureExt.Equals(".jpg") || PictureExt.Equals(".jpeg") || PictureExt.Equals(".png"))
                     {
                         person.Picture.Tag = pictureName;
-                        person.Picture.Path = picturePath;
+                        person.Picture.Path = pathReal;
                         postedFileBase.SaveAs(picturePath);
 
                         // Thread.Sleep(1000);

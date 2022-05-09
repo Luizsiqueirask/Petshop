@@ -42,6 +42,7 @@ namespace Web.Models.Animal
         public Person Person { get; set; }
         public Pet Pet { get; set; }
         public SelectListItem PersonPetsSelect { get; set; }
+        public IEnumerable<SelectListItem> PeopleSelect { get; set; }
     }
     public class PeoplePets
     {
