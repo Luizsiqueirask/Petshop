@@ -12,15 +12,14 @@ namespace Web.Api
     {
         public readonly HttpClient _clientAnimal;
         public readonly HttpClient _clientPerfil;
-        private readonly List<int> ports = new List<int>() { 51654, 51555 };
+        protected readonly List<int> ports = new List<int>() { 51654, 51555 };
 
         public ApiClient()
-        {
-
+        {            
             _clientPerfil = new HttpClient
             {
                 BaseAddress = new Uri($"http://localhost:{ports[0]}/")
-            };
+            };           
 
             _clientAnimal = new HttpClient
             {

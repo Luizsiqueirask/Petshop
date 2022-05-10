@@ -7,7 +7,7 @@ namespace Perfil.Casting
 {
     public class PersonCast
     {
-        private readonly ClassPerson classPerson;
+        private readonly ClassSchedule classPerson;
         public PersonCast()
         {
             classPerson = new ClassPerson();

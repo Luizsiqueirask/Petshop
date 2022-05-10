@@ -1,24 +1,24 @@
-﻿using Library.Models.Perfil;
+﻿using Library.Models.Animal;
 using System;
 using System.Collections.Generic;
 
-namespace Library.Context.Perfil
+namespace Library.Context.PerfilAuth.Schedule
 {
-    public class ThrowSchedule : INterfacePerson
+    public class ThrowSchedule : INterfaceSchedule
     {
-        public IEnumerable<PersonLibrary> List()
+        public IEnumerable<ScheduleLibrary> List()
         {
             throw new NotImplementedException();
         }
-        public PersonLibrary Get(int? Id)
+        public ScheduleLibrary Get(int? Id)
         {
             throw new NotImplementedException();
         }
-        public void Post(PersonLibrary personLibrary)
+        public void Post(ScheduleLibrary scheduleLibrary)
         {
             throw new NotImplementedException();
         }
-        public void Put(PersonLibrary personLibrary, int? Id)
+        public void Put(ScheduleLibrary scheduleLibrary, int? Id)
         {
             throw new NotImplementedException();
         }

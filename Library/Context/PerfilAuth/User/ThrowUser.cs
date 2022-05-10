@@ -1,24 +1,24 @@
-﻿using Library.Models.Perfil;
+﻿using Library.Models.PerfilAuth;
 using System;
 using System.Collections.Generic;
 
-namespace Library.Context.Perfil
+namespace Library.Context.PerfilAuth.User
 {
-    public class ThrowSchedule : INterfacePerson
+    public class ThrowUser : INterfaceUser
     {
-        public IEnumerable<PersonLibrary> List()
+        public IEnumerable<UserAuthLibrary> List()
         {
             throw new NotImplementedException();
         }
-        public PersonLibrary Get(int? Id)
+        public UserAuthLibrary Get(int? Id)
         {
             throw new NotImplementedException();
         }
-        public void Post(PersonLibrary personLibrary)
+        public void Post(UserAuthLibrary userAuthLibrary)
         {
             throw new NotImplementedException();
         }
-        public void Put(PersonLibrary personLibrary, int? Id)
+        public void Put(UserAuthLibrary userAuthLibrary, int? Id)
         {
             throw new NotImplementedException();
         }

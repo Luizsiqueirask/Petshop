@@ -65,6 +65,12 @@
     <Compile Include="Context\Animal\ClassPet.cs" />
     <Compile Include="Context\Animal\InterfacePet.cs" />
     <Compile Include="Context\Animal\ThrowPet.cs" />
+    <Compile Include="Context\PerfilAuth\Schedule\ClassSchedule.cs" />
+    <Compile Include="Context\PerfilAuth\Schedule\InterfaceSchedule.cs" />
+    <Compile Include="Context\PerfilAuth\Schedule\ThrowSchedule.cs" />
+    <Compile Include="Context\PerfilAuth\User\ClassUser.cs" />
+    <Compile Include="Context\PerfilAuth\User\InterfaceUser.cs" />
+    <Compile Include="Context\PerfilAuth\User\ThrowUser.cs" />
     <Compile Include="Context\PerfilAuth\ClassAuthPerson.cs" />
     <Compile Include="Context\PerfilAuth\InterfaceAuthPerson.cs" />
     <Compile Include="Context\PerfilAuth\ThrowAuthPerson.cs" />
