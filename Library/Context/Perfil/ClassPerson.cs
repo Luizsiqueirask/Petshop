@@ -6,12 +6,12 @@ using System.Data.SqlClient;
 
 namespace Library.Context.Perfil
 {
-    public class ClassSchedule : ThrowSchedule
+    public class ClassPerson : ThrowPerson
     {
         public readonly Bridge _conn;
         public readonly SqlConnection _sqlConnection;
 
-        public ClassSchedule()
+        public ClassPerson()
         {
             _conn = new Bridge();
             _sqlConnection = new SqlConnection(_conn.Connect());

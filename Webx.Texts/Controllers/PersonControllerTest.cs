@@ -16,7 +16,7 @@ namespace Webx.Tests.Controllers
     public class PersonControllerTest
     {
         protected readonly ApiClient _clientPerson;
-        protected readonly ClassSchedule _classPerson;
+        protected readonly ClassPerson _classPerson;
         protected readonly Person _personTest;
 
         // http://www.mukeshkumar.net/articles/testing/crud-operations-unit-testing-in-aspnet-core-web-api-with-xunit

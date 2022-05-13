@@ -59,6 +59,29 @@ namespace Web.Api
         }
         #endregion Person
 
+        #region Schedule
+        public async Task<HttpResponseMessage> GetSchedule()
+        {
+            return await _clientPerfil.GetAsync("api/Schedule");
+        }
+        public async Task<HttpResponseMessage> GetScheduleById(int? Id)
+        {
+            return await _clientPerfil.GetAsync($"api/Schedule/{Id}");
+        }
+        public async Task<HttpResponseMessage> PostSchedule(Schedule schedule)
+        {
+            return await _clientPerfil.PostAsJsonAsync("api/Schedule", schedule);
+        }
+        public async Task<HttpResponseMessage> PutSchedule(Schedule schedule, int? Id)
+        {
+            return await _clientPerfil.PutAsJsonAsync($"api/Schedule/{Id}", schedule);
+        }
+        public async Task<HttpResponseMessage> DeleteSchedule(int? Id)
+        {
+            return await _clientPerfil.DeleteAsync($"api/Schedule/{Id}");
+        }
+        #endregion Schedule
+
         #region Pet
         public async Task<HttpResponseMessage> GetPet()
         {

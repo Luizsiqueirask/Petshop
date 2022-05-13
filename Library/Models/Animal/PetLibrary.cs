@@ -13,6 +13,6 @@ namespace Library.Models.Animal
         public DateTime Birthday { get; set; }
         public ImageLibrary Image { get; set; }
         public HealthLibrary Health { get; set; }
-        public ScheduleLibrary Schedule { get; set; }
+        //public ScheduleLibrary Schedule { get; set; }
     }
 }

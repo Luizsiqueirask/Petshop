@@ -182,19 +182,12 @@ namespace Web.Controllers
         // GET: Person/Delete/5
         public async Task<ActionResult> Delete(int? Id)
         {
-            try
-            {
-                var people = await _clientPerson.GetPersonById(Id);
+            var people = await _clientPerson.GetPersonById(Id);
 
-                if (people.IsSuccessStatusCode)
-                {
-                    var person = await people.Content.ReadAsAsync<Person>();
-                    return View(person);
-                }
-            }
-            catch (Exception ex)
+            if (people.IsSuccessStatusCode)
             {
-                Console.WriteLine($"MSG: {ex.Message}");
+                var person = await people.Content.ReadAsAsync<Person>();
+                return View(person);
             }
 
             return View(new Person());
@@ -204,21 +197,21 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Delete(int Id)
         {
+            var person = await _clientPerson.DeletePerson(Id);
+
             try
             {
-                var person = await _clientPerson.DeletePerson(Id);
-
+                // TODO: Add delete logic here
                 if (person.IsSuccessStatusCode)
                 {
                     await person.Content.ReadAsAsync<Person>();
-                    return View(person);
                 }
+                return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine($"MSG: {ex.Message}");
+                return View(new Person());
             }
-            return View(new Person());
         }
     }
 }

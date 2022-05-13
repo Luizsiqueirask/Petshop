@@ -33,10 +33,10 @@ namespace Web.Controllers
             if (allPets.IsSuccessStatusCode)
             {
                 var pets = await allPets.Content.ReadAsAsync<IEnumerable<Pet>>();
-                var people = await allPeople.Content.ReadAsAsync<IEnumerable<Person>>();
 
                 if (allPeople.IsSuccessStatusCode)
                 {
+                    var people = await allPeople.Content.ReadAsAsync<IEnumerable<Person>>();
 
                     foreach (var pet in pets)
                     {
@@ -68,17 +68,17 @@ namespace Web.Controllers
         // GET: Pet/Details/5
         public async Task<ActionResult> Details(int? Id)
         {
-            var allPets = await _clientPet.GetPetById(Id);
+            var pets = await _clientPet.GetPetById(Id);
             var personPet = new PersonPet();
 
-            if (allPets.IsSuccessStatusCode)
+            if (pets.IsSuccessStatusCode)
             {
-                var pet = await allPets.Content.ReadAsAsync<Pet>();
-                var allPeople = await _clientPet.GetPersonById(pet.PersonId);
+                var pet = await pets.Content.ReadAsAsync<Pet>();
+                var people = await _clientPet.GetPersonById(pet.PersonId);
 
-                if (allPeople.IsSuccessStatusCode)
+                if (people.IsSuccessStatusCode)
                 {
-                    var person = await allPeople.Content.ReadAsAsync<Person>();
+                    var person = await people.Content.ReadAsAsync<Person>();
 
                     if (pet.PersonId.Equals(person.Id))
                     {
@@ -284,22 +284,21 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Delete(int Id)
         {
+            var pet = await _clientPet.DeletePet(Id);
+
             try
             {
                 // TODO: Add delete logic here
-                var pet = await _clientPet.DeletePet(Id);
-
                 if (pet.IsSuccessStatusCode)
                 {
                     await pet.Content.ReadAsAsync<Pet>();
-                    return View(pet);
                 }
+                return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch
             {
-                return View($"MSG: {ex.Message}");
+                return View(new Pet());
             }
-            return View(new Pet());
         }
     }
 }

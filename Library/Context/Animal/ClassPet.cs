@@ -53,14 +53,14 @@ namespace Library.Context.Animal
                                 {
                                     Id = (int)dataReader["Id"],
                                     Status = (string)dataReader["Status"],
-                                },
+                                }/*,
                                 Schedule = new ScheduleLibrary()
                                 {
                                     Id = (int)dataReader["Id"],
                                     Services = (string)dataReader["Services"],
                                     Date = (DateTime)dataReader["Date"],
                                     Time = (DateTime)dataReader["Time"]
-                                }
+                                }*/
                             });
                         }
                     }
@@ -106,14 +106,14 @@ namespace Library.Context.Animal
                         {
                             Id = (int)dataReader["Id"],
                             Status = (string)dataReader["Status"],
-                        },
+                        }/*,
                         Schedule = new ScheduleLibrary()
                         {
                             Id = (int)dataReader["Id"],
                             Services = (string)dataReader["Services"],
                             Date = (DateTime)dataReader["Date"],
                             Time = (DateTime)dataReader["Time"]
-                        }
+                        }*/
                     };
                 }
                 _sqlConnection.Close();
@@ -137,10 +137,10 @@ namespace Library.Context.Animal
                     command.Parameters.AddWithValue("@Status", petLibrary.Health.Status);
                     command.Parameters.AddWithValue("@HealthId", Convert.ToInt32(petLibrary.Health.Id));
                     // -- Schedule
-                    command.Parameters.AddWithValue("@Services", petLibrary.Schedule.Services);
+                    /*command.Parameters.AddWithValue("@Services", petLibrary.Schedule.Services);
                     command.Parameters.AddWithValue("@Date", petLibrary.Schedule.Date.ToString("d"));
                     command.Parameters.AddWithValue("@Time", petLibrary.Schedule.Time.ToString("t"));
-                    command.Parameters.AddWithValue("@ScheduleId", Convert.ToInt32(petLibrary.Schedule.Id));
+                    command.Parameters.AddWithValue("@ScheduleId", Convert.ToInt32(petLibrary.Schedule.Id));*/
                     // -- Person
                     command.Parameters.AddWithValue("@PersonId", Convert.ToInt32(petLibrary.PersonId));
                     // -- Pet
@@ -179,10 +179,10 @@ namespace Library.Context.Animal
                 command.Parameters.AddWithValue("@Status", petLibrary.Health.Status);
                 command.Parameters.AddWithValue("@HealthId", Convert.ToInt32(petLibrary.Health.Id));
                 // -- Schedule
-                command.Parameters.AddWithValue("@Services", petLibrary.Schedule.Services);
-                command.Parameters.AddWithValue("@Date", petLibrary.Schedule.Date.ToString("d"));
-                command.Parameters.AddWithValue("@Time", petLibrary.Schedule.Time.ToString("t"));
-                command.Parameters.AddWithValue("@ScheduleId", Convert.ToInt32(petLibrary.Schedule.Id));
+                /*command.Parameters.AddWithValue("@Services", petLibrary.Schedule.Services);
+                   command.Parameters.AddWithValue("@Date", petLibrary.Schedule.Date.ToString("d"));
+                   command.Parameters.AddWithValue("@Time", petLibrary.Schedule.Time.ToString("t"));
+                   command.Parameters.AddWithValue("@ScheduleId", Convert.ToInt32(petLibrary.Schedule.Id));*/
                 // -- Pet
                 command.Parameters.AddWithValue("@Name", petLibrary.Name);
                 command.Parameters.AddWithValue("@Type", petLibrary.Type);

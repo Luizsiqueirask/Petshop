@@ -675,18 +675,25 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\PetController.cs" />
+    <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Animal\Health.cs" />
     <Compile Include="Models\Animal\Image.cs" />
     <Compile Include="Models\Animal\Pet.cs" />
-    <Compile Include="Models\Animal\Schedule.cs" />
+    <None Include="Models\Animal\Schedule" />
     <Compile Include="Models\Perfil\Address.cs" />
     <Compile Include="Models\Perfil\Contact.cs" />
     <Compile Include="Models\Perfil\Person.cs" />
     <Compile Include="Models\Perfil\Picture.cs" />
+    <Compile Include="Models\Perfil\Schedule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Views\Schedule\Create.cshtml" />
+    <Content Include="Views\Schedule\Delete.cshtml" />
+    <Content Include="Views\Schedule\Index.cshtml" />
+    <Content Include="Views\Schedule\Edit.cshtml" />
+    <Content Include="Views\Schedule\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

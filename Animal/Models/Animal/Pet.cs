@@ -12,7 +12,7 @@ namespace Animal.Models.Animal
         public DateTime Birthday { get; set; }
         public Image Image { get; set; }
         public Health Health { get; set; }
-        public Schedule Schedule { get; set; }
+        //public Schedule Schedule { get; set; }
         public int PersonId { get; set; }
     }
 }

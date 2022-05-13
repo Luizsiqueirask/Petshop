@@ -42,14 +42,14 @@ namespace Animal.Casting
                         {
                             Id = pets.Health.Id,
                             Status = pets.Health.Status
-                        },
+                        }/*,
                         Schedule = new Schedule()
                         {
                             Id = pets.Schedule.Id,
                             Services = pets.Schedule.Services,
                             Date = pets.Schedule.Date,
                             Time = pets.Schedule.Time
-                        }
+                        }*/
                     });
                 }
                 return listPet;
@@ -81,14 +81,14 @@ namespace Animal.Casting
                     {
                         Id = pets.Health.Id,
                         Status = pets.Health.Status
-                    },
+                    }/*,
                     Schedule = new Schedule()
                     {
                         Id = pets.Schedule.Id,
                         Services = pets.Schedule.Services,
                         Date = pets.Schedule.Date,
                         Time = pets.Schedule.Time
-                    }
+                    }*/
                 };
                 return pet;
             }
@@ -115,14 +115,14 @@ namespace Animal.Casting
                 {
                     Id = pet.Health.Id,
                     Status = pet.Health.Status
-                },
+                }/*,
                 Schedule = new ScheduleLibrary()
                 {
                     Id = pet.Schedule.Id,
                     Services = pet.Schedule.Services,
                     Date = pet.Schedule.Date,
                     Time = pet.Schedule.Time
-                }
+                }*/
             };
 
             classPet.Post(petLibrary);
@@ -148,14 +148,14 @@ namespace Animal.Casting
                 {
                     Id = pet.Health.Id,
                     Status = pet.Health.Status
-                },
+                }/*,
                 Schedule = new ScheduleLibrary()
                 {
                     Id = pet.Schedule.Id,
                     Services = pet.Schedule.Services,
                     Date = pet.Schedule.Date,
                     Time = pet.Schedule.Time
-                }
+                }*/
             };
 
             classPet.Put(petLibrary, Id);

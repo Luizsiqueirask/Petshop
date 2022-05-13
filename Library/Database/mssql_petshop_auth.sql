@@ -132,6 +132,24 @@ ELSE
 	PRINT 'Person - Exists this table !!!'
 GO
 
+-- Creating Schedules
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Schedules' and type in (N'U'))
+
+CREATE TABLE [dbo].[Schedules](
+	[Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	[Services] NVARCHAR(255) NOT NULL,
+	[Date] DATETIME2 NOT NULL,
+	[Time] DATETIME2 NOT NULL,
+	[PersonId] INT NOT NULL,
+	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (PersonId) REFERENCES [dbo].[Person](Id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+ELSE
+	PRINT 'Schedules - Exists this table !!!'
+GO
+
 ------------------------- Pet ----------------------------
 
 -- Creating Images
@@ -163,23 +181,6 @@ ELSE
 	PRINT 'Health - Exists this table !!!'
 GO
 
-
--- Creating Schedules
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Schedules' and type in (N'U'))
-
-CREATE TABLE [dbo].[Schedules](
-	[Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[Services] NVARCHAR(255) NOT NULL,
-	[Date] DATETIME2 NOT NULL,
-	[Time] DATETIME2 NOT NULL,
-	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-ELSE
-	PRINT 'Schedules - Exists this table !!!'
-GO
-
 -- Creating Pet
 
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Pet' and type in (N'U'))
@@ -194,12 +195,10 @@ CREATE TABLE [dbo].[Pet] (
 	[ImageId] INT NOT NULL,
 	[PersonId] INT NOT NULL,
 	[HealthId] INT NOT NULL,
-	[ScheduleId] INT NOT NULL,
 	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (ImageId) REFERENCES [dbo].[Images](Id) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (HealthId) REFERENCES [dbo].[Health](Id) ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (ScheduleId) REFERENCES [dbo].[Schedules](Id) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (PersonId) REFERENCES [dbo].[Person](Id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 ELSE
@@ -474,10 +473,6 @@ AS BEGIN
 	-- Health
 	LEFT JOIN [dbo].[Health] h1
 	ON p1.HealthId = h1.Id	
-	-- Schedules
-	LEFT JOIN [dbo].[Schedules] s1
-	ON p1.ScheduleId = s1.Id
-
 END
 GO
 
@@ -492,7 +487,6 @@ AS BEGIN
 		i1.[Path],
 		-- Health
 		h1.[Status],		
-		-- Schedules
 		-- Pet
 		p1.[Id],
 		p1.[Name],
@@ -506,10 +500,7 @@ AS BEGIN
 	ON p1.ImageId = i1.Id
 	-- Health
 	LEFT JOIN [dbo].[Health] h1
-	ON p1.HealthId = h1.Id	
-	-- Schedules
-	LEFT JOIN [dbo].[Schedules] s1
-	ON p1.ScheduleId = s1.Id
+	ON p1.HealthId = h1.Id
 	WHERE p1.Id = @IdPet
 END
 GO
@@ -523,8 +514,6 @@ CREATE PROCEDURE [dbo].[PostPet]
 	-- Health
 	@Status AS NVARCHAR(250),
 	@HealthId AS INT,
-	-- Schedule	
-	@ScheduleId AS INT,
 	-- Pet
 	@Name AS NVARCHAR(250),
 	@Type AS NVARCHAR(250),
@@ -542,11 +531,10 @@ AS BEGIN
 	INSERT INTO [dbo].[Health]([Status]) 
 	VALUES (@Status);	
 		-- Pet
-	INSERT INTO [dbo].[Pet]([Name], [Type], [Age], [Genre], [Birthday], [ImageId], [HealthId], [ScheduleId], [PersonId])
+	INSERT INTO [dbo].[Pet]([Name], [Type], [Age], [Genre], [Birthday], [ImageId], [HealthId], [PersonId])
 	VALUES (@Name, @Type, @Age, @Genre, Convert(DATE, @Birthday), 
 	(SELECT MAX(i1.Id) FROM [dbo].[Images] i1),
 	(SELECT MAX(h1.Id) FROM [dbo].[Health] h1),
-	(SELECT MAX(s1.Id) FROM [dbo].[Schedules] s1),
 	(SELECT MAX(p1.Id) FROM [dbo].[Person] p1))
 END
 GO
@@ -561,8 +549,6 @@ CREATE PROCEDURE [dbo].[PutPet]
 	-- Health
 	@Status AS NVARCHAR(250),
 	@HealthId AS INT,
-	-- Schedule	
-	@ScheduleId AS INT,
 	-- Pet
 	@Name AS NVARCHAR(250),
 	@Type AS NVARCHAR(250),
@@ -593,7 +579,6 @@ AS BEGIN
 		Birthday = Convert(DATE, @Birthday),
 		ImageId = @ImageId,
 		HealthId = @HealthId,
-		ScheduleId = @ScheduleId,
 		PersonId = @PersonId
 	WHERE Id = @IdPet;
 END
@@ -610,9 +595,6 @@ AS BEGIN
 	-- Health
 	LEFT JOIN [dbo].[Health] h1
 	ON p1.HealthId = h1.Id	
-	-- Schedules
-	LEFT JOIN [dbo].[Schedules] s1
-	ON p1.ScheduleId = s1.Id
 	WHERE p1.Id = @IdPet
 END
 GO
@@ -635,8 +617,9 @@ AS BEGIN
 		s1.Id,
 		s1.[Services],
 		s1.[Date],
-		s1.[Time]	
-	FROM [dbo].[@Schedules] s1
+		s1.[Time],
+		s1.[PersonId]
+	FROM [dbo].[Schedules] s1
 	WHERE s1.Id = @IdSchedule
 END
 GO
@@ -646,11 +629,12 @@ CREATE PROCEDURE [dbo].[PostSchedule]
 	-- Users
 	@Services AS NVARCHAR(250),
 	@Date AS DATE,
-	@Time TIME
+	@Time TIME,
+	@PersonId AS INT
 AS BEGIN
 	-- Schedules
-	INSERT INTO [dbo].[Schedules]([Services], [Date], [Time]) 
-	VALUES (@Services, Convert(DATE, @Date), @Time);
+	INSERT INTO [dbo].[Schedules]([Services], [Date], [Time], [PersonId]) 
+	VALUES (@Services, Convert(DATE, @Date), @Time, @PersonId);
 END
 GO
 
@@ -659,14 +643,16 @@ CREATE PROCEDURE [dbo].[PutSchedule]
 	@IdSchedule AS INT,
 	@Services AS NVARCHAR(250),
 	@Date AS DATE,
-	@Time TIME
+	@Time TIME,
+	@PersonId AS INT
 AS BEGIN
 	-- Schedules
 	UPDATE  [dbo].[Schedules] SET 
 		[Services] = @Services,
 		[Date] = @Date,
-		[Time] = @Time
-	WHERE Id = @ScheduleId;	
+		[Time] = @Time,
+		[PersonId] = @PersonId
+	WHERE Id = @IdSchedule;	
 END
 GO
 
@@ -762,7 +748,7 @@ EXEC [dbo].[PutPet] @IdPet = 1, @Tag = 'SelfPet', @Path = '../Pictures/my_pictur
 
 EXEC [dbo].[DeletePet] @IdPet = 1;
 
-/* ********************* Pet ********************* */
+/* ********************* Schedules ********************* */
 
 /* List */
 
@@ -783,6 +769,19 @@ EXEC [dbo].[PutSchedule] @IdSchedule = 1, @Services = 'Banho', @Date = '2022-06-
 /* Delete */
 
 EXEC [dbo].[DeleteSchedule] @IdSchedule = 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 -- Creating Users

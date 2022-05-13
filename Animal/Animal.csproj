@@ -156,7 +156,7 @@
     <Compile Include="Models\Animal\Health.cs" />
     <Compile Include="Models\Animal\Image.cs" />
     <Compile Include="Models\Animal\Pet.cs" />
-    <Compile Include="Models\Animal\Schedule.cs" />
+    <None Include="Models\Animal\Schedule" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
