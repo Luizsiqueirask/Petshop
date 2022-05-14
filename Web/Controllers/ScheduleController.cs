@@ -144,6 +144,7 @@ namespace Web.Controllers
         public async Task<ActionResult> Edit(int? Id)
         {
             var allSchedule = await _clientSchedule.GetScheduleById(Id);
+            var personSchedule = new PersonSchedule();
 
             if (allSchedule.IsSuccessStatusCode)
             {
@@ -154,7 +155,7 @@ namespace Web.Controllers
                 {
                     var person = await allPeople.Content.ReadAsAsync<Person>();
 
-                    var personSchedule = new PersonSchedule()
+                    personSchedule = new PersonSchedule()
                     {
                         Schedule = schedule,
                         Person = person,
@@ -168,9 +169,8 @@ namespace Web.Controllers
                             }
                         }
                     };
-
-                    return View(personSchedule);
                 }
+                return View(personSchedule);
             }
             return View(new PersonSchedule());
         }
@@ -209,7 +209,7 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Delete(int Id)
         {
-            var schedules = await _clientSchedule.DeletePet(Id);
+            var schedules = await _clientSchedule.DeleteSchedule(Id);
 
             try
             {
@@ -217,6 +217,7 @@ namespace Web.Controllers
                 if (schedules.IsSuccessStatusCode)
                 {
                     await schedules.Content.ReadAsAsync<Schedule>();
+                    return RedirectToAction("Index");
                 }
                 return RedirectToAction("Index");
             }

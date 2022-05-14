@@ -21,7 +21,7 @@ namespace Web.Models.Perfil
         public string Genre { get; set; }
         [Required(ErrorMessage = "Informe aniversário")]
         [DisplayName("Data de aniversário")]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = @"{0:dd/MM/yyyy}", ApplyFormatInEditMode = true, HtmlEncode = true)]
         public DateTime Birthday { get; set; }
         public Picture Picture { get; set; }

@@ -184,6 +184,7 @@ namespace Web.Controllers
         public async Task<ActionResult> Edit(int? Id)
         {
             var allPets = await _clientPet.GetPetById(Id);
+            var personPet = new PersonPet();
 
             if (allPets.IsSuccessStatusCode)
             {
@@ -194,7 +195,7 @@ namespace Web.Controllers
                 {
                     var person = await allPeople.Content.ReadAsAsync<Person>();
 
-                    var personPet = new PersonPet()
+                     personPet = new PersonPet()
                     {
                         Pet = pet,
                         Person = person,
@@ -204,13 +205,13 @@ namespace Web.Controllers
                             {
                                 Value = person.Id.ToString(),
                                 Text = $"{person.FirstName} {person.LastName}",
-                                Selected = pet.PersonId == person.Id
+                                Selected = person.Id.Equals(pet.PersonId)
                             }
                         }
                     };
 
-                    return View(personPet);
                 }
+                return View(personPet);
             }
             return View(new PersonPet());
         }

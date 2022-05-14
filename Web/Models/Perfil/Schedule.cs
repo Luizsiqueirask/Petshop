@@ -22,7 +22,7 @@ namespace Web.Models.Perfil
         [Required(ErrorMessage = "Informe a hora do agendamento")]
         [DisplayName("Hora")]
         [DataType(DataType.Time)]
-        [DisplayFormat(DataFormatString = @"{0:hh:mm}", ApplyFormatInEditMode = true, HtmlEncode = false)]
+        [DisplayFormat(DataFormatString = @"{0:hh:mm}", ApplyFormatInEditMode = true, HtmlEncode = true )]
         public DateTime Time { get; set; }
         [DisplayName("Dono do Pet")]
         public int PersonId { get; set; }
