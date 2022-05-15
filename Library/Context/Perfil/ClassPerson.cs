@@ -205,7 +205,7 @@ namespace Library.Context.Perfil
                 try
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@IdPet", Id);
+                    command.Parameters.AddWithValue("@IdPerson", Id);
 
                     _sqlConnection.Open();
                     var running = command.ExecuteNonQuery();

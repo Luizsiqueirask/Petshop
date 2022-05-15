@@ -134,7 +134,7 @@ namespace Web.Controllers
 
             try
             {
-                if (ModelState.IsValid)
+                if(ModelState.IsValid)
                 {
                     await _blobClient.SetupCloudBlob();
 
@@ -144,9 +144,8 @@ namespace Web.Controllers
 
                     person.Picture.Tag = picturePathblob.Name.ToString();
                     person.Picture.Path = picturePathblob.Uri.AbsolutePath.ToString();
+                    await _clientPerson.PutPerson(person, Id);
 
-                    // Thread.Sleep(1000);
-                    await _clientPerson.PostPerson(person);
                     return RedirectToAction("Index");
                 }
             }
@@ -163,13 +162,12 @@ namespace Web.Controllers
                     // Add picture reference to model and save
                     var PictureExt = Path.GetExtension(pictureName);
 
+
                     if (PictureExt.Equals(".jpg") || PictureExt.Equals(".jpeg") || PictureExt.Equals(".png"))
                     {
                         person.Picture.Tag = pictureName;
                         person.Picture.Path = pathReal;
                         postedFileBase.SaveAs(picturePath);
-
-                        // Thread.Sleep(1000);
                         await _clientPerson.PutPerson(person, Id);
 
                         return RedirectToAction("Index");
@@ -205,6 +203,7 @@ namespace Web.Controllers
                 if (person.IsSuccessStatusCode)
                 {
                     await person.Content.ReadAsAsync<Person>();
+                    return RedirectToAction("Index");
                 }
                 return RedirectToAction("Index");
             }

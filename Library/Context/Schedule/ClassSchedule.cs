@@ -115,8 +115,7 @@ namespace Library.Context.Schedule
                 command.Parameters.AddWithValue("@IdSchedule", Id);
                 _sqlConnection.Open();
 
-                // -- Picture
-                command.Parameters.AddWithValue("@Id", scheduleLibrary.Id);
+                // -- Schedule
                 command.Parameters.AddWithValue("@Services", scheduleLibrary.Services);
                 command.Parameters.AddWithValue("@Date", scheduleLibrary.Date.ToString("d"));
                 command.Parameters.AddWithValue("@Time", scheduleLibrary.Time.ToString("t"));
