@@ -165,7 +165,6 @@ ELSE
 	PRINT 'Health - Exists this table !!!'
 GO
 
-
 -- Creating Pet
 
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Pet' and type in (N'U'))
@@ -403,7 +402,7 @@ GO
 
 /* Create */
 CREATE PROCEDURE [dbo].[PostSchedule]	
-	-- Users
+	-- Schedules
 	@Services AS NVARCHAR(250),
 	@Date AS DATE,
 	@Time TIME,

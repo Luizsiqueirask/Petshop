@@ -1,5 +1,10 @@
 ﻿@model IEnumerable<Web.Models.Perfil.Person>
 
+@{
+    ViewBag.Title = "Person Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
 <div class="container-fluid">
     <h3 class="text-center p-5">All People</h3>
     <p class="p-2">
@@ -14,7 +19,7 @@
                     <h3 class="h3 text-center m-4">@Html.DisplayFor(model => item.FirstName) @Html.DisplayFor(model => item.LastName)</h3>
                     <hr />
                     <div class="card-body">
-                        <br />                        
+                        <br />
                         <div>
                             <h4 class="h-50 mb-2 text-center">Perfil</h4>
                             <div class="card-body row m-3">

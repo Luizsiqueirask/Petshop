@@ -16,33 +16,34 @@ USE PetshopAuth;
 -------------------------- SELECT ------------------------
 
 -- Person
+SELECT * FROM Users;
 SELECT * FROM Person;
 SELECT * FROM Pictures;
 SELECT * FROM Contacts;
 SELECT * FROM Addresses;
+SELECT * FROM Schedules;
 
 -- Pet
 SELECT * FROM Pet;
 SELECT * FROM Images;
 SELECT * FROM Health;
-SELECT * FROM Schedules;
 
 ------------------------------ DROP ------------------------
 
 -- Person
+DROP TABLE Users;
 DROP TABLE Person;
 DROP TABLE Pictures;
 DROP TABLE Contacts;
 DROP TABLE Addresses;
+DROP TABLE Schedules;
 
 -- Pet
 DROP TABLE Pet;
 DROP TABLE Images;
 DROP TABLE Health;
-DROP TABLE Schedules;
 
 ------------------------- Person -------------------------
-
 
 -- Creating Pictures
 
@@ -247,11 +248,11 @@ GO
 
 /* Update */
 CREATE PROCEDURE [dbo].[PutUser]
-	@UserId AS INT,
+	@IdUser AS INT,
 	@Username AS NVARCHAR(250),
 	@Password AS NVARCHAR(250)
 AS BEGIN
-	UPDATE [dbo].[User] SET 
+	UPDATE [dbo].[Users] SET 
 		[Username] = @Username,
 		[Password] = @Password
 	WHERE Id = @IdUser;
@@ -260,10 +261,10 @@ GO
 
 /* Delete */
 CREATE PROCEDURE [dbo].[DeleteUser]
-	@IdPerson AS INT
+	@IdUser AS INT
 AS BEGIN 
-	DELETE p1 FROM [dbo].[Users] u1
-	WHERE u1.Id = @IdPerson
+	DELETE u1 FROM [dbo].[Users] u1
+	WHERE u1.Id = @IdUser
 END
 GO
 
@@ -677,15 +678,18 @@ EXEC [dbo].[GetUser] @IdUser = 1;
 
 /* Create */
 
-EXEC [dbo].[PostUser] @Username = 'root', @Passwordd = 'Root#7530';
+EXEC [dbo].[PostUser] @Username = 'root@local.com', 
+@Password = '$2a$11$Y/cVg.Xx8m6HSOqkqFThWeG5bNz5d6OnOlDGdpuZlyigy3fGtEEEG';
 
 /* Update */
 
-EXEC [dbo].[PutUser] @IdUser = 1, @Username = 'root', @Passwordd = 'Root#7531';
+EXEC [dbo].[PutUser] @IdUser = 1, @Username = 'root1@local.com',
+@Password = '$2a$11$lbfOHPz2buHUN5VnvAkv5Omq9TfQ1jQIxuhLhZsFlUA3Mux9bl746';
 
 /* Delete */
 
 EXEC [dbo].[DeleteUser] @IdUser = 1;
+
 
 /* ********************* Person ********************* */
 
@@ -702,16 +706,14 @@ EXEC [dbo].[GetPerson] @IdPerson = 1;
 EXEC [dbo].[PostPerson] @Tag = 'MyPicturePerson', @Path = '../Pictures/my_picture_person.png', 
 	@Email = 'luiz@siqueira.psk', @Mobile = '21975918265', 
 	@Country = 'Brasil', @States = 'Rio de Janeiro', @City = 'Rio de Janeiro', @Neighborhoods = 'Leme',
-	@Username = 'luizsiqueira', @Password = '123456',
 	@Firstname = 'Luiz', @Lastname = 'Siqueira', @Genre = 'Male', @Age = '31', @Birthday = '1990-01-28',
-	@PictureId = 1, @UserId = 1, @ContactId = 1, @AddressId = 1; 
+	@PictureId = 1, @ContactId = 1, @AddressId = 1;
 
 /* Update */
 
 EXEC [dbo].[PutPerson] @IdPerson = 1, @Tag = 'MyPicturePerson', @Path = '../Pictures/my_picture_person.png', 
 	@Email = 'luiz@siqueira.psk', @Mobile = '21975918265', 
 	@Country = 'Brasil', @States = 'Rio de Janeiro', @City = 'Rio de Janeiro', @Neighborhoods = 'Leme',
-	@Username = 'luizsiqueira', @Password = '123456',
 	@Firstname = 'Luiz', @Lastname = 'Siqueira', @Genre = 'Male', @Age = '31', @Birthday = '1990-01-28',
 	@PictureId = 1, @UserId = 1, @ContactId = 1, @AddressId = 1;
 
@@ -730,23 +732,22 @@ EXEC [dbo].[ListPet];
 
 EXEC [dbo].[GetPet] @IdPet = 1;
 
+
 /* Create */
 
-EXEC [dbo].[PostPet] @Tag = 'SelfPet', @Path = '../Pictures/my_picture_pet.png',
-	@Status = 'Bad', @City =	'Rio de Janeiro', @Street = 'Rua da Oliveiras', @Number = '1105',
-	@Name = 'Negao', @Type = 'Mendes', @Genre = 'M', @Age = '10', @Birthday = '2002-11-20', 
-	@ImageId = 1,  @HealthId = 1, @PersonId = 1, @ScheduleId = 1; 
+EXEC [dbo].[PostPet] @Tag = 'my_picture_pet', @Path = '../Pictures/my_picture_pet.png', @Status = 'Bad', @Name = 'Negao', @Type = 'Mendes', @Genre = 'M', @Age = '10', @Birthday = '2002-11-20', 
+	@ImageId = 1,  @HealthId = 1, @PersonId = 1; 
 
 /* Update */
 
 EXEC [dbo].[PutPet] @IdPet = 1, @Tag = 'SelfPet', @Path = '../Pictures/my_picture_pet.png',
-	@Status = 'Bad', @City =	'Rio de Janeiro', @Street = 'Rua da Oliveiras', @Number = '1105',
-	@Name = 'Negao', @Type = 'Mendes', @Genre = 'M', @Age = '10', @Birthday = '2002-11-20', 
-	@ImageId = 1,  @HealthId = 1, @PersonId = 1, @ScheduleId = 1; 
+	@Status = 'Bad', @Name = 'Negao', @Type = 'Mendes', @Genre = 'M', @Age = '10', @Birthday = '2002-11-20', 
+	@ImageId = 1,  @HealthId = 1, @PersonId = 1;
 
 /* Delete */
 
 EXEC [dbo].[DeletePet] @IdPet = 1;
+
 
 /* ********************* Schedules ********************* */
 
@@ -760,190 +761,12 @@ EXEC [dbo].[GetSchedule] @IdSchedule = 1;
 
 /* Create */
 
-EXEC [dbo].[PostSchedule] @Services = 'Banho', @Date = '2022-06-12', @Time = '10:00:00.0123456';
+EXEC [dbo].[PostSchedule] @Services = 'Banho', @Date = '2022-06-12', @Time = '10:00:00.0123456', @PersonId = 1;
 
 /* Update */
 
-EXEC [dbo].[PutSchedule] @IdSchedule = 1, @Services = 'Banho', @Date = '2022-06-12', @Time = '10:00:00.0123456';
+EXEC [dbo].[PutSchedule] @IdSchedule = 1, @Services = 'Banho', @Date = '2022-06-12', @Time = '10:00:00.0123456',  @PersonId = 1;
 
 /* Delete */
 
 EXEC [dbo].[DeleteSchedule] @IdSchedule = 1;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- Creating Users
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Users' and type in (N'U'))
-
-CREATE TABLE [dbo].[Users](
-	[Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[Username] NVARCHAR(255) NOT NULL,
-	[Password] NVARCHAR(255) NOT NULL,
-	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-);
-ELSE
-	PRINT 'Users - Exists this table !!!'
-GO
-
--- Creating Person
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Person' and type in (N'U'))
-
-CREATE TABLE [dbo].[Person] (
-	[Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[FirstName] NVARCHAR(250) NOT NULL,
-	[LastName] NVARCHAR(250) NOT NULL,
-	[Age] INT NOT NULL,
-	[Genre] NVARCHAR(250) NOT NULL,
-	[Birthday] DATETIME2 NOT NULL,
-	[UserId] INT NOT NULL,
-	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (UserId) REFERENCES [dbo].[Users](Id) ON UPDATE CASCADE ON DELETE CASCADE,
-);
-ELSE
-	PRINT 'Person - Exists this table !!!'
-GO
-
--- Creating Pictures
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Pictures' and type in (N'U'))
-
-CREATE TABLE [dbo].[Pictures](
-	[Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[Tag] NVARCHAR(255) NULL,
-	[Path] NVARCHAR(255) NULL,
-	[PersonId] INT NOT NULL,
-	FOREIGN KEY (PersonId) REFERENCES [dbo].[Person](Id) ON UPDATE CASCADE ON DELETE CASCADE,
-	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-);
-ELSE
-	PRINT 'Pictures - Exists this table !!!'
-GO
-
--- Creating Contacts
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Contacts' and type in (N'U'))
-
-CREATE TABLE [dbo].[Contacts](
-	[Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[Email] NVARCHAR(250) NOT NULL,
-	[Mobile] NVARCHAR(250) NOT NULL,
-	[PersonId] INT NOT NULL,
-	FOREIGN KEY (PersonId) REFERENCES [dbo].[Person](Id) ON UPDATE CASCADE ON DELETE CASCADE,
-	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-);
-ELSE
-	PRINT 'Contacts - Exists this table !!!'
-GO
-
--- Creating Addresses
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Addresses' and type in (N'U'))
-
-CREATE TABLE [dbo].[Addresses](
-	[Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[Country] NVARCHAR(255) NOT NULL,
-	[States] NVARCHAR(255) NOT NULL,
-	[City] NVARCHAR(255) NOT NULL,
-	[Neighborhoods] NVARCHAR(255) NOT NULL,
-	[PersonId] INT NOT NULL,
-	FOREIGN KEY (PersonId) REFERENCES [dbo].[Person](Id) ON UPDATE CASCADE ON DELETE CASCADE,
-	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-);
-ELSE
-	PRINT 'Addresses - Exists this table !!!'
-GO
-
-
-
-------------------------- Pet ----------------------------
-
--- Creating Pet
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Pet' and type in (N'U'))
-
-CREATE TABLE [dbo].[Pet] (
-	[Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[Name] NVARCHAR(250) NOT NULL,
-	[Type] NVARCHAR(250) NOT NULL,
-	[Genre] NVARCHAR(250) NOT NULL,
-	[Age] INT NOT NULL,
-	[Birthday] DATETIME2 NOT NULL,
-	[PersonId] INT NOT NULL,
-	FOREIGN KEY (PersonId) REFERENCES [dbo].[Person](Id) ON UPDATE CASCADE ON DELETE CASCADE,
-	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-);
-ELSE
-	PRINT 'Pet - Exists this table !!!'
-GO
-
--- Creating Images
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Images' and type in (N'U'))
-
-CREATE TABLE [dbo].[Images](
-	[Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[Tag] NVARCHAR(255) NULL,
-	[Path] NVARCHAR(255) NULL,
-	[PetId] INT NOT NULL,
-	FOREIGN KEY (PetId) REFERENCES [dbo].[Pet](Id) ON UPDATE CASCADE ON DELETE CASCADE,
-	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-ELSE
-	PRINT 'Images - Exists this table !!!'
-GO
-
--- Creating Health
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Health' and type in (N'U'))
-
-CREATE TABLE [dbo].[Health](
-	[Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[Status] NVARCHAR(255) NOT NULL,
-	[PetId] INT NOT NULL,
-	FOREIGN KEY (PetId) REFERENCES [dbo].[Pet](Id) ON UPDATE CASCADE ON DELETE CASCADE,
-	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-ELSE
-	PRINT 'Health - Exists this table !!!'
-GO
-
-
--- Creating Schedules
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE NAME=N'Schedules' and type in (N'U'))
-
-CREATE TABLE [dbo].[Schedules](
-	[Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[Services] NVARCHAR(255) NOT NULL,
-	[Date] DATETIME2 NOT NULL,
-	[Time] DATETIME2 NOT NULL,
-	[PetId] INT NOT NULL,
-	FOREIGN KEY (PetId) REFERENCES [dbo].[Pet](Id) ON UPDATE CASCADE ON DELETE CASCADE,
-	Created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-ELSE
-	PRINT 'Schedules - Exists this table !!!'
-GO

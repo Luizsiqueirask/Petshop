@@ -682,7 +682,6 @@
     <Compile Include="Models\Animal\Health.cs" />
     <Compile Include="Models\Animal\Image.cs" />
     <Compile Include="Models\Animal\Pet.cs" />
-    <None Include="Models\Animal\Schedule" />
     <Compile Include="Models\Perfil\Address.cs" />
     <Compile Include="Models\Perfil\Contact.cs" />
     <Compile Include="Models\Perfil\Person.cs" />
